@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0ba94f12c735415f94b1801da9bc6ca3" Name="Diagram1">
+        <EntityTypeShape EntityType="intsisModel.NameSis" Width="1.5" PointX="4.375" PointY="2" />
+        <EntityTypeShape EntityType="intsisModel.Answer" Width="1.5" PointX="8.875" PointY="1.75" />
+        <EntityTypeShape EntityType="intsisModel.Rules" Width="1.5" PointX="6.625" PointY="1.75" />
+        <AssociationConnector Association="intsisModel.FK_Answer_Rules" />
+        <AssociationConnector Association="intsisModel.FK_Rules_NameSis" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

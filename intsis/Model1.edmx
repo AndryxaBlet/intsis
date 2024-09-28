@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище intsisModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDRule" Type="int" Nullable="false" />
+          <Property Name="Ans" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="NextR" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Rec" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="NameSis">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rules">
+          <Key>
+            <PropertyRef Name="IDRule" />
+          </Key>
+          <Property Name="IDRule" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDSis" Type="int" Nullable="false" />
+          <Property Name="Text" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Answer_Rules">
+          <End Role="Rules" Type="Self.Rules" Multiplicity="1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rules">
+              <PropertyRef Name="IDRule" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="IDRule" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rules_NameSis">
+          <End Role="NameSis" Type="Self.NameSis" Multiplicity="1" />
+          <End Role="Rules" Type="Self.Rules" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NameSis">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rules">
+              <PropertyRef Name="IDSis" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище intsisModelContainer">
+          <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NameSis" EntityType="Self.NameSis" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rules" EntityType="Self.Rules" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Answer_Rules" Association="Self.FK_Answer_Rules">
+            <End Role="Rules" EntitySet="Rules" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rules_NameSis" Association="Self.FK_Rules_NameSis">
+            <End Role="NameSis" EntitySet="NameSis" />
+            <End Role="Rules" EntitySet="Rules" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="intsisModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="intsisEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="NameSis" EntityType="intsisModel.NameSis" />
+          <EntitySet Name="Answer" EntityType="intsisModel.Answer" />
+          <EntitySet Name="Rules" EntityType="intsisModel.Rules" />
+          <AssociationSet Name="FK_Answer_Rules" Association="intsisModel.FK_Answer_Rules">
+            <End Role="Rules" EntitySet="Rules" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rules_NameSis" Association="intsisModel.FK_Rules_NameSis">
+            <End Role="NameSis" EntitySet="NameSis" />
+            <End Role="Rules" EntitySet="Rules" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="NameSis">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Rules" Relationship="intsisModel.FK_Rules_NameSis" FromRole="NameSis" ToRole="Rules" />
+        </EntityType>
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDRule" Type="Int32" Nullable="false" />
+          <Property Name="Ans" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="NextR" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Rec" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Rules" Relationship="intsisModel.FK_Answer_Rules" FromRole="Answer" ToRole="Rules" />
+        </EntityType>
+        <EntityType Name="Rules">
+          <Key>
+            <PropertyRef Name="IDRule" />
+          </Key>
+          <Property Name="IDRule" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDSis" Type="Int32" Nullable="false" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Answer" Relationship="intsisModel.FK_Answer_Rules" FromRole="Rules" ToRole="Answer" />
+          <NavigationProperty Name="NameSis" Relationship="intsisModel.FK_Rules_NameSis" FromRole="Rules" ToRole="NameSis" />
+        </EntityType>
+        <Association Name="FK_Answer_Rules">
+          <End Type="intsisModel.Rules" Role="Rules" Multiplicity="1" />
+          <End Type="intsisModel.Answer" Role="Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rules">
+              <PropertyRef Name="IDRule" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="IDRule" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rules_NameSis">
+          <End Type="intsisModel.NameSis" Role="NameSis" Multiplicity="1" />
+          <End Type="intsisModel.Rules" Role="Rules" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NameSis">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Rules">
+              <PropertyRef Name="IDSis" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище intsisModelContainer" CdmEntityContainer="intsisEntities">
+          <EntitySetMapping Name="NameSis">
+            <EntityTypeMapping TypeName="intsisModel.NameSis">
+              <MappingFragment StoreEntitySet="NameSis">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Answer">
+            <EntityTypeMapping TypeName="intsisModel.Answer">
+              <MappingFragment StoreEntitySet="Answer">
+                <ScalarProperty Name="Rec" ColumnName="Rec" />
+                <ScalarProperty Name="NextR" ColumnName="NextR" />
+                <ScalarProperty Name="Ans" ColumnName="Ans" />
+                <ScalarProperty Name="IDRule" ColumnName="IDRule" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rules">
+            <EntityTypeMapping TypeName="intsisModel.Rules">
+              <MappingFragment StoreEntitySet="Rules">
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="IDSis" ColumnName="IDSis" />
+                <ScalarProperty Name="IDRule" ColumnName="IDRule" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
