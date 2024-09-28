@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Xml.Linq;
 
 namespace intsis
 {
@@ -27,7 +14,7 @@ namespace intsis
             InitializeComponent();
             binddatagrid(ID);
             id = ID;
-            
+
         }
         string connect = "data source=1-236-EMP-01;initial catalog=intsisIR311;persist security info=True;user id=sa;password=123;MultipleActiveResultSets=True;";
         private SqlDataAdapter da;
