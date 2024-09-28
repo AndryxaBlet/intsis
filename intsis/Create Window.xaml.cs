@@ -108,7 +108,6 @@ namespace intsis
                 ans.Show();
             }
             else MessageBox.Show("Выберите систему");
-            ///////
 
         }
     }
