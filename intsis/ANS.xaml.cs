@@ -1,6 +1,8 @@
-﻿using System.Data;
-using System.Data.SqlClient;
+﻿using System;
+using System.Linq;
 using System.Windows;
+using System.Data.Entity;
+using System.Collections.Generic;
 
 namespace intsis
 {
@@ -9,43 +11,69 @@ namespace intsis
     /// </summary>
     public partial class ANS : Window
     {
+        private int id = 0;
+
         public ANS(string ID)
         {
             InitializeComponent();
             binddatagrid(ID);
-            id = ID;
-
+            id = Convert.ToInt32(ID);
         }
-        string connect = "data source=1-236-EMP-01;initial catalog=intsisIR311;persist security info=True;user id=sa;password=123;MultipleActiveResultSets=True;";
-        private SqlDataAdapter da;
-        private DataTable dt;
-        string id = "";
-        public DataSet dataSet { get; set; }
-        public SqlCommandBuilder builder { get; set; }
 
         public void binddatagrid(string ID)
         {
-            SqlConnection mycon = new SqlConnection(connect);
-            mycon.Open();
-            string query = "SELECT * from Answer where IDRule=" + ID;
-            SqlCommand c = new SqlCommand(query, mycon);
-            da = new SqlDataAdapter(c);
-            dt = new DataTable();
-            da.Fill(dt);
-            Dg.ItemsSource = dt.DefaultView;
-            dt.Columns[1].DefaultValue = ID;
+          
+                // Получаем ответы по IDRule
+                var answers = intsisEntities.GetContext().Answer
+                    .Where(a => a.IDRule.ToString() == ID)
+                    .ToList();
+
+                // Привязываем данные к DataGrid
+                Dg.ItemsSource = answers;
+
+                // Устанавливаем значение по умолчанию для колонки IDRule
+                foreach (var answer in answers)
+                {
+                    answer.IDRule = int.Parse(ID);
+                }
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(connect))
+            // Получаем измененные записи из DataGrid
+            var answers = Dg.ItemsSource as List<Answer>;
+
+            if (answers != null)
             {
-                SqlCommand com = new SqlCommand();
-                conn.Open();
-                SqlCommandBuilder commandBuilder = new SqlCommandBuilder(da);
-                da.Update(dt);
+                foreach (var answer in answers)
+                {
+                    // Проверяем, существует ли соответствующее правило
+                    answer.IDRule = id;
+
+                    // Проверяем, существует ли запись в базе данных
+                    var existingAnswer = intsisEntities.GetContext().Answer
+                        .FirstOrDefault(a => a.ID == answer.ID);
+
+                    if (existingAnswer != null)
+                    {
+                        // Обновляем запись
+                        intsisEntities.GetContext().Entry(existingAnswer).CurrentValues.SetValues(answer);
+                    }
+                    else
+                    {
+                        // Добавляем новую запись
+                        intsisEntities.GetContext().Answer.Add(answer);
+                    }
+                }
+
+                // Сохраняем изменения в базе данных
+                intsisEntities.GetContext().SaveChanges();
+
+                // Повторно привязываем обновленные данные к DataGrid
                 binddatagrid(id.ToString());
-                MessageBox.Show("Update get succesful");
+
+                MessageBox.Show("Обновление прошло успешно");
             }
         }
     }

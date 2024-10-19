@@ -19,7 +19,14 @@ namespace intsis
             : base("name=intsisEntities")
         {
         }
-    
+        private static intsisEntities context_;
+        public static intsisEntities GetContext()
+        {
+            if (context_ == null)
+                context_ = new intsisEntities();
+            return context_;
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

@@ -14,7 +14,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn FontSize="20"  Header="ID" Binding="{Binding IDRule}" IsReadOnly="True"/>
                 <DataGridTextColumn FontSize="20" Width="800" Header="Вопрос" Binding="{Binding Text}"/>
-                <DataGridTextColumn Header="Прио" Binding="{Binding IDSis}" Visibility="Hidden"/>
+                <DataGridTextColumn Header="Прио" Binding="{Binding IDRule}" Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Обновить вопросы" HorizontalAlignment="Left" x:Name="Create_Copy" Margin="32,77,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.24,0.098" Height="19" Width="248" Click="Create_Copy_Click"/>

@@ -29,70 +29,97 @@ namespace intsis
             log = ID;
         }
         int next = 0;
-        string connect = "data source = 1-236-EMP-01; initial catalog = intsisIR311; persist security info=True;user id = sa; password=123;MultipleActiveResultSets=True;";
         int log = 0;
     
 
         public int FIRST(int id)
         {
-            SqlConnection mycon = new SqlConnection(connect);
-            mycon.Open();
-            string query = "SELECT Text from Rules where IDSis=" + id.ToString();
-            string qu = "SELECT IDRule from Rules where IDSis=" + id.ToString();
-            SqlCommand command = new SqlCommand(query, mycon);
-            SqlCommand com = new SqlCommand(qu, mycon);
-            var i = command.ExecuteScalar();
-            var IDRule = com.ExecuteScalar();
-            VOP.Content = i.ToString();
-            UpdateItems((int)IDRule);
-            return (int)IDRule;
+            
+                // Получаем текст правила по IDSis
+                var ruleText = intsisEntities.GetContext().Rules
+                    .Where(r => r.IDSis == id)
+                    .Select(r => r.Text)
+                    .FirstOrDefault();
+
+                // Получаем IDRule по IDSis
+                var ruleID = intsisEntities.GetContext().Rules
+                    .Where(r => r.IDSis == id)
+                    .Select(r => r.IDRule)
+                    .FirstOrDefault();
+
+                // Устанавливаем текст вопроса в интерфейсе
+                VOP.Content = ruleText;
+
+                // Обновляем элементы ComboBox
+                UpdateItems(ruleID);
+
+                return ruleID;
+            
         }
         private void UpdateItems(int id)
         {
-                using (SqlConnection con = new SqlConnection(connect))
-                {
-                    con.Open();
-                    SqlDataAdapter sa = new SqlDataAdapter($"SELECT * FROM Answer where IDRule={id.ToString()}", con);
-                    DataSet ds = new DataSet();
-                    sa.Fill(ds, "t");
-                    CB.ItemsSource = ds.Tables["t"].DefaultView;
-                    CB.DisplayMemberPath = "Ans";
-                    CB.SelectedValuePath = "ID";
-            }
+            
+                // Получаем список ответов по IDRule
+                var answers = intsisEntities.GetContext().Answer
+                    .Where(a => a.IDRule == id)
+                    .Select(a => new { a.ID, a.Ans })
+                    .ToList();
+
+                // Присваиваем данные источнику ComboBox
+                CB.ItemsSource = answers;
+                CB.DisplayMemberPath = "Ans";
+                CB.SelectedValuePath = "ID";
+
             
         }
 
         public void BNext()
         {
-      
-            string v = CB.SelectedValue.ToString();
-            SqlConnection mycon = new SqlConnection(connect);
-            mycon.Open();
-            string query = $"SELECT NextR from Answer where ID={v}";
-            SqlCommand command = new SqlCommand(query, mycon);
-            var i = command.ExecuteScalar();
-            if (int.TryParse(i.ToString(), out next))
+            var selectedValue = CB.SelectedValue.ToString();
+            int.TryParse(selectedValue, out int sv);
+
+            if (selectedValue != null)
             {
-                string p = "SELECT Rec from Answer where ID=" + v;
-                SqlCommand dop = new SqlCommand(p, mycon);
-                var REC = dop.ExecuteScalar();
-                if (REC.ToString() != "") { MessageBox.Show(REC.ToString()); }
-                string qu = "SELECT Text from Rules where IDRule=" + next.ToString();
-                SqlCommand co = new SqlCommand(qu, mycon);
-                var n = co.ExecuteScalar();
-                VOP.Content = n.ToString();
-                UpdateItems(next);
+             
+                    // Получаем значение поля NextR
+                    var nextValue = intsisEntities.GetContext().Answer
+                        .Where(a => a.ID == sv)
+                        .Select(a => a.NextR)
+                        .FirstOrDefault();
+
+                    // Проверяем, является ли результат целым числом
+                    if (int.TryParse(nextValue, out next))
+                    {
+                        // Получаем текст ответа
+                        var rec = intsisEntities.GetContext().Answer
+                            .Where(a => a.ID == sv)
+                            .Select(a => a.Rec)
+                            .FirstOrDefault();
+
+                        if (!string.IsNullOrEmpty(rec))
+                        {
+                            MessageBox.Show(rec);
+                        }
+
+                        // Получаем текст следующего вопроса
+                        var nextText = intsisEntities.GetContext().Rules
+                            .Where(r => r.IDRule == next)
+                            .Select(r => r.Text)
+                            .FirstOrDefault();
+
+                        VOP.Content = nextText;
+                        UpdateItems(next);
+                    }
+                    else
+                    {
+                        // Если это не число, выводим строковое сообщение
+                        VOP.Content = nextValue.ToString();
+                        CB.Visibility = Visibility.Hidden;
+                        Deny.Visibility = Visibility.Hidden;
+                        Repeat.Visibility = Visibility.Visible;
+                    }
+                
             }
-            else
-            {
-
-                VOP.Content = i.ToString();
-                CB.Visibility = Visibility.Hidden;
-                Deny.Visibility = Visibility.Hidden;
-                Repeat.Visibility = Visibility.Visible;
-            }
-
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

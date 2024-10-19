@@ -26,21 +26,14 @@ namespace intsis
         {
             InitializeComponent();
             binddatagrid();
+            intsisEntities.GetContext().Database.Connection.ConnectionString = connect;
         }
-        string connect = "data source=1-236-EMP-01;initial catalog=intsisIR311;persist security info=True;user id=sa;password=123;MultipleActiveResultSets=True;";
-        private SqlDataAdapter da;
+        
+        string connect = Properties.Settings.Default.NotebookSQL;
         private DataTable dt;
         public void binddatagrid()
         {
-            SqlConnection mycon = new SqlConnection(connect);
-            mycon.Open();
-            string query = "SELECT * from NameSis";
-            SqlCommand command = new SqlCommand(query, mycon);
-            da = new SqlDataAdapter(command);
-            dt = new DataTable("Workless");
-            da.Fill(dt);
-
-            Dg.ItemsSource = dt.DefaultView;
+            Dg.ItemsSource = intsisEntities.GetContext().NameSis.ToList();
         }
 
         private void Create_Click(object sender, RoutedEventArgs e)
@@ -54,7 +47,8 @@ namespace intsis
         {
             if (Dg.SelectedIndex!=-1)
             {
-                Answers answers = new Answers((int)dt.DefaultView[Dg.SelectedIndex]["ID"]);
+                var selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
+                Answers answers = new Answers(selectedRuleId);
                 answers.ShowDialog();
             }
             else MessageBox.Show("Выберите систему");
