@@ -13,23 +13,36 @@ namespace intsis
     public partial class Create_Window : Window
     {
         private int id = 0;
+        private int SelectedSys=-1;
 
-        public Create_Window()
+        public Create_Window(int id)
         {
             InitializeComponent();
-           
-           
+            BindComboBox();
+            if (id != -1) { 
+            NameI.SelectedIndex = id;
+            binddatagrid(id);
+            }
+
+
+        }
+        void BindComboBox()
+        {
+            var Sis = intsisEntities.GetContext().NameSis.ToList();
+            NameI.ItemsSource = Sis;
+            NameI.DisplayMemberPath = "Name";
+            NameI.SelectedValuePath = "ID";
         }
         
-        public void binddatagrid(string name)
+        public void binddatagrid(int systemId)
         {
          
             {
                 // Получаем ID системы по имени
-                var systemId = intsisEntities.GetContext().NameSis
-                    .Where(ns => ns.Name == name)
-                    .Select(ns => ns.ID)
-                    .FirstOrDefault();
+                //var systemId = intsisEntities.GetContext().NameSis
+                //    .Where(ns => ns.Name == name)
+                //    .Select(ns => ns.ID)
+                //    .FirstOrDefault();
 
                 if (systemId != 0)
                 {
@@ -64,8 +77,13 @@ namespace intsis
             intsisEntities.GetContext().NameSis.Add(newSystem);
             intsisEntities.GetContext().SaveChanges();
 
-                // Привязываем DataGrid после добавления системы
-                binddatagrid(name);
+            var systemId = intsisEntities.GetContext().NameSis
+                .Where(ns => ns.Name == name)
+                .Select(ns => ns.ID)
+                .FirstOrDefault();
+            SelectedSys = systemId;
+            // Привязываем DataGrid после добавления системы
+            binddatagrid(systemId);
             
         }
 
@@ -79,19 +97,22 @@ namespace intsis
                 if (systemExists)
                 {
                     MessageBox.Show("Редактирование данных");
-                    binddatagrid(NameI.Text);
+                    binddatagrid(Convert.ToInt32(NameI.SelectedValue));
+                    SelectedSys = Convert.ToInt32(NameI.SelectedValue);
                 }
                 else
                 {
                     MessageBox.Show("Создана новая система");
                     insert(NameI.Text);
                 }
-            
+            BindComboBox();
+
         }
 
         public void Create_Copy_Click(object sender, RoutedEventArgs e)
         {
-          
+            if (SelectedSys != -1)
+            {
                 // Получаем измененные данные из DataGrid
                 var rules = Dg.ItemsSource as List<Rules>;
 
@@ -131,10 +152,13 @@ namespace intsis
 
                     // Сохраняем изменения в базе данных
                     intsisEntities.GetContext().SaveChanges();
-                    binddatagrid(NameI.Text);
+                    binddatagrid(SelectedSys);
 
                     MessageBox.Show("Update successful");
                 }
+            } else {
+                MessageBox.Show("Не выбранна система");
+            }
             
         }
 
@@ -152,6 +176,11 @@ namespace intsis
             {
                 MessageBox.Show("Выберите систему");
             }
+        }
+
+        private void NameI_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            
         }
     }
 }

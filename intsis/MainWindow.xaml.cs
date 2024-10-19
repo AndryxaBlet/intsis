@@ -38,7 +38,12 @@ namespace intsis
 
         private void Create_Click(object sender, RoutedEventArgs e)
         {
-            Create_Window window=new Create_Window();
+            var selectedRuleId = -1;
+            if (Dg.SelectedIndex != -1)
+            {
+                 selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
+            }
+            Create_Window window=new Create_Window(selectedRuleId);
             window.ShowDialog();
             binddatagrid();
         }
