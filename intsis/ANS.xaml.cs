@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Data.Entity;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace intsis
 {
@@ -74,6 +75,56 @@ namespace intsis
                 binddatagrid(id.ToString());
 
                 MessageBox.Show("Обновление прошло успешно");
+            }
+        }
+
+        private void DelV_Click(object sender, RoutedEventArgs e)
+        {
+            int del = id;
+            var itemToDelete = intsisEntities.GetContext().Rules.FirstOrDefault(x => x.IDRule == del);
+
+            if (itemToDelete != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Удалить вопрос?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить вопрос невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // Удалить объект из контекста
+                        intsisEntities.GetContext().Rules.Remove(itemToDelete);
+
+                        // Сохранить изменения в базе данных
+                        intsisEntities.GetContext().SaveChanges();
+                    }
+                }
+            }
+        }
+
+        private void DelO_Click(object sender, RoutedEventArgs e)
+        {
+            int del = (Dg.ItemsSource as List<Answer>)[Dg.SelectedIndex].ID;
+            var itemToDelete = intsisEntities.GetContext().Answer.FirstOrDefault(x => x.ID == del);
+
+            if (itemToDelete != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Удалить ответ на вопрос?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить ответ невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // Удалить объект из контекста
+                        intsisEntities.GetContext().Answer.Remove(itemToDelete);
+
+                        // Сохранить изменения в базе данных
+                        intsisEntities.GetContext().SaveChanges();
+                    }
+                }
             }
         }
     }

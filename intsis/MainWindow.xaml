@@ -7,14 +7,28 @@
         mc:Ignorable="d"
         Title="ИнтСис" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
-        <DataGrid x:Name="Dg" AutoGenerateColumns="False" Margin="0,148,0,0" Grid.ColumnSpan="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <!-- Растягивающаяся область -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <!-- Растягивающаяся область -->
+        </Grid.ColumnDefinitions>
+
+        <!-- Кнопки в первой строке -->
+        <Button Content="Открыть ЭС" HorizontalAlignment="Left" VerticalAlignment="Top" Height="69" Width="123" x:Name="Open" Click="Open_Click" Grid.Row="0" Grid.Column="0" Margin="10"/>
+        <Button Content="Конфигуратор" HorizontalAlignment="Left" VerticalAlignment="Top" Height="69" Width="127" x:Name="Create" Click="Create_Click" Grid.Row="0" Grid.Column="1" Margin="10"/>
+
+        <!-- DataGrid во второй строке, который будет растягиваться -->
+        <DataGrid x:Name="Dg" AutoGenerateColumns="False" Grid.Row="1" Grid.ColumnSpan="2" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <DataGrid.Columns>
-                <DataGridTextColumn FontSize="20"  Header="ID" Binding="{Binding ID}" IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20" Header="ID" Width="auto" Binding="{Binding ID}" IsReadOnly="True"/>
                 <DataGridTextColumn FontSize="20" Header="Название" Binding="{Binding Name}" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Открыть" HorizontalAlignment="Left" Margin="23,45,0,0" VerticalAlignment="Top" Height="69" Width="123" x:Name="Open" Grid.ColumnSpan="2" Click="Open_Click" />
-        <Button Content="Создать" HorizontalAlignment="Left" Margin="179,45,0,0" VerticalAlignment="Top" Height="69" Width="127" x:Name="Create" Click="Create_Click"/>
-
     </Grid>
 </Window>

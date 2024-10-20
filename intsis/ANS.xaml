@@ -7,15 +7,24 @@
         mc:Ignorable="d"
         Title="ANS" Height="450" Width="800">
     <Grid>
-        <DataGrid x:Name="Dg" AutoGenerateColumns="False" Margin="0,115,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <!-- Растягиваемый ряд для DataGrid -->
+            <RowDefinition Height="Auto"/>
+            <!-- Автоматическая высота для кнопки -->
+        </Grid.RowDefinitions>
+
+        <DataGrid x:Name="Dg" AutoGenerateColumns="False" Margin="0,0,0,5">
             <DataGrid.Columns>
-                <DataGridTextColumn FontSize="20" Width="30" Header="ID" Binding="{Binding ID}" IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20" Width="auto" Header="ID" Binding="{Binding ID}" IsReadOnly="True"/>
                 <DataGridTextColumn FontSize="20" Width="*" Header="Ответ" Binding="{Binding Ans}"/>
                 <DataGridTextColumn Header="Следующее правило" Width="*" Binding="{Binding NextR}"/>
-                <DataGridTextColumn Header="Рекомендации" Width="*"  Binding="{Binding Rec}"/>
+                <DataGridTextColumn Header="Рекомендации" Width="*" Binding="{Binding Rec}"/>
                 <DataGridTextColumn Header="Прио" Binding="{Binding IDRule}" Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="92,64,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button Content="Удалить вопрос" HorizontalAlignment="Left" Margin="10,10" Name="DelV" VerticalAlignment="Top"  Grid.Row="1" Click="DelV_Click"/>
+        <Button Content="Удалить ответ" HorizontalAlignment="Left" Margin="120,10" Name="DelO" VerticalAlignment="Top"  Grid.Row="1" Click="DelO_Click"/>
+        <Button Content="Сохранить изменения" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Top" Click="Button_Click" Grid.Row="1"/>
     </Grid>
 </Window>

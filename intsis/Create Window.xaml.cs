@@ -3,7 +3,8 @@ using System.Linq;
 using System.Windows;
 using System.Data.Entity;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+using System.Runtime.Remoting.Contexts;
+
 
 namespace intsis
 {
@@ -20,7 +21,7 @@ namespace intsis
             InitializeComponent();
             BindComboBox();
             if (id != -1) { 
-            NameI.SelectedIndex = id;
+            NameI.SelectedValue = id;
             binddatagrid(id);
             }
 
@@ -43,7 +44,7 @@ namespace intsis
                 //    .Where(ns => ns.Name == name)
                 //    .Select(ns => ns.ID)
                 //    .FirstOrDefault();
-
+                SelectedSys = systemId;
                 if (systemId != 0)
                 {
                     id = systemId;
@@ -119,10 +120,7 @@ namespace intsis
                 if (rules != null)
                 {
                     // Получаем ID существующей NameSis
-                    var nameSisId = intsisEntities.GetContext().NameSis
-                        .Where(ns => ns.Name == NameI.Text)
-                        .Select(ns => ns.ID)
-                        .FirstOrDefault();
+                    var nameSisId = SelectedSys;
 
                     // Проверяем, существует ли NameSis
                     if (nameSisId == 0)
@@ -181,6 +179,31 @@ namespace intsis
         private void NameI_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            int del = Convert.ToInt32(NameI.SelectedValue);
+            var itemToDelete = intsisEntities.GetContext().NameSis.FirstOrDefault(x => x.ID == del);
+
+            if (itemToDelete != null)
+            {
+                MessageBoxResult result = MessageBox.Show("Удалить систему?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить систему невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // Удалить объект из контекста
+                        intsisEntities.GetContext().NameSis.Remove(itemToDelete);
+
+                        // Сохранить изменения в базе данных
+                        intsisEntities.GetContext().SaveChanges();
+                    }
+                }
+            }
         }
     }
 }

@@ -31,7 +31,9 @@
           <Property Name="Text" Type="nvarchar" MaxLength="250" Nullable="false" />
         </EntityType>
         <Association Name="FK_Answer_Rules">
-          <End Role="Rules" Type="Self.Rules" Multiplicity="1" />
+          <End Role="Rules" Type="Self.Rules" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Rules">
@@ -43,7 +45,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rules_NameSis">
-          <End Role="NameSis" Type="Self.NameSis" Multiplicity="1" />
+          <End Role="NameSis" Type="Self.NameSis" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Rules" Type="Self.Rules" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="NameSis">
@@ -114,7 +118,9 @@
           <NavigationProperty Name="NameSis" Relationship="intsisModel.FK_Rules_NameSis" FromRole="Rules" ToRole="NameSis" />
         </EntityType>
         <Association Name="FK_Answer_Rules">
-          <End Type="intsisModel.Rules" Role="Rules" Multiplicity="1" />
+          <End Type="intsisModel.Rules" Role="Rules" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="intsisModel.Answer" Role="Answer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Rules">
@@ -126,7 +132,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rules_NameSis">
-          <End Type="intsisModel.NameSis" Role="NameSis" Multiplicity="1" />
+          <End Type="intsisModel.NameSis" Role="NameSis" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="intsisModel.Rules" Role="Rules" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="NameSis">

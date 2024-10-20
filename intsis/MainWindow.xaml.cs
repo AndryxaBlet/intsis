@@ -30,10 +30,10 @@ namespace intsis
         }
         
         string connect = Properties.Settings.Default.NotebookSQL;
-        private DataTable dt;
         public void binddatagrid()
         {
             Dg.ItemsSource = intsisEntities.GetContext().NameSis.ToList();
+
         }
 
         private void Create_Click(object sender, RoutedEventArgs e)
@@ -41,11 +41,11 @@ namespace intsis
             var selectedRuleId = -1;
             if (Dg.SelectedIndex != -1)
             {
-                 selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
+               selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
             }
-            Create_Window window=new Create_Window(selectedRuleId);
-            window.ShowDialog();
-            binddatagrid();
+             Create_Window window = new Create_Window(selectedRuleId);
+             window.ShowDialog();
+             binddatagrid();
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
