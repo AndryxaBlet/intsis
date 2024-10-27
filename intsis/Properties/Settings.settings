@@ -10,5 +10,8 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=DESKTOP-2VLO4HT;Initial Catalog=intsisIR311;Persist Security Info=True;User ID=sa;Password=123;Encrypt=False</Value>
     </Setting>
+    <Setting Name="RestAPI_URL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://192.168.0.109:8000/</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

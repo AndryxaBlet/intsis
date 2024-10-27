@@ -33,5 +33,17 @@ namespace intsis.Properties {
                 return ((string)(this["NotebookSQL"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://192.168.0.109:8000/")]
+        public string RestAPI_URL {
+            get {
+                return ((string)(this["RestAPI_URL"]));
+            }
+            set {
+                this["RestAPI_URL"] = value;
+            }
+        }
     }
 }
