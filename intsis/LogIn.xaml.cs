@@ -1,8 +1,20 @@
 ﻿using System;
-using System.Net.Http;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
-using Newtonsoft.Json;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Security.Cryptography;
 
 namespace intsis
 {
@@ -11,57 +23,44 @@ namespace intsis
     /// </summary>
     public partial class LogIn : Window
     {
-        private readonly HttpClient _httpClient;
 
         public LogIn()
         {
             InitializeComponent();
-            _httpClient = new HttpClient();
-        }
+            intsisEntities.GetContext().Database.Connection.ConnectionString = connect;
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        }
+        string connect = Properties.Settings.Default.NotebookSQL;
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             string username = LoginTextBox.Text;
             string password = PasswordBox.Password;
 
-            var loginData = new
+            var login = intsisEntities.GetContext().User.FirstOrDefault(l => l.Login == username && l.Password == password);
+
+            if (login != null)
             {
-                username = username,
-                password = password
-            };
-
-            var json = JsonConvert.SerializeObject(loginData);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync($"{Properties.Settings.Default.RestAPI_URL}api/login/", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var user = JsonConvert.DeserializeObject<UserResponse>(jsonResponse); // Пример класса UserResponse
-
-                MessageBox.Show($"ID пользователя: {user.id}"); // Здесь вы получаете ID пользователя
-
-                // Дальнейшая логика с ID пользователя
+                    MainWindow window = new MainWindow(login.IsAdmin);
+                    window.Show();
+                    this.Close();
+        
             }
             else
             {
-                MessageBox.Show("Ошибка авторизации");
+                MessageBox.Show("Неверно введены данные аккаунта!");
             }
+
+            
+           
         }
 
-        // Создайте класс для десериализации ответа
-        public class UserResponse
-        {
-            public int id { get; set; }
-            public string username { get; set; }
-            public string email { get; set; }
-        }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            // Логика для регистрации
-            MessageBox.Show("Открыть форму регистрации.");
+            Registration registration = new Registration();
+            registration.Show();
+            this.Close();
         }
     }
 }

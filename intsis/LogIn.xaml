@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:intsis"
         mc:Ignorable="d"
-        Title="LogIn" Height="400" Width="400">
+        Title="Авторизация" Height="400" Width="400">
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Авторизация" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
-
+            <TextBlock Text="Авторизация" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+            <TextBlock Text="Логин" FontSize="11" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left"/>
             <TextBox Name="LoginTextBox" 
                  Margin="0,0,0,10" ></TextBox>
-
+            <TextBlock Text="Пароль" FontSize="11" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left"/>
             <PasswordBox Name="PasswordBox" 
                      Margin="0,0,0,20" ></PasswordBox>
 
