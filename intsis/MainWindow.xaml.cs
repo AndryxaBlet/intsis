@@ -22,11 +22,14 @@ namespace intsis
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(bool admin)
         {
             InitializeComponent();
             binddatagrid();
-            intsisEntities.GetContext().Database.Connection.ConnectionString = connect;
+            if (!admin) {
+                Create.Visibility = Visibility.Hidden;
+            }
+            
         }
         
         string connect = Properties.Settings.Default.NotebookSQL2;
