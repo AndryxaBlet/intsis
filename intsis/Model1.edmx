@@ -21,6 +21,8 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ScopeOfApplication" Type="nvarchar" MaxLength="100" />
+          <Property Name="Comment" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Rules">
           <Key>
@@ -29,6 +31,15 @@
           <Property Name="IDRule" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IDSis" Type="int" Nullable="false" />
           <Property Name="Text" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <Association Name="FK_Answer_Rules">
           <End Role="Rules" Type="Self.Rules" Multiplicity="1">
@@ -62,6 +73,7 @@
           <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NameSis" EntityType="Self.NameSis" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rules" EntityType="Self.Rules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Answer_Rules" Association="Self.FK_Answer_Rules">
             <End Role="Rules" EntitySet="Rules" />
             <End Role="Answer" EntitySet="Answer" />
@@ -87,6 +99,7 @@
             <End Role="NameSis" EntitySet="NameSis" />
             <End Role="Rules" EntitySet="Rules" />
           </AssociationSet>
+          <EntitySet Name="User" EntityType="intsisModel.User" />
         </EntityContainer>
         <EntityType Name="NameSis">
           <Key>
@@ -95,6 +108,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Rules" Relationship="intsisModel.FK_Rules_NameSis" FromRole="NameSis" ToRole="Rules" />
+          <Property Name="ScopeOfApplication" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Answer">
           <Key>
@@ -145,6 +160,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -154,6 +178,8 @@
           <EntitySetMapping Name="NameSis">
             <EntityTypeMapping TypeName="intsisModel.NameSis">
               <MappingFragment StoreEntitySet="NameSis">
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="ScopeOfApplication" ColumnName="ScopeOfApplication" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -176,6 +202,16 @@
                 <ScalarProperty Name="Text" ColumnName="Text" />
                 <ScalarProperty Name="IDSis" ColumnName="IDSis" />
                 <ScalarProperty Name="IDRule" ColumnName="IDRule" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="intsisModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

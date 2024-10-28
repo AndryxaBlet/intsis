@@ -10,6 +10,7 @@
         <EntityTypeShape EntityType="intsisModel.Rules" Width="1.5" PointX="6.625" PointY="1.75" />
         <AssociationConnector Association="intsisModel.FK_Answer_Rules" />
         <AssociationConnector Association="intsisModel.FK_Rules_NameSis" />
+        <EntityTypeShape EntityType="intsisModel.User" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
