@@ -19,12 +19,11 @@ namespace intsis
             : base("name=intsisEntities")
         {
         }
-        private static intsisEntities context_;
+        private static intsisEntities context_; 
         public static intsisEntities GetContext()
         {
             if (context_ == null)
-                context_ = new intsisEntities();
-            return context_;
+                context_ = new intsisEntities(); return context_;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -35,5 +34,6 @@ namespace intsis
         public virtual DbSet<NameSis> NameSis { get; set; }
         public virtual DbSet<Answer> Answer { get; set; }
         public virtual DbSet<Rules> Rules { get; set; }
+        public virtual DbSet<User> User { get; set; }
     }
 }

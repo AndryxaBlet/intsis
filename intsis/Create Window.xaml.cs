@@ -20,12 +20,15 @@ namespace intsis
         {
             InitializeComponent();
             BindComboBox();
-            if (id != -1) { 
-            NameI.SelectedValue = id;
-            binddatagrid(id);
+            if (id != -1) 
+            { 
+                NameI.SelectedValue = id;
+                binddatagrid(id);
             }
-
-
+            if (NameI.SelectedIndex == -1)
+                UpdateSis.IsEnabled = false;
+            else
+                UpdateSis.IsEnabled = true;
         }
         void BindComboBox()
         {
@@ -66,28 +69,6 @@ namespace intsis
             }
         }
 
-        public void insert(string name)
-        {
-            
-                // Добавляем новую систему
-                var newSystem = new NameSis
-                {
-                    Name = name
-                };
-
-            intsisEntities.GetContext().NameSis.Add(newSystem);
-            intsisEntities.GetContext().SaveChanges();
-
-            var systemId = intsisEntities.GetContext().NameSis
-                .Where(ns => ns.Name == name)
-                .Select(ns => ns.ID)
-                .FirstOrDefault();
-            SelectedSys = systemId;
-            // Привязываем DataGrid после добавления системы
-            binddatagrid(systemId);
-            
-        }
-
         private void Create_Click(object sender, RoutedEventArgs e)
         {
           
@@ -100,11 +81,6 @@ namespace intsis
                     MessageBox.Show("Редактирование данных");
                     binddatagrid(Convert.ToInt32(NameI.SelectedValue));
                     SelectedSys = Convert.ToInt32(NameI.SelectedValue);
-                }
-                else
-                {
-                    MessageBox.Show("Создана новая система");
-                    insert(NameI.Text);
                 }
             BindComboBox();
 
@@ -178,7 +154,10 @@ namespace intsis
 
         private void NameI_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            
+            if (NameI.SelectedIndex == -1)
+                UpdateSis.IsEnabled = false;
+            else
+                UpdateSis.IsEnabled = true;
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -204,6 +183,12 @@ namespace intsis
                     }
                 }
             }
+        }
+
+        private void CreateSystem_Click(object sender, RoutedEventArgs e)
+        {
+            CreateSis createSis = new CreateSis();
+            createSis.ShowDialog();
         }
     }
 }

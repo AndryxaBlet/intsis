@@ -28,6 +28,8 @@
             <DataGrid.Columns>
                 <DataGridTextColumn FontSize="20" Header="ID" Width="auto" Binding="{Binding ID}" IsReadOnly="True"/>
                 <DataGridTextColumn FontSize="20" Header="Название" Binding="{Binding Name}" IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20" Header="Сфера применения" Binding="{Binding ScopeOfApplication}" IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20" Header="Комментарий" Binding="{Binding Comment}" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

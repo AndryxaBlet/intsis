@@ -29,11 +29,10 @@ namespace intsis
             intsisEntities.GetContext().Database.Connection.ConnectionString = connect;
         }
         
-        string connect = Properties.Settings.Default.NotebookSQL;
+        string connect = Properties.Settings.Default.NotebookSQL2;
         public void binddatagrid()
         {
             Dg.ItemsSource = intsisEntities.GetContext().NameSis.ToList();
-
         }
 
         private void Create_Click(object sender, RoutedEventArgs e)
