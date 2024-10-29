@@ -43,17 +43,24 @@ namespace intsis
         }
         public void insert(string name, string scope, string comment)
         {
-
-            // Добавляем новую систему
-            var newSystem = new NameSis
+            try
             {
-                Name = name,
-                ScopeOfApplication = scope,
-                Comment = comment
-            };
+                // Добавляем новую систему
+                var newSystem = new NameSis
+                {
+                    Name = name,
+                    ScopeOfApplication = scope,
+                    Comment = comment
+                };
 
-            intsisEntities.GetContext().NameSis.Add(newSystem);
-            intsisEntities.GetContext().SaveChanges();
+                intsisEntities.GetContext().NameSis.Add(newSystem);
+                intsisEntities.GetContext().SaveChanges();
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
+            }
         }
     }
 }

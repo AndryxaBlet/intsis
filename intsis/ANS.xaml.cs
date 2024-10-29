@@ -23,6 +23,8 @@ namespace intsis
 
         public void binddatagrid(string ID)
         {
+            try 
+            { 
           
                 // Получаем ответы по IDRule
                 var answers = intsisEntities.GetContext().Answer
@@ -37,94 +39,125 @@ namespace intsis
                 {
                     answer.IDRule = int.Parse(ID);
                 }
-            
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
+            }
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // Получаем измененные записи из DataGrid
-            var answers = Dg.ItemsSource as List<Answer>;
-
-            if (answers != null)
+            try
             {
-                foreach (var answer in answers)
+                // Получаем измененные записи из DataGrid
+                var answers = Dg.ItemsSource as List<Answer>;
+
+                if (answers != null)
                 {
-                    // Проверяем, существует ли соответствующее правило
-                    answer.IDRule = id;
-
-                    // Проверяем, существует ли запись в базе данных
-                    var existingAnswer = intsisEntities.GetContext().Answer
-                        .FirstOrDefault(a => a.ID == answer.ID);
-
-                    if (existingAnswer != null)
+                    foreach (var answer in answers)
                     {
-                        // Обновляем запись
-                        intsisEntities.GetContext().Entry(existingAnswer).CurrentValues.SetValues(answer);
+                        // Проверяем, существует ли соответствующее правило
+                        answer.IDRule = id;
+
+                        // Проверяем, существует ли запись в базе данных
+                        var existingAnswer = intsisEntities.GetContext().Answer
+                            .FirstOrDefault(a => a.ID == answer.ID);
+
+                        if (existingAnswer != null)
+                        {
+                            // Обновляем запись
+                            intsisEntities.GetContext().Entry(existingAnswer).CurrentValues.SetValues(answer);
+                        }
+                        else
+                        {
+                            // Добавляем новую запись
+                            intsisEntities.GetContext().Answer.Add(answer);
+                        }
                     }
-                    else
-                    {
-                        // Добавляем новую запись
-                        intsisEntities.GetContext().Answer.Add(answer);
-                    }
+
+                    // Сохраняем изменения в базе данных
+                    intsisEntities.GetContext().SaveChanges();
+
+                    // Повторно привязываем обновленные данные к DataGrid
+                    binddatagrid(id.ToString());
+
+                    MessageBox.Show("Обновление прошло успешно");
                 }
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
 
-                // Сохраняем изменения в базе данных
-                intsisEntities.GetContext().SaveChanges();
-
-                // Повторно привязываем обновленные данные к DataGrid
-                binddatagrid(id.ToString());
-
-                MessageBox.Show("Обновление прошло успешно");
             }
         }
 
         private void DelV_Click(object sender, RoutedEventArgs e)
         {
-            int del = id;
-            var itemToDelete = intsisEntities.GetContext().Rules.FirstOrDefault(x => x.IDRule == del);
-
-            if (itemToDelete != null)
+            try
             {
-                MessageBoxResult result = MessageBox.Show("Удалить вопрос?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                int del = id;
+                var itemToDelete = intsisEntities.GetContext().Rules.FirstOrDefault(x => x.IDRule == del);
 
-                if (result == MessageBoxResult.Yes)
+                if (itemToDelete != null)
                 {
-                    result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить вопрос невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    MessageBoxResult result = MessageBox.Show("Удалить вопрос?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     if (result == MessageBoxResult.Yes)
                     {
-                        // Удалить объект из контекста
-                        intsisEntities.GetContext().Rules.Remove(itemToDelete);
+                        result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить вопрос невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-                        // Сохранить изменения в базе данных
-                        intsisEntities.GetContext().SaveChanges();
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            // Удалить объект из контекста
+                            intsisEntities.GetContext().Rules.Remove(itemToDelete);
+
+                            // Сохранить изменения в базе данных
+                            intsisEntities.GetContext().SaveChanges();
+                        }
                     }
                 }
+            }
+            
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
             }
         }
 
         private void DelO_Click(object sender, RoutedEventArgs e)
         {
-            int del = (Dg.ItemsSource as List<Answer>)[Dg.SelectedIndex].ID;
-            var itemToDelete = intsisEntities.GetContext().Answer.FirstOrDefault(x => x.ID == del);
-
-            if (itemToDelete != null)
+            try
             {
-                MessageBoxResult result = MessageBox.Show("Удалить ответ на вопрос?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                int del = (Dg.ItemsSource as List<Answer>)[Dg.SelectedIndex].ID;
+                var itemToDelete = intsisEntities.GetContext().Answer.FirstOrDefault(x => x.ID == del);
 
-                if (result == MessageBoxResult.Yes)
+                if (itemToDelete != null)
                 {
-                    result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить ответ невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    MessageBoxResult result = MessageBox.Show("Удалить ответ на вопрос?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     if (result == MessageBoxResult.Yes)
                     {
-                        // Удалить объект из контекста
-                        intsisEntities.GetContext().Answer.Remove(itemToDelete);
+                        result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить ответ невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-                        // Сохранить изменения в базе данных
-                        intsisEntities.GetContext().SaveChanges();
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            // Удалить объект из контекста
+                            intsisEntities.GetContext().Answer.Remove(itemToDelete);
+
+                            // Сохранить изменения в базе данных
+                            intsisEntities.GetContext().SaveChanges();
+                        }
                     }
                 }
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
             }
         }
     }

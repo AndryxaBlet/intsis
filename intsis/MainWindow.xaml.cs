@@ -35,31 +35,54 @@ namespace intsis
         string connect = Properties.Settings.Default.NotebookSQL2;
         public void binddatagrid()
         {
-            Dg.ItemsSource = intsisEntities.GetContext().NameSis.ToList();
+            try
+            {
+                Dg.ItemsSource = intsisEntities.GetContext().NameSis.ToList();
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
+            }
         }
 
         private void Create_Click(object sender, RoutedEventArgs e)
         {
-            var selectedRuleId = -1;
-            if (Dg.SelectedIndex != -1)
+            try
             {
-               selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
+                var selectedRuleId = -1;
+                if (Dg.SelectedIndex != -1)
+                {
+                    selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
+                }
+                Create_Window window = new Create_Window(selectedRuleId);
+                window.ShowDialog();
+                binddatagrid();
             }
-             Create_Window window = new Create_Window(selectedRuleId);
-             window.ShowDialog();
-             binddatagrid();
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
+            }
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            if (Dg.SelectedIndex!=-1)
+            try
             {
-                var selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
-                Answers answers = new Answers(selectedRuleId);
-                answers.ShowDialog();
+                if (Dg.SelectedIndex != -1)
+                {
+                    var selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
+                    Answers answers = new Answers(selectedRuleId);
+                    answers.ShowDialog();
+                }
+                else MessageBox.Show("Выберите систему");
             }
-            else MessageBox.Show("Выберите систему");
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
 
+            }
         }
     }
 }

@@ -34,7 +34,6 @@ namespace intsis
 
         public int FIRST(int id)
         {
-            
                 // Получаем текст правила по IDSis
                 var ruleText = intsisEntities.GetContext().Rules
                     .Where(r => r.IDSis == id)
@@ -54,11 +53,12 @@ namespace intsis
                 UpdateItems(ruleID);
 
                 return ruleID;
-            
+
         }
         private void UpdateItems(int id)
         {
-            
+            try
+            {
                 // Получаем список ответов по IDRule
                 var answers = intsisEntities.GetContext().Answer
                     .Where(a => a.IDRule == id)
@@ -70,17 +70,24 @@ namespace intsis
                 CB.DisplayMemberPath = "Ans";
                 CB.SelectedValuePath = "ID";
 
-            
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
+            }
         }
 
         public void BNext()
         {
-            var selectedValue = CB.SelectedValue.ToString();
-            int.TryParse(selectedValue, out int sv);
-
-            if (selectedValue != null)
+            try
             {
-             
+                var selectedValue = CB.SelectedValue.ToString();
+                int.TryParse(selectedValue, out int sv);
+
+                if (selectedValue != null)
+                {
+
                     // Получаем значение поля NextR
                     var nextValue = intsisEntities.GetContext().Answer
                         .Where(a => a.ID == sv)
@@ -118,7 +125,13 @@ namespace intsis
                         Deny.Visibility = Visibility.Hidden;
                         Repeat.Visibility = Visibility.Visible;
                     }
-                
+
+                }
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
             }
         }
 
@@ -129,14 +142,30 @@ namespace intsis
 
         private void Repeat_Click(object sender, RoutedEventArgs e)
         {
-            next=FIRST(log);
-            CB.Visibility = Visibility.Visible;
-            Deny.Visibility = Visibility.Visible;
-            Repeat.Visibility = Visibility.Hidden;
+            try
+            {
+                next = FIRST(log);
+                CB.Visibility = Visibility.Visible;
+                Deny.Visibility = Visibility.Visible;
+                Repeat.Visibility = Visibility.Hidden;
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
+            }
         }
         private void Deny_Click(object sender, RoutedEventArgs e)
         {
-            BNext();
+            try 
+            { 
+                BNext();
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
+            }
         }
     }
 }

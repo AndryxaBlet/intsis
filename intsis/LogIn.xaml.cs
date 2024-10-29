@@ -34,33 +34,46 @@ namespace intsis
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string username = LoginTextBox.Text;
-            string password = PasswordBox.Password;
-
-            var login = intsisEntities.GetContext().User.FirstOrDefault(l => l.Login == username && l.Password == password);
-
-            if (login != null)
+            try
             {
+                string username = LoginTextBox.Text;
+                string password = PasswordBox.Password;
+
+                var login = intsisEntities.GetContext().User.FirstOrDefault(l => l.Login == username && l.Password == password);
+
+                if (login != null)
+                {
                     MainWindow window = new MainWindow(login.IsAdmin);
                     window.Show();
                     this.Close();
-        
-            }
-            else
-            {
-                MessageBox.Show("Неверно введены данные аккаунта!");
-            }
 
-            
-           
+                }
+                else
+                {
+                    MessageBox.Show("Неверно введены данные аккаунта!");
+                }
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
+            }
         }
 
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            Registration registration = new Registration();
-            registration.Show();
-            this.Close();
+            try
+            {
+                Registration registration = new Registration();
+                registration.Show();
+                this.Close();
+            }
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+
+            }
         }
     }
 }
