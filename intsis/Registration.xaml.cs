@@ -83,5 +83,41 @@ namespace intsis
             logIn.Show();
             this.Close();
         }
+
+        private void EmailTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) // Проверяем, нажата ли клавиша Enter
+            {
+                LoginTextBox.Focus(); // Передаем фокус на кнопку
+                e.Handled = true;
+            }
+        }
+
+        private void LoginTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) // Проверяем, нажата ли клавиша Enter
+            {
+                PasswordBox.Focus(); // Передаем фокус на кнопку
+                e.Handled = true;
+            }
+        }
+
+        private void PasswordBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) // Проверяем, нажата ли клавиша Enter
+            {
+                ConfirmPasswordBox.Focus(); // Передаем фокус на кнопку
+                e.Handled = true;
+            }
+        }
+
+        private void ConfirmPasswordBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) // Проверяем, нажата ли клавиша Enter
+            {
+                RegisterButton.Focus(); // Передаем фокус на кнопку
+                e.Handled = true;
+            }
+        }
     }
 }

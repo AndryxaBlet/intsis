@@ -23,6 +23,7 @@ namespace intsis
         {
             InitializeComponent();
         }
+        public static int SystemId { get; private set; }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -55,6 +56,9 @@ namespace intsis
 
                 intsisEntities.GetContext().NameSis.Add(newSystem);
                 intsisEntities.GetContext().SaveChanges();
+                var sisid=intsisEntities.GetContext().NameSis.Where(x=>x.Name==name && x.ScopeOfApplication==scope && x.Comment==comment).FirstOrDefault();
+                SystemId = sisid.ID;
+                DialogResult = true;
             }
             catch (Exception r)
             {

@@ -28,7 +28,7 @@ namespace intsis
         {
             InitializeComponent();
             intsisEntities.GetContext().Database.Connection.ConnectionString = connect;
-
+            LoginTextBox.Focus();
         }
         string connect = Properties.Settings.Default.NotebookSQL;
 
@@ -73,6 +73,24 @@ namespace intsis
             {
                 MessageBox.Show(r.Message);
 
+            }
+        }
+
+        private void LoginTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) // Проверяем, нажата ли клавиша Enter
+            {
+                PasswordBox.Focus(); // Передаем фокус на кнопку
+                e.Handled = true; 
+            }
+        }
+
+        private void PasswordBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) // Проверяем, нажата ли клавиша Enter
+            {
+                LoginButton.Focus(); // Передаем фокус на кнопку
+                e.Handled = true; // Устанавливаем Handled, чтобы предотвратить дальнейшую обработку события
             }
         }
     }

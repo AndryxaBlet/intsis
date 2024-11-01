@@ -301,16 +301,11 @@
 
         <!-- Название и ComboBox -->
         <Label FontWeight="Bold" Content="Название" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" Margin="27,22,0,0"/>
-        <ComboBox Style="{DynamicResource ComboBoxStyle1}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="185" Name="NameI" IsEditable="False" Grid.Row="0" Grid.Column="0" SelectionChanged="NameI_SelectionChanged" Grid.RowSpan="1"/>
+        <ComboBox Style="{DynamicResource ComboBoxStyle1}"  SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="185" Name="NameI" IsEditable="False" Grid.Row="0" Grid.Column="0" SelectionChanged="NameI_SelectionChanged" Grid.RowSpan="1">
+        </ComboBox>
 
         <!-- Кнопки в следующей строке -->
-        <Button Content="Редактировать систему" HorizontalAlignment="Left" VerticalAlignment="Top" Name="UpdateSis" Height="19" Width="248" Grid.Row="1" Grid.Column="0" Margin="32,40,0,0" Click="Create_Click">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
-        </Button>
+
         <Button Content="Применить изменения" Name="Create_Copy" Click="Create_Copy_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Height="19" Width="248" Grid.Row="1" Grid.Column="1" Margin="20,40,0,0">
             <Button.Resources>
                 <Style TargetType="Border">
@@ -318,7 +313,7 @@
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Content="Удалить ЭС" HorizontalAlignment="Left" VerticalAlignment="Top" Name="Delete" Height="19" Width="248" Grid.Row="1" Grid.Column="0" Margin="32,70,0,0" Click="Delete_Click">
+        <Button Content="Удалить ЭС" HorizontalAlignment="Left" VerticalAlignment="Top" Name="Delete" Height="19" Width="248" Grid.Row="1" Grid.Column="0" Margin="32,40,0,0" Click="Delete_Click">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
@@ -343,9 +338,9 @@
         <!-- DataGrid, который будет растягиваться -->
         <DataGrid x:Name="Dg" AutoGenerateColumns="False" Grid.Row="2" Grid.ColumnSpan="2" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <DataGrid.Columns>
-                <DataGridTextColumn FontSize="20" Width="22" Header="ID" Binding="{Binding IDRule}" IsReadOnly="True"/>
-                <DataGridTextColumn FontSize="20" Width="*" Header="Вопрос" Binding="{Binding Text}"/>
-                <DataGridTextColumn Header="Прио" Width="0" Binding="{Binding IDRule}" Visibility="Hidden"/>
+                <DataGridTextColumn FontSize="20" Visibility="Hidden" Width="22" Header="ID" Binding="{Binding IDRule}" x:Name="ID" IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20" Width="*" Header="Вопрос" Binding="{Binding Text}" x:Name="Txt"/>
+                <DataGridTextColumn Header="Прио" Width="0" Binding="{Binding IDSis}" x:Name="IDRul" Visibility="Hidden"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

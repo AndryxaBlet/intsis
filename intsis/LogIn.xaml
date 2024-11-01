@@ -11,13 +11,13 @@
             <TextBlock Text="Авторизация" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
             <TextBlock Text="Логин" FontSize="11" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left"/>
             <TextBox Name="LoginTextBox" 
-                 Margin="0,0,0,10" ></TextBox>
+                 Margin="0,0,0,10" KeyDown="LoginTextBox_KeyDown" ></TextBox>
             <TextBlock Text="Пароль" FontSize="11" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left"/>
             <PasswordBox Name="PasswordBox" 
-                     Margin="0,0,0,20" ></PasswordBox>
+                     Margin="0,0,0,20" KeyDown="PasswordBox_KeyDown" ></PasswordBox>
 
 
-            <Button Content="Войти" Click="LoginButton_Click" >
+            <Button Content="Войти" Click="LoginButton_Click" Name="LoginButton" >
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>

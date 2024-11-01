@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using System.Data.Entity;
 using System.Collections.Generic;
-using System.Xml.Linq;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Globalization;
+using System.Windows.Data;
 
 namespace intsis
 {
@@ -13,14 +15,20 @@ namespace intsis
     public partial class ANS : Window
     {
         private int id = 0;
+        public ObservableCollection<Rules> RuleOptions { get; set; }
 
-        public ANS(string ID)
+        public ANS(string ID, int idsis)
         {
             InitializeComponent();
             binddatagrid(ID);
             id = Convert.ToInt32(ID);
-        }
+            RuleOptions = new ObservableCollection<Rules>(intsisEntities.GetContext().Rules.Where(x=>x.IDSis==idsis));
 
+            // Устанавливаем DataContext для MainWindow, чтобы RuleOptions был доступен
+            DataContext = this;
+
+        }
+       
         public void binddatagrid(string ID)
         {
             try 
@@ -116,6 +124,7 @@ namespace intsis
 
                             // Сохранить изменения в базе данных
                             intsisEntities.GetContext().SaveChanges();
+                            this.Close();
                         }
                     }
                 }

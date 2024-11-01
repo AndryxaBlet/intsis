@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:intsis"
         mc:Ignorable="d"
         Title="ANS" Height="450" Width="800" Background="#83B8FF">
+
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -16,14 +18,28 @@
 
         <DataGrid x:Name="Dg" AutoGenerateColumns="False" Margin="0,0,0,5">
             <DataGrid.Columns>
-                <DataGridTextColumn FontSize="20" Width="auto" Header="ID" Binding="{Binding ID}" IsReadOnly="True"/>
-                <DataGridTextColumn FontSize="20" Width="*" Header="Ответ" Binding="{Binding Ans}"/>
-                <DataGridTextColumn Header="Следующее правило" Width="*" Binding="{Binding NextR}"/>
+                <DataGridTextColumn FontSize="20" Width="auto" Header="ID" Visibility="Hidden" Binding="{Binding ID}" IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20" Width="auto" MaxWidth="100" Header="Ответ" Binding="{Binding Ans}"/>
+
+                <!-- Колонка с ComboBox вместо текста -->
+                <DataGridTemplateColumn Header="Следующее правило" Width="Auto" MaxWidth="150" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.RuleOptions, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                DisplayMemberPath="Text"   
+                                SelectedValuePath="IDRule"
+                                SelectedValue="{Binding NextR, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <DataGridTextColumn Header="Рекомендации" Width="*" Binding="{Binding Rec}"/>
                 <DataGridTextColumn Header="Прио" Binding="{Binding IDRule}" Visibility="Hidden"/>
+
+
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Удалить вопрос" HorizontalAlignment="Left" Width="105" Margin="10,10" Name="DelV" VerticalAlignment="Top"  Grid.Row="1" Click="DelV_Click">
+        <Button Content="Удалить вопрос" HorizontalAlignment="Left" Width="105" Margin="10,10,0,10" Name="DelV"  Grid.Row="1" Click="DelV_Click">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>

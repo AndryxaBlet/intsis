@@ -4,6 +4,11 @@ using System.Windows;
 using System.Data.Entity;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Contexts;
+using System.Data.Entity.Validation;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.Web.Configuration;
+using System.Data;
 
 
 namespace intsis
@@ -14,22 +19,24 @@ namespace intsis
     public partial class Create_Window : Window
     {
         private int id = 0;
-        private int SelectedSys=-1;
+        private int SelectedSys = -1;
 
         public Create_Window(int id)
-        {
+        {   
             InitializeComponent();
             BindComboBox();
-            if (id != -1) 
-            { 
+            NameI.SelectedIndex = 0;
+            binddatagrid(Convert.ToInt32(NameI.SelectedValue));
+            if (id != -1)
+            {
                 NameI.SelectedValue = id;
                 binddatagrid(id);
             }
-            if (NameI.SelectedIndex == -1)
-                UpdateSis.IsEnabled = false;
-            else
-                UpdateSis.IsEnabled = true;
+
+
         }
+
+
         void BindComboBox()
         {
             var Sis = intsisEntities.GetContext().NameSis.ToList();
@@ -37,16 +44,11 @@ namespace intsis
             NameI.DisplayMemberPath = "Name";
             NameI.SelectedValuePath = "ID";
         }
-        
+
         public void binddatagrid(int systemId)
         {
-         
+
             {
-                // Получаем ID системы по имени
-                //var systemId = intsisEntities.GetContext().NameSis
-                //    .Where(ns => ns.Name == name)
-                //    .Select(ns => ns.ID)
-                //    .FirstOrDefault();
                 SelectedSys = systemId;
                 if (systemId != 0)
                 {
@@ -69,22 +71,6 @@ namespace intsis
             }
         }
 
-        private void Create_Click(object sender, RoutedEventArgs e)
-        {
-          
-                // Проверяем, существует ли система с таким именем
-                var systemExists = intsisEntities.GetContext().NameSis
-                    .Any(ns => ns.Name == NameI.Text);
-
-                if (systemExists)
-                {
-                    MessageBox.Show("Редактирование данных");
-                    binddatagrid(Convert.ToInt32(NameI.SelectedValue));
-                    SelectedSys = Convert.ToInt32(NameI.SelectedValue);
-                }
-            BindComboBox();
-
-        }
 
         public void Create_Copy_Click(object sender, RoutedEventArgs e)
         {
@@ -98,12 +84,6 @@ namespace intsis
                     // Получаем ID существующей NameSis
                     var nameSisId = SelectedSys;
 
-                    // Проверяем, существует ли NameSis
-                    if (nameSisId == 0)
-                    {
-                        MessageBox.Show("Система не найдена. Убедитесь, что система существует перед добавлением правил.");
-                        return; // Прекращаем выполнение, если NameSis не найден
-                    }
 
                     foreach (var rule in rules)
                     {
@@ -127,13 +107,13 @@ namespace intsis
                     // Сохраняем изменения в базе данных
                     intsisEntities.GetContext().SaveChanges();
                     binddatagrid(SelectedSys);
-
-                    MessageBox.Show("Update successful");
                 }
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("Не выбранна система");
             }
-            
+
         }
 
 
@@ -143,8 +123,9 @@ namespace intsis
             {
                 // Открываем окно с вопросами для выбранного правила
                 var selectedRuleId = (Dg.ItemsSource as List<Rules>)[Dg.SelectedIndex].IDRule;
-                ANS ans = new ANS(selectedRuleId.ToString());
+                ANS ans = new ANS(selectedRuleId.ToString(),id);
                 ans.Show();
+                binddatagrid(Convert.ToInt32(NameI.SelectedValue));
             }
             else
             {
@@ -154,10 +135,17 @@ namespace intsis
 
         private void NameI_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (NameI.SelectedIndex == -1)
-                UpdateSis.IsEnabled = false;
-            else
-                UpdateSis.IsEnabled = true;
+            // Проверяем, существует ли система с таким именем
+            var systemExists = intsisEntities.GetContext().NameSis
+                .Any(ns => ns.Name == NameI.Text);
+
+            if (systemExists)
+            {
+                MessageBox.Show("Редактирование данных");
+                binddatagrid(Convert.ToInt32(NameI.SelectedValue));
+                SelectedSys = Convert.ToInt32(NameI.SelectedValue);
+            }
+            BindComboBox();
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -180,6 +168,7 @@ namespace intsis
 
                         // Сохранить изменения в базе данных
                         intsisEntities.GetContext().SaveChanges();
+                        this.Close();
                     }
                 }
             }
@@ -188,7 +177,20 @@ namespace intsis
         private void CreateSystem_Click(object sender, RoutedEventArgs e)
         {
             CreateSis createSis = new CreateSis();
-            createSis.ShowDialog();
+            
+            bool? result = createSis.ShowDialog();
+
+            if (result == true) // Проверяем, что окно закрыто с успешным результатом
+            {
+                int systemId = CreateSis.SystemId;
+                binddatagrid(systemId);
+                BindComboBox();
+                NameI.SelectedValue = systemId;
+            }
+           
         }
+
+    
+        
     }
 }
