@@ -94,6 +94,7 @@
     <Compile Include="CreateSis.xaml.cs">
       <DependentUpon>CreateSis.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FUNC.cs" />
     <Compile Include="LogIn.xaml.cs">
       <DependentUpon>LogIn.xaml</DependentUpon>
     </Compile>

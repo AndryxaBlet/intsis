@@ -89,5 +89,38 @@ namespace intsis
             }
             
         }
+
+        private void Grid_Click(object sender, MouseEventArgs e)
+        {
+            if (Dg.IsFocused && !Dg.IsMouseOver)
+            {
+                Dg.SelectedIndex = -1;
+            }
+        }
+
+        private void Dg_MouseLeave(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            
+                Dg.SelectedIndex = -1;
+            
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Dg.IsFocused && !Dg.IsMouseOver)
+            {
+                Dg.SelectedIndex = -1;
+            }
+        }
+
+        private void Dg_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Dg.SelectedItem = null;
+        }
     }
 }

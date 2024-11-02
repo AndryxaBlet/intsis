@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:intsis"
              StartupUri="LogIn.xaml">
     <Application.Resources>
-       
+        <Style TargetType="Window">
+            <!-- Пример настроек -->
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="#83B8FF"/>
+        </Style>
     </Application.Resources>
 </Application>

@@ -18,7 +18,6 @@ namespace intsis
     {
         private int id = 0;
         public ObservableCollection<Rules> RuleOptions { get; set; }
-        public ObservableCollection<Answer> Answers { get; set; } = new ObservableCollection<Answer>();
 
         public ANS(string ID, int idsis)
         {
@@ -31,7 +30,6 @@ namespace intsis
             DataContext = this;
 
         }
-        ComboBox combo;
        
         public void binddatagrid(string ID)
         {
@@ -42,13 +40,7 @@ namespace intsis
                 var answersFromDb = intsisEntities.GetContext().Answer
                     .Where(a => a.IDRule.ToString() == ID)
                     .ToList();
-                Answers.Clear();
-                foreach (var answer in answersFromDb)
-                {
-                    answer.IDRule = id;
-                    Answers.Add(answer); // Добавляем элементы в ObservableCollection
-                }
-                Dg.ItemsSource = Answers; // Привязываем коллекцию к DataGrid
+                Dg.ItemsSource = answersFromDb; // Привязываем коллекцию к DataGrid
             }
             catch (Exception r)
             {
@@ -63,8 +55,8 @@ namespace intsis
             //try
             {
                 // Получаем измененные записи из DataGrid
-               
-                    foreach (var answer in Answers)
+                var answers = Dg.ItemsSource as List<Answer>;
+                foreach (var answer in answers)
                     {
                         // Проверяем, существует ли соответствующее правило
                         answer.IDRule = id;
@@ -172,23 +164,14 @@ namespace intsis
             }
         }
 
-        private static T FindParent<T>(DependencyObject child) where T : DependencyObject
-        {
-            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
-            if (parentObject == null) return null;
-
-            if (parentObject is T parent)
-                return parent;
-            else
-                return FindParent<T>(parentObject);
-        }
+      
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ComboBox comboBox && comboBox.SelectedValue != null)
             {
                 // Получаем текущий объект строки, к которому относится ComboBox
-                var dataGridRow = FindParent<DataGridRow>(comboBox);
+                var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(comboBox);
                 if (dataGridRow?.Item is Answer answer)
                 {
                     // Обновляем значение NextR для текущего элемента
@@ -207,6 +190,21 @@ namespace intsis
             }
         }
 
-        
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                // Получаем текущий объект строки, к которому относится ComboBox
+                var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
+                if (dataGridRow?.Item is Answer deleted)
+                {
+                    var itemToDelete = intsisEntities.GetContext().Answer.FirstOrDefault(x => x.ID == deleted.ID);
+                    itemToDelete.IDRule = id;
+                    intsisEntities.GetContext().Answer.Remove(itemToDelete);
+                    intsisEntities.GetContext().SaveChanges();
+                    binddatagrid(id.ToString());
+                }
+            }
+        }
     }
 }

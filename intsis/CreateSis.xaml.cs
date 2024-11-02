@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Deployment.Internal;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,17 +20,36 @@ namespace intsis
     /// </summary>
     public partial class CreateSis : Window
     {
-        public CreateSis()
+        public CreateSis(int id)
         {
             InitializeComponent();
+            if (id != -1)
+            {
+                sys=intsisEntities.GetContext().NameSis.Where(x => x.ID == id).FirstOrDefault();
+                NameTextBox.Text=sys.Name;
+                ScopeTextBox.Text = sys.ScopeOfApplication;
+                CommentTextBox.Text = sys.Comment;
+
+            }
         }
         public static int SystemId { get; private set; }
+        NameSis sys=null;
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                insert(NameTextBox.Text, ScopeTextBox.Text, CommentTextBox.Text);
+                if (sys!=null)
+                {
+                    sys.Name=NameTextBox.Text;
+                    sys.ScopeOfApplication=ScopeTextBox.Text;
+                    sys.Comment = CommentTextBox.Text;
+                    intsisEntities.GetContext().SaveChanges();
+                }
+                else
+                {
+                    insert(NameTextBox.Text, ScopeTextBox.Text, CommentTextBox.Text);
+                }
             }
             catch (Exception r)
             {

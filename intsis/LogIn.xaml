@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:intsis"
         mc:Ignorable="d"
-        Title="Авторизация" Height="400" Width="400" Background="#83B8FF">
+        Title="Авторизация" Height="400" Width="400" Background="#83B8FF" WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="Авторизация" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
@@ -17,7 +17,7 @@
                      Margin="0,0,0,20" KeyDown="PasswordBox_KeyDown" ></PasswordBox>
 
 
-            <Button Content="Войти" Click="LoginButton_Click" Name="LoginButton" >
+            <Button Content="Войти" Click="LoginButton_Click" Name="LoginButton"  >
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="5"/>

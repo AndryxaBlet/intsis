@@ -9,6 +9,9 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Web.Configuration;
 using System.Data;
+using intsis;
+using System.Security.Cryptography;
+
 
 
 namespace intsis
@@ -190,7 +193,7 @@ namespace intsis
 
         private void CreateSystem_Click(object sender, RoutedEventArgs e)
         {
-            CreateSis createSis = new CreateSis();
+            CreateSis createSis = new CreateSis(-1);
             
             bool? result = createSis.ShowDialog();
 
@@ -204,7 +207,36 @@ namespace intsis
            
         }
 
-    
-        
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                // Получаем текущий объект строки, к которому относится ComboBox
+                var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
+                if (dataGridRow?.Item is Rules deleted)
+                {
+                    var itemToDelete = intsisEntities.GetContext().Rules.FirstOrDefault(x => x.IDRule ==deleted.IDRule );
+                    intsisEntities.GetContext().Rules.Remove(itemToDelete);
+                    intsisEntities.GetContext().SaveChanges();
+                    binddatagrid(id);
+                }
+            }
+        }
+
+        private void UpdIS_Click(object sender, RoutedEventArgs e)
+        {
+            CreateSis createSis = new CreateSis(Convert.ToInt32(NameI.SelectedValue));
+
+            bool? result = createSis.ShowDialog();
+
+            if (result == true) // Проверяем, что окно закрыто с успешным результатом
+            {
+                int systemId = CreateSis.SystemId;
+                binddatagrid(systemId);
+                BindComboBox();
+                NameI.SelectedValue = systemId;
+            }
+
+        }
     }
 }

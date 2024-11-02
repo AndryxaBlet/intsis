@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:intsis"
         mc:Ignorable="d"
-        Title="Регистрация" Height="450" Width="400" Background="#83B8FF">
+        Title="Регистрация" Height="450" Width="400" Background="#83B8FF" WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="Регистрация" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>

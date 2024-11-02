@@ -303,6 +303,14 @@
         <Label FontWeight="Bold" Content="Название" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" Margin="27,22,0,0"/>
         <ComboBox Style="{DynamicResource ComboBoxStyle1}"  SelectedIndex="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="185" Name="NameI" IsEditable="False" Grid.Row="0" Grid.Column="0" SelectionChanged="NameI_SelectionChanged" Grid.RowSpan="1">
         </ComboBox>
+        <Button Content="Редактировать ЭС" HorizontalAlignment="Left" VerticalAlignment="Bottom" Name="UpdIS" Height="19" Width="248" Grid.Row="0" Grid.Column="1" Margin="20,22,0,0" Click="UpdIS_Click">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
 
         <!-- Кнопки в следующей строке -->
 
@@ -341,6 +349,13 @@
                 <DataGridTextColumn FontSize="20" Visibility="Hidden" Width="22" Header="ID" Binding="{Binding IDRule}" x:Name="ID" IsReadOnly="True"/>
                 <DataGridTextColumn FontSize="20" Width="*" Header="Вопрос" Binding="{Binding Text}" x:Name="Txt"/>
                 <DataGridTextColumn Header="Прио" Width="0" Binding="{Binding IDSis}" x:Name="IDRul" Visibility="Hidden"/>
+                <DataGridTemplateColumn Width="auto" Header="Удалить">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Удалить" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
