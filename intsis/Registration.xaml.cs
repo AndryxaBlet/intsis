@@ -48,8 +48,7 @@ namespace intsis
             }
 
          
-            var existingUser = intsisEntities.GetContext().User
-                                  .FirstOrDefault(u => u.Login == username || u.Email == email);
+            var existingUser = intsisEntities.GetContext().User.FirstOrDefault(u => u.Login == username || u.Email == email);
 
             if (existingUser != null)
             {

@@ -22,8 +22,20 @@
             <TextBlock Text="Подтвердите пароль" FontSize="11" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left"/>
             <PasswordBox Name="ConfirmPasswordBox" Margin="0,0,0,20" KeyDown="ConfirmPasswordBox_KeyDown" />
 
-            <Button Content="Зарегистрироваться" Click="RegisterButton_Click" Name="RegisterButton" />
-            <Button Content="Назад к авторизации" Margin="0,10,0,0" Click="BackToLoginButton_Click"/>
+            <Button Content="Зарегистрироваться" Click="RegisterButton_Click" Name="RegisterButton">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+            <Button Content="Назад к авторизации" Margin="0,10,0,0" Click="BackToLoginButton_Click">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

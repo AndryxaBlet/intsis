@@ -76,13 +76,18 @@ namespace intsis
                     Answers answers = new Answers(selectedRuleId);
                     answers.ShowDialog();
                 }
-                else MessageBox.Show("Выберите систему");
+                else MessageBox.Show("Выберите системуa", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Нужно выбрать существующий набор вопросов", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (Exception r)
             {
                 MessageBox.Show(r.Message);
 
             }
+            
         }
     }
 }

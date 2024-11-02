@@ -30,12 +30,12 @@ namespace intsis
             intsisEntities.GetContext().Database.Connection.ConnectionString = connect;
             LoginTextBox.Focus();
         }
-        string connect = Properties.Settings.Default.NotebookSQL;
+        string connect = Properties.Settings.Default.NotebookSQL2;
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 string username = LoginTextBox.Text;
                 string password = PasswordBox.Password;
 
@@ -50,14 +50,14 @@ namespace intsis
                 }
                 else
                 {
-                    MessageBox.Show("Неверно введены данные аккаунта!");
+                MessageBox.Show("Неверно введены данные аккаунта!", "", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
-            }
-            catch (Exception r)
-            {
-                MessageBox.Show(r.Message);
+            //}
+            //catch (Exception r)
+            //{
+            //    MessageBox.Show(r.Message);
 
-            }
+            //}
         }
 
 

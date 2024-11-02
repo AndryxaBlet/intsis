@@ -25,15 +25,14 @@ namespace intsis
         {   
             InitializeComponent();
             BindComboBox();
-            NameI.SelectedIndex = 0;
-            binddatagrid(Convert.ToInt32(NameI.SelectedValue));
+            Dg.Visibility = Visibility.Hidden;
             if (id != -1)
-            {
+            {                
                 NameI.SelectedValue = id;
+                binddatagrid(Convert.ToInt32(NameI.SelectedValue));
                 binddatagrid(id);
+                Dg.Visibility = Visibility.Visible;
             }
-
-
         }
 
 
@@ -43,6 +42,8 @@ namespace intsis
             NameI.ItemsSource = Sis;
             NameI.DisplayMemberPath = "Name";
             NameI.SelectedValuePath = "ID";
+            Dg.Visibility = Visibility.Visible;
+            binddatagrid(Convert.ToInt32(NameI.SelectedValue));
         }
 
         public void binddatagrid(int systemId)
@@ -74,44 +75,51 @@ namespace intsis
 
         public void Create_Copy_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedSys != -1)
+            if (Dg.SelectedIndex != -1)
             {
-                // Получаем измененные данные из DataGrid
-                var rules = Dg.ItemsSource as List<Rules>;
-
-                if (rules != null)
+                if (SelectedSys != -1)
                 {
-                    // Получаем ID существующей NameSis
-                    var nameSisId = SelectedSys;
+                    // Получаем измененные данные из DataGrid
+                    var rules = Dg.ItemsSource as List<Rules>;
 
-
-                    foreach (var rule in rules)
+                    if (rules != null)
                     {
-                        // Проверяем, существует ли запись в базе данных
-                        var existingRule = intsisEntities.GetContext().Rules
-                            .FirstOrDefault(r => r.IDRule == rule.IDRule);
+                        // Получаем ID существующей NameSis
+                        var nameSisId = SelectedSys;
 
-                        if (existingRule != null)
+
+                        foreach (var rule in rules)
                         {
-                            // Обновляем существующую запись
-                            intsisEntities.GetContext().Entry(existingRule).CurrentValues.SetValues(rule);
+                            // Проверяем, существует ли запись в базе данных
+                            var existingRule = intsisEntities.GetContext().Rules
+                                .FirstOrDefault(r => r.IDRule == rule.IDRule);
+
+                            if (existingRule != null)
+                            {
+                                // Обновляем существующую запись
+                                intsisEntities.GetContext().Entry(existingRule).CurrentValues.SetValues(rule);
+                            }
+                            else
+                            {
+                                // Устанавливаем правильный ID для нового правила
+                                rule.IDSis = nameSisId; // Устанавливаем ID существующей NameSis
+                                intsisEntities.GetContext().Rules.Add(rule);
+                            }
                         }
-                        else
-                        {
-                            // Устанавливаем правильный ID для нового правила
-                            rule.IDSis = nameSisId; // Устанавливаем ID существующей NameSis
-                            intsisEntities.GetContext().Rules.Add(rule);
-                        }
+
+                        // Сохраняем изменения в базе данных
+                        intsisEntities.GetContext().SaveChanges();
+                        binddatagrid(SelectedSys);
                     }
-
-                    // Сохраняем изменения в базе данных
-                    intsisEntities.GetContext().SaveChanges();
-                    binddatagrid(SelectedSys);
+                }
+                else
+                {
+                    MessageBox.Show("Не выбранна система");
                 }
             }
             else
             {
-                MessageBox.Show("Не выбранна система");
+                MessageBox.Show("Выберите систему", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
         }
@@ -129,15 +137,14 @@ namespace intsis
             }
             else
             {
-                MessageBox.Show("Выберите систему");
+                MessageBox.Show("Выберите систему", "",MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
         private void NameI_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             // Проверяем, существует ли система с таким именем
-            var systemExists = intsisEntities.GetContext().NameSis
-                .Any(ns => ns.Name == NameI.Text);
+            var systemExists = intsisEntities.GetContext().NameSis.Any(ns => ns.Name == NameI.Text);
 
             if (systemExists)
             {
@@ -150,27 +157,34 @@ namespace intsis
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            int del = Convert.ToInt32(NameI.SelectedValue);
-            var itemToDelete = intsisEntities.GetContext().NameSis.FirstOrDefault(x => x.ID == del);
-
-            if (itemToDelete != null)
+            if (Dg.SelectedIndex != -1)
             {
-                MessageBoxResult result = MessageBox.Show("Удалить систему?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                int del = Convert.ToInt32(NameI.SelectedValue);
+                var itemToDelete = intsisEntities.GetContext().NameSis.FirstOrDefault(x => x.ID == del);
 
-                if (result == MessageBoxResult.Yes)
+                if (itemToDelete != null)
                 {
-                    result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить систему невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    MessageBoxResult result = MessageBox.Show("Удалить систему?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     if (result == MessageBoxResult.Yes)
                     {
-                        // Удалить объект из контекста
-                        intsisEntities.GetContext().NameSis.Remove(itemToDelete);
+                        result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить систему невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-                        // Сохранить изменения в базе данных
-                        intsisEntities.GetContext().SaveChanges();
-                        this.Close();
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            // Удалить объект из контекста
+                            intsisEntities.GetContext().NameSis.Remove(itemToDelete);
+
+                            // Сохранить изменения в базе данных
+                            intsisEntities.GetContext().SaveChanges();
+                            this.Close();
+                        }
                     }
                 }
+            }
+            else
+            {
+                MessageBox.Show("Выберите систему", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
