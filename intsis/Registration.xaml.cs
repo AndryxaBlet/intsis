@@ -22,32 +22,43 @@ namespace intsis
         public Registration()
         {
             InitializeComponent();
+            FirstAdmin();
         }
+        private void FirstAdmin()
+        {
+            var users = intsisEntities.GetContext().User.FirstOrDefault();
+            if (users==null)
+            {
+                isAdmin = true;
+                MessageBox.Show("Ваш аккаунт первый в системе, вы автоматически назначенны администратором, запомните ваши данные аккаунта", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+        }
+        bool isAdmin = false;
 
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
-        { 
+        {
             string email = EmailTextBox.Text;
             string username = LoginTextBox.Text;
             string password = PasswordBox.Password;
             string confirmPassword = ConfirmPasswordBox.Password;
 
-          
-            if ( string.IsNullOrEmpty(email) ||
+
+            if (string.IsNullOrEmpty(email) ||
                 string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Все поля должны быть заполнены!");
                 return;
             }
 
-            
+
             if (password != confirmPassword)
             {
                 MessageBox.Show("Пароли не совпадают!");
                 return;
             }
 
-         
+
             var existingUser = intsisEntities.GetContext().User.FirstOrDefault(u => u.Login == username || u.Email == email);
 
             if (existingUser != null)
@@ -55,15 +66,29 @@ namespace intsis
                 MessageBox.Show("Пользователь с таким логином или электронной почтой уже существует!");
                 return;
             }
-
-
-            User newUser = new User
+            User newUser;
+            if (isAdmin)
             {
-                Email = email,
-                Login = username,
-                Password = password, 
-                IsAdmin = false // Set to false by default; adjust as needed
-            };
+                newUser = new User
+                {
+                    Email = email,
+                    Login = username,
+                    Password = password,
+                    IsAdmin = true // Set to false by default; adjust as needed
+
+                };
+            }
+            else
+            {
+                 newUser = new User
+                {
+                    Email = email,
+                    Login = username,
+                    Password = password,
+                    IsAdmin = false // Set to false by default; adjust as needed
+
+                };
+            }
 
             intsisEntities.GetContext().User.Add(newUser);
             intsisEntities.GetContext().SaveChanges();
