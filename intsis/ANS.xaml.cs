@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Globalization;
 using System.Windows.Data;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace intsis
 {
@@ -16,6 +18,7 @@ namespace intsis
     {
         private int id = 0;
         public ObservableCollection<Rules> RuleOptions { get; set; }
+        public ObservableCollection<Answer> Answers { get; set; } = new ObservableCollection<Answer>();
 
         public ANS(string ID, int idsis)
         {
@@ -28,6 +31,7 @@ namespace intsis
             DataContext = this;
 
         }
+        ComboBox combo;
        
         public void binddatagrid(string ID)
         {
@@ -35,18 +39,16 @@ namespace intsis
             { 
           
                 // Получаем ответы по IDRule
-                var answers = intsisEntities.GetContext().Answer
+                var answersFromDb = intsisEntities.GetContext().Answer
                     .Where(a => a.IDRule.ToString() == ID)
                     .ToList();
-
-                // Привязываем данные к DataGrid
-                Dg.ItemsSource = answers;
-
-                // Устанавливаем значение по умолчанию для колонки IDRule
-                foreach (var answer in answers)
+                Answers.Clear();
+                foreach (var answer in answersFromDb)
                 {
-                    answer.IDRule = int.Parse(ID);
+                    answer.IDRule = id;
+                    Answers.Add(answer); // Добавляем элементы в ObservableCollection
                 }
+                Dg.ItemsSource = Answers; // Привязываем коллекцию к DataGrid
             }
             catch (Exception r)
             {
@@ -58,14 +60,11 @@ namespace intsis
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            try
+            //try
             {
                 // Получаем измененные записи из DataGrid
-                var answers = Dg.ItemsSource as List<Answer>;
-
-                if (answers != null)
-                {
-                    foreach (var answer in answers)
+               
+                    foreach (var answer in Answers)
                     {
                         // Проверяем, существует ли соответствующее правило
                         answer.IDRule = id;
@@ -76,8 +75,11 @@ namespace intsis
 
                         if (existingAnswer != null)
                         {
-                            // Обновляем запись
-                            intsisEntities.GetContext().Entry(existingAnswer).CurrentValues.SetValues(answer);
+                        // Обновляем запись
+
+                        existingAnswer.IDRule = answer.IDRule;
+                        existingAnswer.Rules = answer.Rules;
+                        existingAnswer.Rec = answer.Rec;
                         }
                         else
                         {
@@ -93,13 +95,13 @@ namespace intsis
                     binddatagrid(id.ToString());
 
                     MessageBox.Show("Обновление прошло успешно");
-                }
+                
             }
-            catch (Exception r)
-            {
-                MessageBox.Show(r.Message);
+            //catch (Exception r)
+            //{
+            //    MessageBox.Show(r.Message);
 
-            }
+            //}
         }
 
         private void DelV_Click(object sender, RoutedEventArgs e)
@@ -169,5 +171,42 @@ namespace intsis
 
             }
         }
+
+        private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+            if (parentObject == null) return null;
+
+            if (parentObject is T parent)
+                return parent;
+            else
+                return FindParent<T>(parentObject);
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox comboBox && comboBox.SelectedValue != null)
+            {
+                // Получаем текущий объект строки, к которому относится ComboBox
+                var dataGridRow = FindParent<DataGridRow>(comboBox);
+                if (dataGridRow?.Item is Answer answer)
+                {
+                    // Обновляем значение NextR для текущего элемента
+                    answer.NextR = comboBox.SelectedValue.ToString();
+
+                    // Сохраняем изменения для текущего объекта в базе данных
+                    var context = intsisEntities.GetContext();
+                    var existingAnswer = context.Answer.FirstOrDefault(a => a.ID == answer.ID);
+                    if (existingAnswer != null)
+                    {
+                   
+                        existingAnswer.NextR = answer.NextR;
+                     
+                    }
+                }
+            }
+        }
+
+        
     }
 }
