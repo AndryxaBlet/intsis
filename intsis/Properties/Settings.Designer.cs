@@ -56,6 +56,5 @@ namespace intsis.Properties {
                 return ((string)(this["NotebookSQL2"]));
             }
         }
-
     }
 }

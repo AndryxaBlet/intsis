@@ -82,52 +82,57 @@ namespace intsis
         {
             try
             {
-                var selectedValue = CB.SelectedValue.ToString();
-                int.TryParse(selectedValue, out int sv);
-
-                if (selectedValue != null)
+                if (CB.SelectedIndex != -1)
                 {
+                    var selectedValue = CB.SelectedValue.ToString();
+                    int.TryParse(selectedValue, out int sv);
 
-                    // Получаем значение поля NextR
-                    var nextValue = intsisEntities.GetContext().Answer
-                        .Where(a => a.ID == sv)
-                        .FirstOrDefault();
-                   
-                    
-                        // Проверяем, является ли результат целым числом
-                    if (nextValue.Out == "" || nextValue.Out == null)
+                    if (selectedValue != null)
                     {
-                        next = int.Parse(nextValue.NextR.ToString());
-                        // Получаем текст ответа
-                        var rec = intsisEntities.GetContext().Answer
+
+                        // Получаем значение поля NextR
+                        var nextValue = intsisEntities.GetContext().Answer
                             .Where(a => a.ID == sv)
-                            .Select(a => a.Rec)
                             .FirstOrDefault();
 
-                        if (!string.IsNullOrEmpty(rec))
+
+                        // Проверяем, является ли результат целым числом
+                        if (nextValue.Out == "" || nextValue.Out == null)
                         {
-                            MessageBox.Show(rec);
+                            next = int.Parse(nextValue.NextR.ToString());
+                            // Получаем текст ответа
+                            var rec = intsisEntities.GetContext().Answer
+                                .Where(a => a.ID == sv)
+                                .Select(a => a.Rec)
+                                .FirstOrDefault();
+
+                            if (!string.IsNullOrEmpty(rec))
+                            {
+                                MessageBox.Show(rec);
+                            }
+
+                            // Получаем текст следующего вопроса
+                            var nextText = intsisEntities.GetContext().Rules
+                                .Where(r => r.IDRule == next)
+                                .Select(r => r.Text)
+                                .FirstOrDefault();
+
+                            VOP.Content = nextText;
+                            UpdateItems(next);
+                        }
+                        else
+                        {
+                            // Если это не число, выводим строковое сообщение
+                            VOP.Content = nextValue.Out.ToString();
+                            CB.Visibility = Visibility.Hidden;
+                            Deny.Visibility = Visibility.Hidden;
+                            Repeat.Visibility = Visibility.Visible;
                         }
 
-                        // Получаем текст следующего вопроса
-                        var nextText = intsisEntities.GetContext().Rules
-                            .Where(r => r.IDRule == next)
-                            .Select(r => r.Text)
-                            .FirstOrDefault();
-
-                        VOP.Content = nextText;
-                        UpdateItems(next);
                     }
-                    else
-                    {
-                        // Если это не число, выводим строковое сообщение
-                        VOP.Content = nextValue.Out.ToString();
-                        CB.Visibility = Visibility.Hidden;
-                        Deny.Visibility = Visibility.Hidden;
-                        Repeat.Visibility = Visibility.Visible;
-                    }
-
                 }
+                else
+                { MessageBox.Show("Выберите вариант ответа.", "", MessageBoxButton.OK, MessageBoxImage.Warning); }
             }
             catch (Exception r)
             {

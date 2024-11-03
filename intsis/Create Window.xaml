@@ -358,8 +358,19 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Column="1" Content="Импортировать JSON
-" HorizontalAlignment="Left" Margin="339,36,0,0"  VerticalAlignment="Top" Click="Button_Click_1" Grid.RowSpan="2"/>
-        <Button Grid.Column="1" Content="Экспортировать JSON" HorizontalAlignment="Left" Margin="339,13,0,0" Grid.Row="1" Name="export" VerticalAlignment="Top" Click="export_Click"/>
+        <Button Grid.Column="1" Content="Импортировать JSON" HorizontalAlignment="Left" Margin="330,29,0,0" Width="160" VerticalAlignment="Top" Click="Button_Click_1" Grid.RowSpan="2">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Grid.Column="1" Content="Экспортировать JSON" HorizontalAlignment="Left" Margin="330,8,0,0" Width="160" Grid.Row="1" Name="export" VerticalAlignment="Top" Click="export_Click">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>

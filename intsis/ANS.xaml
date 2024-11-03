@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:intsis"
         mc:Ignorable="d"
-        Title="ANS" Height="450" Width="800" Background="#83B8FF">
+        Title="ANS" Height="450" Width="800" WindowStartupLocation="CenterScreen" Background="#83B8FF">
 
 
     <Grid>
@@ -46,13 +46,6 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Удалить ответ" HorizontalAlignment="Left" Width="105" Margin="120,10" Name="DelO" VerticalAlignment="Top"  Grid.Row="1" Click="DelO_Click">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="5"/>
-                </Style>
-            </Button.Resources>
-        </Button>
         <Button Content="Сохранить изменения" HorizontalAlignment="Right" Width="135" Margin="10" VerticalAlignment="Top" Click="Button_Click" Grid.Row="1">
             <Button.Resources>
                 <Style TargetType="Border">

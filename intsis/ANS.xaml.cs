@@ -193,18 +193,25 @@ namespace intsis
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button)
+            try
             {
-                // Получаем текущий объект строки, к которому относится ComboBox
-                var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
-                if (dataGridRow?.Item is Answer deleted)
+                if (sender is Button button)
                 {
-                    var itemToDelete = intsisEntities.GetContext().Answer.FirstOrDefault(x => x.ID == deleted.ID);
-                    itemToDelete.IDRule = id;
-                    intsisEntities.GetContext().Answer.Remove(itemToDelete);
-                    intsisEntities.GetContext().SaveChanges();
-                    binddatagrid(id);
+                    // Получаем текущий объект строки, к которому относится ComboBox
+                    var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
+                    if (dataGridRow?.Item is Answer deleted)
+                    {
+                        var itemToDelete = intsisEntities.GetContext().Answer.FirstOrDefault(x => x.ID == deleted.ID);
+                        itemToDelete.IDRule = id;
+                        intsisEntities.GetContext().Answer.Remove(itemToDelete);
+                        intsisEntities.GetContext().SaveChanges();
+                        binddatagrid(id);
+                    }
                 }
+            }
+            catch(NullReferenceException)
+            {
+                MessageBox.Show("Сохраните изменения, прежде чем удалять.", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }

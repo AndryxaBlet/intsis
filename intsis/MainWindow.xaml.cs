@@ -77,6 +77,7 @@ namespace intsis
                     answers.ShowDialog();
                 }
                 else MessageBox.Show("Выберите системуa", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                
             }
             catch (ArgumentOutOfRangeException)
             {

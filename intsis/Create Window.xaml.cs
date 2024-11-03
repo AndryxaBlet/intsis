@@ -213,17 +213,24 @@ namespace intsis
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button)
+            try
             {
-                // Получаем текущий объект строки, к которому относится ComboBox
-                var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
-                if (dataGridRow?.Item is Rules deleted)
+                if (sender is Button button)
                 {
-                    var itemToDelete = intsisEntities.GetContext().Rules.FirstOrDefault(x => x.IDRule ==deleted.IDRule );
-                    intsisEntities.GetContext().Rules.Remove(itemToDelete);
-                    intsisEntities.GetContext().SaveChanges();
-                    binddatagrid(id);
+                    // Получаем текущий объект строки, к которому относится ComboBox
+                    var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
+                    if (dataGridRow?.Item is Rules deleted)
+                    {
+                        var itemToDelete = intsisEntities.GetContext().Rules.FirstOrDefault(x => x.IDRule == deleted.IDRule);
+                        intsisEntities.GetContext().Rules.Remove(itemToDelete);
+                        intsisEntities.GetContext().SaveChanges();
+                        binddatagrid(id);
+                    }
                 }
+            }
+            catch(ArgumentNullException)
+            {
+                MessageBox.Show("Примените изменения, прежде чем удалять.", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

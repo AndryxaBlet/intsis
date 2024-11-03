@@ -30,7 +30,7 @@ namespace intsis
             intsisEntities.GetContext().Database.Connection.ConnectionString = connect;
             LoginTextBox.Focus();
         }
-        string connect = Properties.Settings.Default.NotebookSQL;
+        string connect = Properties.Settings.Default.NotebookSQL2;
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
@@ -63,17 +63,17 @@ namespace intsis
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 Registration registration = new Registration();
                 registration.Show();
                 this.Close();
-            }
-            catch (Exception r)
-            {
-                MessageBox.Show(r.Message);
+            //}
+            //catch (Exception r)
+            //{
+            //    MessageBox.Show(r.Message);
 
-            }
+            //}
         }
 
         private void LoginTextBox_KeyDown(object sender, KeyEventArgs e)
