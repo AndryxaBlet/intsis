@@ -11,6 +11,8 @@ using System.Web.Configuration;
 using System.Data;
 using intsis;
 using System.Security.Cryptography;
+using System.Configuration.Internal;
+using Microsoft.Win32;
 
 
 
@@ -37,7 +39,7 @@ namespace intsis
                 Dg.Visibility = Visibility.Visible;
             }
         }
-
+        SqlJSON sqlJSON = new SqlJSON();
 
         void BindComboBox()
         {
@@ -133,8 +135,10 @@ namespace intsis
             if (Dg.SelectedIndex != -1)
             {
                 // Открываем окно с вопросами для выбранного правила
-                var selectedRuleId = (Dg.ItemsSource as List<Rules>)[Dg.SelectedIndex].IDRule;
-                ANS ans = new ANS(selectedRuleId.ToString(),id);
+                Rules selectedRuleId = Dg.SelectedValue as Rules;
+                int r = selectedRuleId.IDRule;
+                int IDSYSTEM = id;
+                ANS ans = new ANS(r,id);
                 ans.Show();
                 binddatagrid(Convert.ToInt32(NameI.SelectedValue));
             }
@@ -160,7 +164,7 @@ namespace intsis
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            if (Dg.SelectedIndex != -1)
+            if (NameI.SelectedIndex != -1)
             {
                 int del = Convert.ToInt32(NameI.SelectedValue);
                 var itemToDelete = intsisEntities.GetContext().NameSis.FirstOrDefault(x => x.ID == del);
@@ -236,6 +240,46 @@ namespace intsis
                 BindComboBox();
                 NameI.SelectedValue = systemId;
             }
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*", // Установите фильтр для файлов
+                Title = "Выберите файл" // Заголовок диалогового окна
+            };
+
+            // Отображаем диалоговое окно и проверяем, была ли нажата кнопка "Открыть"
+            if (openFileDialog.ShowDialog() == true)
+            {
+                // Получаем путь к выбранному файлу
+                string filePath = openFileDialog.FileName;
+
+                // Здесь можно добавить код для обработки файла
+                MessageBox.Show($"Выбранный файл: {filePath}");
+                sqlJSON.ImportData(filePath);
+            }
+            BindComboBox();
+            NameI.SelectedIndex=NameI.Items.Count-1;
+
+        }
+
+        private void export_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                // Получаем путь к выбранному файлу
+                string filePath = saveFileDialog.FileName;
+
+                // Здесь можно добавить код для обработки файла
+                MessageBox.Show($"Выбранный файл: {filePath}");
+                sqlJSON.ExportData(Convert.ToInt32(NameI.SelectedValue), filePath);
+            }
+            BindComboBox();
+            NameI.SelectedIndex = NameI.Items.Count - 1;
 
         }
     }

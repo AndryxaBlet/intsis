@@ -344,7 +344,7 @@
         </Button>
 
         <!-- DataGrid, который будет растягиваться -->
-        <DataGrid x:Name="Dg" AutoGenerateColumns="False" Grid.Row="2" Grid.ColumnSpan="2" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <DataGrid x:Name="Dg" AutoGenerateColumns="False" Grid.Row="2" Grid.ColumnSpan="2" Margin="10"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <DataGrid.Columns>
                 <DataGridTextColumn FontSize="20" Visibility="Hidden" Width="22" Header="ID" Binding="{Binding IDRule}" x:Name="ID" IsReadOnly="True"/>
                 <DataGridTextColumn FontSize="20" Width="*" Header="Вопрос" Binding="{Binding Text}" x:Name="Txt"/>
@@ -358,5 +358,8 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <Button Grid.Column="1" Content="Импортировать JSON
+" HorizontalAlignment="Left" Margin="339,36,0,0"  VerticalAlignment="Top" Click="Button_Click_1" Grid.RowSpan="2"/>
+        <Button Grid.Column="1" Content="Экспортировать JSON" HorizontalAlignment="Left" Margin="339,13,0,0" Grid.Row="1" Name="export" VerticalAlignment="Top" Click="export_Click"/>
     </Grid>
 </Window>

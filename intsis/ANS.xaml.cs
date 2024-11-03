@@ -19,7 +19,7 @@ namespace intsis
         private int id = 0;
         public ObservableCollection<Rules> RuleOptions { get; set; }
 
-        public ANS(string ID, int idsis)
+        public ANS(int ID, int idsis)
         {
             InitializeComponent();
             binddatagrid(ID);
@@ -31,14 +31,14 @@ namespace intsis
 
         }
        
-        public void binddatagrid(string ID)
+        public void binddatagrid(int ID)
         {
             try 
             { 
           
                 // Получаем ответы по IDRule
                 var answersFromDb = intsisEntities.GetContext().Answer
-                    .Where(a => a.IDRule.ToString() == ID)
+                    .Where(a => a.IDRule == ID)
                     .ToList();
                 Dg.ItemsSource = answersFromDb; // Привязываем коллекцию к DataGrid
             }
@@ -58,7 +58,6 @@ namespace intsis
                 var answers = Dg.ItemsSource as List<Answer>;
                 foreach (var answer in answers)
                     {
-                        // Проверяем, существует ли соответствующее правило
                         answer.IDRule = id;
 
                         // Проверяем, существует ли запись в базе данных
@@ -72,19 +71,21 @@ namespace intsis
                         existingAnswer.IDRule = answer.IDRule;
                         existingAnswer.Rules = answer.Rules;
                         existingAnswer.Rec = answer.Rec;
+                       
                         }
                         else
                         {
-                            // Добавляем новую запись
-                            intsisEntities.GetContext().Answer.Add(answer);
+                        // Добавляем новую запись
+                        intsisEntities.GetContext().Answer.Add(answer);
                         }
                     }
+                    
 
                     // Сохраняем изменения в базе данных
                     intsisEntities.GetContext().SaveChanges();
 
                     // Повторно привязываем обновленные данные к DataGrid
-                    binddatagrid(id.ToString());
+                    binddatagrid(id);
 
                     MessageBox.Show("Обновление прошло успешно");
                 
@@ -175,17 +176,17 @@ namespace intsis
                 if (dataGridRow?.Item is Answer answer)
                 {
                     // Обновляем значение NextR для текущего элемента
-                    answer.NextR = comboBox.SelectedValue.ToString();
+                    answer.NextR = Convert.ToInt32(comboBox.SelectedValue);
 
-                    // Сохраняем изменения для текущего объекта в базе данных
-                    var context = intsisEntities.GetContext();
-                    var existingAnswer = context.Answer.FirstOrDefault(a => a.ID == answer.ID);
-                    if (existingAnswer != null)
-                    {
-                   
-                        existingAnswer.NextR = answer.NextR;
-                     
-                    }
+                        // Сохраняем изменения для текущего объекта в базе данных
+                        var context = intsisEntities.GetContext();
+                        var existingAnswer = context.Answer.FirstOrDefault(a => a.ID == answer.ID);
+                        if (existingAnswer != null)
+                        {
+
+                            existingAnswer.NextR = answer.NextR;
+
+                        }
                 }
             }
         }
@@ -202,7 +203,7 @@ namespace intsis
                     itemToDelete.IDRule = id;
                     intsisEntities.GetContext().Answer.Remove(itemToDelete);
                     intsisEntities.GetContext().SaveChanges();
-                    binddatagrid(id.ToString());
+                    binddatagrid(id);
                 }
             }
         }

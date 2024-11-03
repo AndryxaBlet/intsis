@@ -17,8 +17,9 @@ namespace intsis
         public int ID { get; set; }
         public int IDRule { get; set; }
         public string Ans { get; set; }
-        public string NextR { get; set; }
+        public Nullable<int> NextR { get; set; }
         public string Rec { get; set; }
+        public string Out { get; set; }
     
         public virtual Rules Rules { get; set; }
     }

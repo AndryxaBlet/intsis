@@ -91,12 +91,13 @@ namespace intsis
                     // Получаем значение поля NextR
                     var nextValue = intsisEntities.GetContext().Answer
                         .Where(a => a.ID == sv)
-                        .Select(a => a.NextR)
                         .FirstOrDefault();
-
-                    // Проверяем, является ли результат целым числом
-                    if (int.TryParse(nextValue, out next))
+                   
+                    
+                        // Проверяем, является ли результат целым числом
+                    if (nextValue.Out == "" || nextValue.Out == null)
                     {
+                        next = int.Parse(nextValue.NextR.ToString());
                         // Получаем текст ответа
                         var rec = intsisEntities.GetContext().Answer
                             .Where(a => a.ID == sv)
@@ -120,7 +121,7 @@ namespace intsis
                     else
                     {
                         // Если это не число, выводим строковое сообщение
-                        VOP.Content = nextValue.ToString();
+                        VOP.Content = nextValue.Out.ToString();
                         CB.Visibility = Visibility.Hidden;
                         Deny.Visibility = Visibility.Hidden;
                         Repeat.Visibility = Visibility.Visible;

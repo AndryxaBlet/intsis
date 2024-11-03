@@ -6,11 +6,11 @@
     <edmx:Diagrams>
       <Diagram DiagramId="0ba94f12c735415f94b1801da9bc6ca3" Name="Diagram1">
         <EntityTypeShape EntityType="intsisModel.NameSis" Width="1.5" PointX="4.375" PointY="2" />
-        <EntityTypeShape EntityType="intsisModel.Answer" Width="1.5" PointX="8.875" PointY="1.75" />
+        <EntityTypeShape EntityType="intsisModel.Answer" Width="1.5" PointX="8.875" PointY="1.75" IsExpanded="true" />
         <EntityTypeShape EntityType="intsisModel.Rules" Width="1.5" PointX="6.625" PointY="1.75" />
         <AssociationConnector Association="intsisModel.FK_Answer_Rules" />
         <AssociationConnector Association="intsisModel.FK_Rules_NameSis" />
-        <EntityTypeShape EntityType="intsisModel.User" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="intsisModel.User" Width="1.5" PointX="2.25" PointY="0.5" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

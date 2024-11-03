@@ -19,7 +19,7 @@ namespace intsis
             : base("name=intsisEntities")
         {
         }
-        private static intsisEntities context_; 
+        private static intsisEntities context_;
         public static intsisEntities GetContext()
         {
             if (context_ == null)
