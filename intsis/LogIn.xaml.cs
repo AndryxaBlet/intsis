@@ -29,8 +29,16 @@ namespace intsis
             InitializeComponent();
             intsisEntities.GetContext().Database.Connection.ConnectionString = connect;
             LoginTextBox.Focus();
+            var users = intsisEntities.GetContext().User.FirstOrDefault();
+            if (users == null)
+            {
+                Registration reg = new Registration(true);
+                this.Close();
+                reg.Show();
+                
+            }
         }
-        string connect = Properties.Settings.Default.NotebookSQL2;
+        string connect = Properties.Settings.Default.NotebookSQL;
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
@@ -38,6 +46,8 @@ namespace intsis
             //{
                 string username = LoginTextBox.Text;
                 string password = PasswordBox.Password;
+            if (username != "" && password != "")
+            {
 
                 var login = intsisEntities.GetContext().User.FirstOrDefault(l => l.Login == username && l.Password == password);
 
@@ -50,8 +60,13 @@ namespace intsis
                 }
                 else
                 {
-                MessageBox.Show("Неверно введены данные аккаунта!", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Неверно введены данные аккаунта!", "", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
+            }
+            else
+            {
+                MessageBox.Show("Оба поля авторизации должны быть заполнены!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             //}
             //catch (Exception r)
             //{
@@ -65,7 +80,7 @@ namespace intsis
         {
             //try
             //{
-                Registration registration = new Registration();
+                Registration registration = new Registration(false);
                 registration.Show();
                 this.Close();
             //}

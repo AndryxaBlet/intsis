@@ -15,36 +15,43 @@ namespace intsis
     {
         public void ExportData(int systemId, string filePath)
         {
-            var context = new intsisEntities();
+            try
             {
-                // Извлекаем выбранную систему по ID
-                var system = context.NameSis
-                    .Where(s => s.ID == systemId)
-                    .Select(s => new ImportedSystem
-                    {
-                        ID = s.ID,
-                        Name = s.Name,
-                        ScopeOfApplication = s.ScopeOfApplication,
-                        Comment = s.Comment,
-                        Rules = s.Rules.Select(r => new ImportedRule
-                        {   IDRule=r.IDRule,
-                            Text = r.Text,
-                            Answers = r.Answer.Select(a => new ImportedAnswer
-                            {   ID = a.ID,
-                                Ans = a.Ans,
-                                NextR = a.NextR.ToString(),
-                                Rec = string.IsNullOrEmpty(a.Rec) ? null : a.Rec,
-                                Out=a.Out
+                var context = intsisEntities.GetContext();
+                {
+                    // Извлекаем выбранную систему по ID
+                    var system = context.NameSis
+                        .Where(s => s.ID == systemId)
+                        .Select(s => new ImportedSystem
+                        {
+                            ID = s.ID,
+                            Name = s.Name,
+                            ScopeOfApplication = s.ScopeOfApplication,
+                            Comment = s.Comment,
+                            Rules = s.Rules.Select(r => new ImportedRule
+                            {
+                                IDRule = r.IDRule,
+                                Text = r.Text,
+                                Answers = r.Answer.Select(a => new ImportedAnswer
+                                {
+                                    ID = a.ID,
+                                    Ans = a.Ans,
+                                    NextR = a.NextR.ToString(),
+                                    Rec = string.IsNullOrEmpty(a.Rec) ? null : a.Rec,
+                                    Out = a.Out
+                                }).ToList()
                             }).ToList()
-                        }).ToList()
-                    }).ToList();
+                        }).ToList();
 
-                // Сериализация данных в JSON
-                var jsonData = JsonConvert.SerializeObject(system, Formatting.Indented);
+                    // Сериализация данных в JSON
+                    var jsonData = JsonConvert.SerializeObject(system, Formatting.Indented);
 
-                // Запись данных в файл
-                File.WriteAllText(filePath, jsonData);
+                    // Запись данных в файл
+                    File.WriteAllText(filePath, jsonData);
+                    MessageBox.Show("Файл успешно сохранён");
+                }
             }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
 

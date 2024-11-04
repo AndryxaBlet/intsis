@@ -31,8 +31,6 @@ namespace intsis
             }
             
         }
-        
-        string connect = Properties.Settings.Default.NotebookSQL2;
         public void binddatagrid()
         {
             try
@@ -72,8 +70,9 @@ namespace intsis
             {
                 if (Dg.SelectedIndex != -1)
                 {
-                    var selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
-                    Answers answers = new Answers(selectedRuleId);
+                    NameSis selectedRuleId = Dg.SelectedValue as NameSis;
+                    Answers answers = new Answers(selectedRuleId.ID);
+                    answers.Title=selectedRuleId.Name;
                     answers.ShowDialog();
                 }
                 else MessageBox.Show("Выберите системуa", "", MessageBoxButton.OK, MessageBoxImage.Warning);

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:intsis"
         mc:Ignorable="d"
-        Title="Create" Height="450" Width="800" WindowStartupLocation="CenterScreen" xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" Background="#83B8FF">
+        Title="Конфигурация системы" Height="450" Width="800" WindowStartupLocation="CenterScreen" xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" Background="#83B8FF">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">

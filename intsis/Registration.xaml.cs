@@ -19,19 +19,17 @@ namespace intsis
     /// </summary>
     public partial class Registration : Window
     {
-        public Registration()
+        public Registration(bool First)
         {
             InitializeComponent();
+            if(First)
             FirstAdmin();
         }
         private void FirstAdmin()
         {
-            var users = intsisEntities.GetContext().User.FirstOrDefault();
-            if (users==null)
-            {
                 isAdmin = true;
                 MessageBox.Show("Ваш аккаунт первый в системе, вы автоматически назначенны администратором, запомните ваши данные аккаунта", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            }
+            
         }
         bool isAdmin = false;
 
@@ -74,7 +72,7 @@ namespace intsis
                     Email = email,
                     Login = username,
                     Password = password,
-                    IsAdmin = true // Set to false by default; adjust as needed
+                    IsAdmin = true
 
                 };
             }

@@ -236,7 +236,9 @@ namespace intsis
 
         private void UpdIS_Click(object sender, RoutedEventArgs e)
         {
+            if (NameI.SelectedIndex != -1) { 
             CreateSis createSis = new CreateSis(Convert.ToInt32(NameI.SelectedValue));
+            createSis.Title = "Редактировать систему";
 
             bool? result = createSis.ShowDialog();
 
@@ -247,17 +249,21 @@ namespace intsis
                 BindComboBox();
                 NameI.SelectedValue = systemId;
             }
+            }
+            else
+            {
+                MessageBox.Show("Выберите систему для редактирования", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*", // Установите фильтр для файлов
                 Title = "Выберите файл" // Заголовок диалогового окна
             };
-
             // Отображаем диалоговое окно и проверяем, была ли нажата кнопка "Открыть"
             if (openFileDialog.ShowDialog() == true)
             {
@@ -275,18 +281,27 @@ namespace intsis
 
         private void export_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            if (saveFileDialog.ShowDialog() == true)
+            if (NameI.SelectedIndex != -1)
             {
-                // Получаем путь к выбранному файлу
-                string filePath = saveFileDialog.FileName;
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*", // Установите фильтр для файлов
+                    Title = "Выберите файл" // Заголовок диалогового окна
+                };
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    // Получаем путь к выбранному файлу
+                    string filePath = saveFileDialog.FileName;
 
-                // Здесь можно добавить код для обработки файла
-                MessageBox.Show($"Выбранный файл: {filePath}");
-                sqlJSON.ExportData(Convert.ToInt32(NameI.SelectedValue), filePath);
+                    // Здесь можно добавить код для обработки файла
+                    MessageBox.Show($"Выбранный файл: {filePath}");
+                    sqlJSON.ExportData(Convert.ToInt32(NameI.SelectedValue), filePath);
+                }
             }
-            BindComboBox();
-            NameI.SelectedIndex = NameI.Items.Count - 1;
+            else
+            {
+                MessageBox.Show("Выберите систему для экспорта","Ошибка",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
 
         }
     }
