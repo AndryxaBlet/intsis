@@ -75,7 +75,7 @@ namespace intsis
                     answers.Title=selectedRuleId.Name;
                     answers.ShowDialog();
                 }
-                else MessageBox.Show("Выберите системуa", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                else MessageBox.Show("Выберите систему", "", MessageBoxButton.OK, MessageBoxImage.Warning);
                 
             }
             catch (ArgumentOutOfRangeException)

@@ -96,7 +96,7 @@ namespace intsis
                             .FirstOrDefault();
 
 
-                        // Проверяем, является ли результат целым числом
+                      
                         if (nextValue.Out == "" || nextValue.Out == null)
                         {
                             next = int.Parse(nextValue.NextR.ToString());
