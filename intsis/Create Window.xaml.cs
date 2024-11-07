@@ -13,7 +13,11 @@ using intsis;
 using System.Security.Cryptography;
 using System.Configuration.Internal;
 using Microsoft.Win32;
-
+using Wpf.Ui.Controls;
+using MessageBox = System.Windows.MessageBox;
+using MessageBoxButton = System.Windows.MessageBoxButton;
+using MessageBoxResult = System.Windows.MessageBoxResult;
+using CustomMessageBox = Wpf.Ui.Controls.MessageBox;
 
 
 namespace intsis
@@ -21,7 +25,7 @@ namespace intsis
     /// <summary>
     /// Логика взаимодействия для Create_Window.xaml
     /// </summary>
-    public partial class Create_Window : Window
+    public partial class Create_Window : FluentWindow
     {
         private int id = 0;
         private int SelectedSys = -1;
@@ -215,7 +219,7 @@ namespace intsis
         {
             try
             {
-                if (sender is Button button)
+                if (sender is System.Windows.Controls.Button button)
                 {
                     // Получаем текущий объект строки, к которому относится ComboBox
                     var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);

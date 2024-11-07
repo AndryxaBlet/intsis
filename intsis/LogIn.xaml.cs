@@ -15,13 +15,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Security.Cryptography;
+using Wpf.Ui.Controls;
 
 namespace intsis
 {
     /// <summary>
     /// Логика взаимодействия для LogIn.xaml
     /// </summary>
-    public partial class LogIn : Window
+    public partial class LogIn : FluentWindow
     {
 
         public LogIn()
@@ -38,7 +39,7 @@ namespace intsis
                 
             }
         }
-        string connect = Properties.Settings.Default.NotebookSQL;
+        string connect = Properties.Settings.Default.PC;
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
@@ -60,12 +61,18 @@ namespace intsis
                 }
                 else
                 {
-                    MessageBox.Show("Неверно введены данные аккаунта!", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    var messagebox = new Wpf.Ui.Controls.MessageBox {
+                        Title = "Ошибка",
+                        Content= "Неверно введены данные аккаунта!",
+                        PrimaryButtonText = "OK",
+                    };
+                    messagebox.ShowDialogAsync();
                 }
             }
             else
             {
-                MessageBox.Show("Оба поля авторизации должны быть заполнены!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = "Оба поля авторизации должны быть заполнены!" };
+                messagebox.ShowDialogAsync();
             }
             //}
             //catch (Exception r)
@@ -112,6 +119,29 @@ namespace intsis
         private void LoginButton_Click(object sender, KeyEventArgs e)
         {
 
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
+        }
+
+        private void MinimizeWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
+        private void CloseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

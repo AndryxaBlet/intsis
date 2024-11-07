@@ -1,12 +1,21 @@
-﻿<Window x:Class="intsis.LogIn"
+﻿<ui:FluentWindow
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+        ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+        x:Class="intsis.LogIn"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:intsis"
         mc:Ignorable="d"
-        Title="Авторизация" Height="400" Width="400" Background="#83B8FF" WindowStartupLocation="CenterScreen">
+        WindowBackdropType="Mica"
+        WindowCornerPreference="Default"
+        ExtendsContentIntoTitleBar="True"
+        MouseDown="Window_MouseDown"
+        Title="Авторизация" Height="400" Width="400"  WindowStartupLocation="CenterScreen">
     <Grid>
+        <ui:TitleBar />
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="Авторизация" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
             <TextBlock Text="Логин" FontSize="11" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left"/>
@@ -15,22 +24,9 @@
             <TextBlock Text="Пароль" FontSize="11" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left"/>
             <PasswordBox Name="PasswordBox" 
                      Margin="0,0,0,20" KeyDown="PasswordBox_KeyDown" ></PasswordBox>
+            <Button Content="Войти" Click="LoginButton_Click" Name="LoginButton" HorizontalAlignment="Stretch" />
+            <Button Content="Зарегистрироваться" Margin="0,10,0,0" Click="RegisterButton_Click"/>
 
-
-            <Button Content="Войти" Click="LoginButton_Click" Name="LoginButton"  >
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
-            </Button >
-            <Button Content="Зарегистрироваться" Margin="0,10,0,0" Click="RegisterButton_Click">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
         </StackPanel>
     </Grid>
-</Window>
+ </ui:FluentWindow>
