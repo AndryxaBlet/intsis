@@ -20,21 +20,22 @@ using MessageBoxResult = System.Windows.MessageBoxResult;
 using CustomMessageBox = Wpf.Ui.Controls.MessageBox;
 
 
-namespace intsis
+namespace intsis.Views
 {
     /// <summary>
     /// Логика взаимодействия для Create_Window.xaml
     /// </summary>
-    public partial class Create_Window : FluentWindow
+    public partial class Create_Window : Page
     {
         private int id = 0;
         private int SelectedSys = -1;
 
-        public Create_Window(int id)
+        public Create_Window()
         {   
             InitializeComponent();
             BindComboBox();
             Dg.Visibility = Visibility.Hidden;
+            int id = GlobalDATA.IdSisForCREATE;
             if (id != -1)
             {                
                 NameI.SelectedValue = id;
@@ -188,7 +189,6 @@ namespace intsis
 
                             // Сохранить изменения в базе данных
                             intsisEntities.GetContext().SaveChanges();
-                            this.Close();
                         }
                     }
                 }

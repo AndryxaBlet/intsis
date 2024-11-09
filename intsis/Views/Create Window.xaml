@@ -1,0 +1,66 @@
+﻿<Page x:Class="intsis.Views.Create_Window"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+        ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:intsis"
+        mc:Ignorable="d"
+        Title="Конфигурация системы">
+    <Grid>
+
+        <StackPanel Margin="5">
+        <!-- Title Bar -->
+        <ui:TextBlock Text="Конфигурация системы" Padding="5" Height="25"  />
+
+        <!-- Название и ComboBox -->
+        <ui:Card MaxWidth="790" Margin="0,5" HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal" >
+                <StackPanel Width="300" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" >
+                        <Label FontWeight="Bold" Content="Название"  VerticalAlignment="Top" Margin="10"/>
+                        <ComboBox SelectedIndex="0" Name="NameI" IsEditable="False"  SelectionChanged="NameI_SelectionChanged"  Width="205"/>
+                    </StackPanel>
+                    <ui:Button Content="Создать систему" Name="CreateSystem"  Height="30" Margin="10" Click="CreateSystem_Click" HorizontalAlignment="Stretch"/>
+                    <Button Content="Удалить ЭС" Name="Delete"  Height="30" Margin="10,0"  Click="Delete_Click" HorizontalAlignment="Stretch"/>
+                </StackPanel>
+                <StackPanel Width="300" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Button Content="Редактировать ЭС" Name="UpdIS" Width="auto" Height="36" Margin="10,3" HorizontalAlignment="Stretch" Click="UpdIS_Click"/>
+                    <Button Content="Настроить вопрос" Name="Ans" HorizontalAlignment="Stretch" Margin="10,10" Height="30" Click="C"/>
+                    <Button Content="Применить изменения" Name="Create_Copy" HorizontalAlignment="Stretch"  Margin="10,0" Height="30" Click="Create_Copy_Click"/>
+                </StackPanel>
+                <StackPanel Width="160" VerticalAlignment="Top" Height="124">
+
+                    <Button  HorizontalAlignment="Stretch" Margin="10" Click="Button_Click_1"   Height="48">
+                        <TextBlock Text="Импортировать JSON" FontSize="14" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+                    <Button  HorizontalAlignment="Stretch" Margin="10,0" Name="export" Click="export_Click" Height="49">
+                        <TextBlock Text="Экспортировать JSON" FontSize="14" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+
+                </StackPanel>
+            </StackPanel>
+        </ui:Card>
+
+        <!-- DataGrid -->
+
+        <ui:DataGrid x:Name="Dg" AutoGenerateColumns="False"  VerticalAlignment="Top" HorizontalAlignment="Stretch" MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
+                  MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}">
+            <DataGrid.Columns>
+                <DataGridTextColumn FontSize="20" Visibility="Hidden" Width="22" Header="ID" Binding="{Binding IDRule}" x:Name="ID" IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20" Width="*" Header="Вопрос" Binding="{Binding Text}" x:Name="Txt"/>
+                <DataGridTextColumn Header="Прио" Width="0" Binding="{Binding IDSis}" x:Name="IDRul" Visibility="Hidden"/>
+                <DataGridTemplateColumn Width="auto" Header="Удалить">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Удалить"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </ui:DataGrid>
+    </StackPanel>
+    </Grid>
+</Page>

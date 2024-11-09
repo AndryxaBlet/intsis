@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,8 +12,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static intsis.Views.MainWindow;
 
-namespace intsis
+namespace intsis.Views
 {
     /// <summary>
     /// Логика взаимодействия для Registration.xaml
@@ -94,16 +96,17 @@ namespace intsis
             MessageBox.Show("Регистрация успешна!");
 
             // Optionally, open the main window after registration
-            MainWindow window = new MainWindow(newUser.IsAdmin);
-            window.Show();
+
+            GlobalDATA.recvadmin = newUser.IsAdmin;
+            var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+            navigateView.Navigate(typeof(MainWindow));
+
             this.Close();
         }
 
         private void BackToLoginButton_Click(object sender, RoutedEventArgs e)
         {
-            LogIn logIn = new LogIn();
-            logIn.Show();
-            this.Close();
+ 
         }
 
         private void EmailTextBox_KeyDown(object sender, KeyEventArgs e)

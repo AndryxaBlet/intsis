@@ -19,18 +19,23 @@ using MessageBox = System.Windows.MessageBox;
 using MessageBoxButton = System.Windows.MessageBoxButton;
 using MessageBoxResult = System.Windows.MessageBoxResult;
 using CustomMessageBox = Wpf.Ui.Controls.MessageBox;
+using Wpf.Ui.Appearance;
+using MaterialDesignThemes.Wpf;
+using System.Web.UI.WebControls;
 
-namespace intsis
+namespace intsis.Views
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : FluentWindow
+    public partial class MainWindow : Page
     {
-        public MainWindow(bool admin)
+       
+        public MainWindow()
         {
             InitializeComponent();
             binddatagrid();
+            bool admin = GlobalDATA.recvadmin;
             if (!admin) {
                 Create.Visibility = Visibility.Hidden;
             }
@@ -58,8 +63,10 @@ namespace intsis
                 {
                     selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
                 }
-                Create_Window window = new Create_Window(selectedRuleId);
-                window.ShowDialog();
+                GlobalDATA.IdSisForCREATE = selectedRuleId;
+                var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+                navigateView.Navigate(typeof(Create_Window));
+
                 binddatagrid();
             }
             catch (Exception r)
@@ -127,5 +134,38 @@ namespace intsis
         {
             Dg.SelectedItem = null;
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+         
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+            // Устанавливаем минимальные и максимальные размеры окна
+            double minWidth = 800;  // минимальная ширина для нормального вида
+            double minHeight = 600; // минимальная высота для нормального вида
+
+
+            // Вычисляем коэффициент масштабирования на основе текущего размера окна
+            double scaleFactorX = e.NewSize.Width / minWidth;
+            double scaleFactorY = e.NewSize.Height / minHeight;
+
+            // Ограничиваем коэффициент масштабирования для X и Y
+            double scaleFactor = Math.Min(scaleFactorX, scaleFactorY);  // Масштабируем по диагонали
+
+            // Ограничиваем минимальное и максимальное масштабирование
+            scaleFactor = Math.Max(0.5, scaleFactor);  // Минимальный масштаб
+            scaleFactor = Math.Min(1, scaleFactor);  // Максимальный масштаб
+
+            // Применяем коэффициент масштабирования
+            scaleTransform.ScaleX = scaleFactor;
+            scaleTransform.ScaleY = scaleFactor;
+        }
+
+    
     }
+    
 }

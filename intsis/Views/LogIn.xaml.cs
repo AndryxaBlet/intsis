@@ -16,13 +16,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Security.Cryptography;
 using Wpf.Ui.Controls;
+using static intsis.Views.MainWindow;
 
-namespace intsis
+namespace intsis.Views
 {
     /// <summary>
     /// Логика взаимодействия для LogIn.xaml
     /// </summary>
-    public partial class LogIn : FluentWindow
+    public partial class LogIn : Page
     {
 
         public LogIn()
@@ -34,7 +35,7 @@ namespace intsis
             if (users == null)
             {
                 Registration reg = new Registration(true);
-                this.Close();
+                
                 reg.Show();
                 
             }
@@ -54,9 +55,13 @@ namespace intsis
 
                 if (login != null)
                 {
-                    MainWindow window = new MainWindow(login.IsAdmin);
-                    window.Show();
-                    this.Close();
+                 
+                    GlobalDATA.recvadmin= login.IsAdmin; 
+                    var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+                    navigateView.Navigate(typeof(MainWindow));
+                   
+                    
+                    
 
                 }
                 else
@@ -89,7 +94,6 @@ namespace intsis
             //{
                 Registration registration = new Registration(false);
                 registration.Show();
-                this.Close();
             //}
             //catch (Exception r)
             //{
@@ -116,32 +120,23 @@ namespace intsis
             }
         }
 
-        private void LoginButton_Click(object sender, KeyEventArgs e)
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            // Определяем максимальные и минимальные размеры
+            double minWidth = 800;  // минимальная ширина для нормального вида
+            double minHeight = 600; // минимальная высота для нормального вида
+           
 
-        }
+            // Рассчитываем коэффициент масштаба в зависимости от размера окна
+            double scaleFactor = Math.Min(e.NewSize.Width / minWidth, e.NewSize.Height / minHeight);
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                this.DragMove();
-            }
-        }
+            // Ограничиваем минимальный и максимальный коэффициент масштаба
+            scaleFactor = Math.Max(0.5, scaleFactor);  // минимальный размер 50%
+            scaleFactor = Math.Min(1.0, scaleFactor);  // максимальный размер 150%
 
-        private void MinimizeWindow_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-
-        private void MaximizeWindow_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        }
-
-        private void CloseWindow_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
+            // Применяем масштаб к элементам
+            scaleTransform.ScaleX = scaleFactor;
+            scaleTransform.ScaleY = scaleFactor;
         }
     }
 }

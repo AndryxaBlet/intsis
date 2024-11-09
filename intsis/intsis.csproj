@@ -94,20 +94,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ANS.xaml.cs">
+    <Compile Include="GlobalDATA.cs" />
+    <Compile Include="Views\ANS.xaml.cs">
       <DependentUpon>ANS.xaml</DependentUpon>
     </Compile>
     <Compile Include="Answer.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Answers.xaml.cs">
+    <Compile Include="Views\Answers.xaml.cs">
       <DependentUpon>Answers.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CreateSis.xaml.cs">
+    <Compile Include="Views\CreateSis.xaml.cs">
       <DependentUpon>CreateSis.xaml</DependentUpon>
     </Compile>
     <Compile Include="FUNC.cs" />
-    <Compile Include="LogIn.xaml.cs">
+    <Compile Include="Views\LogIn.xaml.cs">
       <DependentUpon>LogIn.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model1.cs">
@@ -118,7 +119,7 @@
     <Compile Include="NameSis.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Registration.xaml.cs">
+    <Compile Include="Views\Registration.xaml.cs">
       <DependentUpon>Registration.xaml</DependentUpon>
     </Compile>
     <Compile Include="Rules.cs">
@@ -128,27 +129,30 @@
     <Compile Include="User.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Page Include="ANS.xaml">
+    <Compile Include="Views\WiseChoice.xaml.cs">
+      <DependentUpon>WiseChoice.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\ANS.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Answers.xaml">
+    <Page Include="Views\Answers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Create Window.xaml">
+    <Page Include="Views\Create Window.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CreateSis.xaml">
+    <Page Include="Views\CreateSis.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LogIn.xaml">
+    <Page Include="Views\LogIn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -156,14 +160,18 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Create Window.xaml.cs">
+    <Compile Include="Views\Create Window.xaml.cs">
       <DependentUpon>Create Window.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Registration.xaml">
+    <Page Include="Views\Registration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WiseChoice.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

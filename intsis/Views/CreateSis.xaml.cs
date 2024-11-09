@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace intsis
+namespace intsis.Views
 {
     /// <summary>
     /// Логика взаимодействия для CreateSis.xaml
