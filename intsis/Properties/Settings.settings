@@ -29,5 +29,9 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=REVISION-PC;Initial Catalog=intsisIR311;Persist Security Info=True;User ID=sa;Password=123</Value>
     </Setting>
+    <Setting Name="Параметр" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)" />
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

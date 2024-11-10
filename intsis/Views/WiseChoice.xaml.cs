@@ -23,11 +23,17 @@ namespace intsis.Views
         public WiseChoice()
         {
             InitializeComponent();
+           
         }
 
         private void LogPG_Click(object sender, RoutedEventArgs e)
         {
-            MainNavigation.Navigate(typeof(LogIn));
+            MainNavigation.Navigate(typeof(Info));
+        }
+
+        private void MainNavigation_Loaded(object sender, RoutedEventArgs e)
+        {
+            MainNavigation.Navigate(typeof(Info));
         }
     }
 }

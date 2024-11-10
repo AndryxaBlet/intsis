@@ -29,6 +29,7 @@ namespace intsis.Views
     {
         private int id = 0;
         private int SelectedSys = -1;
+        Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
 
         public Create_Window()
         {   
@@ -141,15 +142,12 @@ namespace intsis.Views
             {
                 // Открываем окно с вопросами для выбранного правила
                 Rules selectedRuleId = Dg.SelectedValue as Rules;
-                int r = selectedRuleId.IDRule;
-                int IDSYSTEM = id;
-                ANS ans = new ANS(r,id);
-                ans.Show();
-                binddatagrid(Convert.ToInt32(NameI.SelectedValue));
+                GlobalDATA.SelectRULEID = selectedRuleId.IDRule;
+                navigateView.Navigate(typeof(ANS));
             }
             else
             {
-                MessageBox.Show("Выберите систему", "",MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Выберите вопрос или систему", "",MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -163,6 +161,7 @@ namespace intsis.Views
                 MessageBox.Show("Редактирование данных");
                 binddatagrid(Convert.ToInt32(NameI.SelectedValue));
                 SelectedSys = Convert.ToInt32(NameI.SelectedValue);
+                GlobalDATA.IdSisForCREATE = SelectedSys;
             }
             BindComboBox();
         }
@@ -189,6 +188,7 @@ namespace intsis.Views
 
                             // Сохранить изменения в базе данных
                             intsisEntities.GetContext().SaveChanges();
+                            navigateView.GoBack();
                         }
                     }
                 }

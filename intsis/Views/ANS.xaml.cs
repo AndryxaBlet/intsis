@@ -14,18 +14,20 @@ namespace intsis
     /// <summary>
     /// Логика взаимодействия для ANS.xaml
     /// </summary>
-    public partial class ANS : Window
+    public partial class ANS : Page
     {
         private int id = 0;
         public ObservableCollection<Rules> RuleOptions { get; set; }
-
-        public ANS(int ID, int idsis)
+        Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+        public ANS()
         {
             InitializeComponent();
+            int ID = GlobalDATA.SelectRULEID;
+            int idsis = GlobalDATA.IdSisForCREATE;
             binddatagrid(ID);
             id = Convert.ToInt32(ID);
             RuleOptions = new ObservableCollection<Rules>(intsisEntities.GetContext().Rules.Where(x=>x.IDSis==idsis));
-
+            RuleTextBlock.Text="Настройка вопроса: "+intsisEntities.GetContext().Rules.Where(x=>x.IDRule==ID).FirstOrDefault()?.Text;
             // Устанавливаем DataContext для MainWindow, чтобы RuleOptions был доступен
             DataContext = this;
 
@@ -119,7 +121,7 @@ namespace intsis
 
                             // Сохранить изменения в базе данных
                             intsisEntities.GetContext().SaveChanges();
-                            this.Close();
+                            navigateView.GoBack();
                         }
                     }
                 }
@@ -213,6 +215,25 @@ namespace intsis
             {
                 MessageBox.Show("Сохраните изменения, прежде чем удалять.", "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // Определяем максимальные и минимальные размеры
+            double minWidth = 800;  // минимальная ширина для нормального вида
+            double minHeight = 600; // минимальная высота для нормального вида
+
+
+            // Рассчитываем коэффициент масштаба в зависимости от размера окна
+            double scaleFactor = Math.Min(e.NewSize.Width / minWidth, e.NewSize.Height / minHeight);
+
+            // Ограничиваем минимальный и максимальный коэффициент масштаба
+            scaleFactor = Math.Max(0.5, scaleFactor);  // минимальный размер 50%
+            scaleFactor = Math.Min(1.0, scaleFactor);  // максимальный размер 150%
+
+            // Применяем масштаб к элементам
+            scaleTransform.ScaleX = scaleFactor;
+            scaleTransform.ScaleY = scaleFactor;
         }
     }
 }

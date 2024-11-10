@@ -12,13 +12,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Wpf.Ui.Controls;
+using MessageBox = System.Windows.MessageBox;
+using MessageBoxButton = System.Windows.MessageBoxButton;
+using MessageBoxResult = System.Windows.MessageBoxResult;
+using CustomMessageBox = Wpf.Ui.Controls.MessageBox;
 
 namespace intsis.Views
 {
     /// <summary>
     /// Логика взаимодействия для CreateSis.xaml
     /// </summary>
-    public partial class CreateSis : Window
+    public partial class CreateSis : FluentWindow
     {
         public CreateSis(int id)
         {
@@ -84,6 +89,33 @@ namespace intsis.Views
             {
                 MessageBox.Show(r.Message);
 
+            }
+        }
+
+        private void NameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ScopeTextBox.Focus();
+                e.Handled = true;
+            }
+        }
+
+        private void ScopeTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                CommentTextBox.Focus();
+                e.Handled = true;
+            }
+        }
+
+        private void CommentTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                // Вызываем обработчик Click кнопки
+                SaveButton_Click(SaveButton, new RoutedEventArgs());
             }
         }
     }

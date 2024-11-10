@@ -18,6 +18,8 @@ namespace intsis
         public intsisEntities()
             : base("name=intsisEntities")
         {
+            Database.SetInitializer(new CreateDatabaseIfNotExists<intsisEntities>());
+            Database.Log = log => System.Diagnostics.Debug.WriteLine(log);
         }
         private static intsisEntities context_;
         public static intsisEntities GetContext()
@@ -35,5 +37,6 @@ namespace intsis
         public virtual DbSet<Answer> Answer { get; set; }
         public virtual DbSet<Rules> Rules { get; set; }
         public virtual DbSet<User> User { get; set; }
+
     }
 }

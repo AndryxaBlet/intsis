@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <ui:TitleBar Title="WiseChoice" Grid.Row="0" Height="30" FontSize="20"/>
-            <ui:NavigationView x:Name="MainNavigation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"  IsPaneOpen="False" IsPaneToggleVisible="False">
+            <ui:NavigationView x:Name="MainNavigation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"  IsPaneOpen="False" IsPaneToggleVisible="False" Loaded="MainNavigation_Loaded">
 
                 <ui:NavigationView.MenuItems>
                     <ui:MenuItem Icon="{ui:SymbolIcon Symbol=Home16, Filled=True}" Tag="HomePage" Name="LogPG" Click="LogPG_Click"  />

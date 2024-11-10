@@ -19,10 +19,12 @@ namespace intsis.Views
     /// <summary>
     /// Логика взаимодействия для Registration.xaml
     /// </summary>
-    public partial class Registration : Window
+    public partial class Registration : Page
     {
-        public Registration(bool First)
+        
+        public Registration()
         {
+            bool First = GlobalDATA.IsFirst;
             InitializeComponent();
             if(First)
             FirstAdmin();
@@ -101,12 +103,13 @@ namespace intsis.Views
             var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
             navigateView.Navigate(typeof(MainWindow));
 
-            this.Close();
+           
         }
 
         private void BackToLoginButton_Click(object sender, RoutedEventArgs e)
         {
- 
+            var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+            navigateView.GoBack();
         }
 
         private void EmailTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -143,6 +146,25 @@ namespace intsis.Views
                 RegisterButton.Focus(); // Передаем фокус на кнопку
                 e.Handled = true;
             }
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // Определяем максимальные и минимальные размеры
+            double minWidth = 800;  // минимальная ширина для нормального вида
+            double minHeight = 600; // минимальная высота для нормального вида
+
+
+            // Рассчитываем коэффициент масштаба в зависимости от размера окна
+            double scaleFactor = Math.Min(e.NewSize.Width / minWidth, e.NewSize.Height / minHeight);
+
+            // Ограничиваем минимальный и максимальный коэффициент масштаба
+            scaleFactor = Math.Max(0.5, scaleFactor);  // минимальный размер 50%
+            scaleFactor = Math.Min(1.0, scaleFactor);  // максимальный размер 150%
+
+            // Применяем масштаб к элементам
+            scaleTransform.ScaleX = scaleFactor;
+            scaleTransform.ScaleY = scaleFactor;
         }
     }
 }

@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using System.Security.Cryptography;
 using Wpf.Ui.Controls;
 using static intsis.Views.MainWindow;
+using System.Web.UI.WebControls;
+using System.Configuration;
 
 namespace intsis.Views
 {
@@ -29,18 +31,19 @@ namespace intsis.Views
         public LogIn()
         {
             InitializeComponent();
-            intsisEntities.GetContext().Database.Connection.ConnectionString = connect;
+            intsisEntities.GetContext().Database.Connection.ConnectionString = connects;
             LoginTextBox.Focus();
             var users = intsisEntities.GetContext().User.FirstOrDefault();
             if (users == null)
             {
-                Registration reg = new Registration(true);
-                
-                reg.Show();
-                
+                GlobalDATA.IsFirst = true;
+                var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+                navigateView.Navigate(typeof(Registration));
+
             }
         }
         string connect = Properties.Settings.Default.PC;
+        string connects = ConfigurationManager.ConnectionStrings["SQLiteConnection"].ConnectionString;
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
@@ -92,8 +95,9 @@ namespace intsis.Views
         {
             //try
             //{
-                Registration registration = new Registration(false);
-                registration.Show();
+            GlobalDATA.IsFirst = false;
+            var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+            navigateView.Navigate(typeof(Registration));
             //}
             //catch (Exception r)
             //{

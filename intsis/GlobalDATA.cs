@@ -11,5 +11,7 @@ namespace intsis
 
         public static bool recvadmin { get; set; }
         public static int IdSisForCREATE { get; set; }
+        public static int SelectRULEID { get; set; }
+        public static bool IsFirst { get; set; }
     }
 }

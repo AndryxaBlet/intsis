@@ -20,10 +20,12 @@ namespace intsis
     /// <summary>
     /// Логика взаимодействия для Answers.xaml
     /// </summary>
-    public partial class Answers : Window
+    public partial class Answers : Page
     {
-        public Answers(int ID)
+        Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+        public Answers()
         {
+            int ID = GlobalDATA.IdSisForCREATE;
             InitializeComponent();
             next=FIRST(ID);
             log = ID;
@@ -47,7 +49,7 @@ namespace intsis
                     .FirstOrDefault();
 
                 // Устанавливаем текст вопроса в интерфейсе
-                VOP.Content = ruleText;
+                VOP.Text = ruleText;
 
                 // Обновляем элементы ComboBox
                 UpdateItems(ruleID);
@@ -117,13 +119,13 @@ namespace intsis
                                 .Select(r => r.Text)
                                 .FirstOrDefault();
 
-                            VOP.Content = nextText;
+                            VOP.Text = nextText;
                             UpdateItems(next);
                         }
                         else
                         {
                             // Если это не число, выводим строковое сообщение
-                            VOP.Content = nextValue.Out.ToString();
+                            VOP.Text = nextValue.Out.ToString();
                             CB.Visibility = Visibility.Hidden;
                             Deny.Visibility = Visibility.Hidden;
                             Repeat.Visibility = Visibility.Visible;
@@ -143,7 +145,7 @@ namespace intsis
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            navigateView.GoBack();
         }
 
         private void Repeat_Click(object sender, RoutedEventArgs e)

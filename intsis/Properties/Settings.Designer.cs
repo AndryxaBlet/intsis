@@ -67,5 +67,14 @@ namespace intsis.Properties {
                 return ((string)(this["PC"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        public string Параметр {
+            get {
+                return ((string)(this["Параметр"]));
+            }
+        }
     }
 }

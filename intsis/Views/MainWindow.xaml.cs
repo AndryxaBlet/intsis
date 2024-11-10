@@ -19,8 +19,6 @@ using MessageBox = System.Windows.MessageBox;
 using MessageBoxButton = System.Windows.MessageBoxButton;
 using MessageBoxResult = System.Windows.MessageBoxResult;
 using CustomMessageBox = Wpf.Ui.Controls.MessageBox;
-using Wpf.Ui.Appearance;
-using MaterialDesignThemes.Wpf;
 using System.Web.UI.WebControls;
 
 namespace intsis.Views
@@ -83,9 +81,9 @@ namespace intsis.Views
                 if (Dg.SelectedIndex != -1)
                 {
                     NameSis selectedRuleId = Dg.SelectedValue as NameSis;
-                    Answers answers = new Answers(selectedRuleId.ID);
-                    answers.Title=selectedRuleId.Name;
-                    answers.ShowDialog();
+                    GlobalDATA.IdSisForCREATE = selectedRuleId.ID;
+                    var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+                    navigateView.Navigate(typeof(Answers));
                 }
                 else MessageBox.Show("Выберите систему", "", MessageBoxButton.OK, MessageBoxImage.Warning);
                 
