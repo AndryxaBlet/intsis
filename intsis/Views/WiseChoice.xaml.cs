@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace intsis.Views
@@ -23,7 +24,8 @@ namespace intsis.Views
         public WiseChoice()
         {
             InitializeComponent();
-           
+            GlobalDATA.Accent = ApplicationAccentColorManager.PrimaryAccentBrush;
+
         }
 
         private void LogPG_Click(object sender, RoutedEventArgs e)
@@ -34,6 +36,11 @@ namespace intsis.Views
         private void MainNavigation_Loaded(object sender, RoutedEventArgs e)
         {
             MainNavigation.Navigate(typeof(Info));
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MainNavigation.Navigate(typeof(Settings));
         }
     }
 }

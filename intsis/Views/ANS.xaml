@@ -3,6 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+      ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       xmlns:local="clr-namespace:intsis"
       mc:Ignorable="d"
       Title="Настройка вопроса" 
@@ -23,9 +26,7 @@
                           FontSize="14" 
                           FontFamily="Segoe UI Semibold"
                           Padding="10"
-                          HorizontalAlignment="Stretch"
-                       
-                          Foreground="White"/>
+                          HorizontalAlignment="Stretch"/>
 
         <DataGrid x:Name="Dg" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False" Grid.Row="1" Margin="0,0,0,5">
             <DataGrid.Columns>

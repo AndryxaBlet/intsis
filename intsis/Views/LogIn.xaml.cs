@@ -19,6 +19,7 @@ using Wpf.Ui.Controls;
 using static intsis.Views.MainWindow;
 using System.Web.UI.WebControls;
 using System.Configuration;
+using Wpf.Ui.Appearance;
 
 namespace intsis.Views
 {
@@ -32,6 +33,7 @@ namespace intsis.Views
         {
             InitializeComponent();
             LoginTextBox.Focus();
+            LoginButton.Background = ApplicationAccentColorManager.PrimaryAccentBrush;
         }
        
 

@@ -28,8 +28,7 @@
                           FontFamily="Segoe UI Semibold"
                           Padding="10"
                           HorizontalAlignment="Stretch"
-                          VerticalAlignment="Center"
-                          Foreground="White"/>
+                          VerticalAlignment="Center"/>
 
         <!-- Панель для комбобокса и кнопки Подтвердить под меткой -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">

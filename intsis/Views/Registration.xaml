@@ -1,15 +1,15 @@
 ﻿<Page x:Class="intsis.Views.Registration"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+      ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:local="clr-namespace:intsis.Views"
       mc:Ignorable="d"
-      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       Title="Регистрация"
-      SizeChanged="Page_SizeChanged"
-      ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
-      ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+      SizeChanged="Page_SizeChanged">
 
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
         <Grid.RenderTransform>
@@ -18,23 +18,23 @@
 
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <!-- Заголовок -->
-            <TextBlock Text="Регистрация" FontSize="34" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" Foreground="{DynamicResource DGTextFillColorPrimaryBrush}"/>
+            <TextBlock Text="Регистрация" FontSize="34" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
 
             <!-- Поля для ввода данных -->
-            <TextBlock Text="Электронная почта" FontSize="21" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left" Foreground="{DynamicResource DGTextFillColorPrimaryBrush}"/>
+            <TextBlock Text="Электронная почта" FontSize="21" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left"/>
             <TextBox Name="EmailTextBox" Margin="0,0,0,10" KeyDown="EmailTextBox_KeyDown" Width="300"/>
 
-            <TextBlock Text="Логин" FontSize="21" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left" Foreground="{DynamicResource DGTextFillColorPrimaryBrush}"/>
+            <TextBlock Text="Логин" FontSize="21" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left"/>
             <TextBox Name="LoginTextBox" Margin="0,0,0,10" KeyDown="LoginTextBox_KeyDown" Width="300"/>
 
-            <TextBlock Text="Пароль" FontSize="21" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left" Foreground="{DynamicResource DGTextFillColorPrimaryBrush}"/>
+            <TextBlock Text="Пароль" FontSize="21" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left" />
             <PasswordBox Name="PasswordBox" Margin="0,0,0,10" KeyDown="PasswordBox_KeyDown" Width="300"/>
 
-            <TextBlock Text="Подтвердите пароль" FontSize="21" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left" Foreground="{DynamicResource DGTextFillColorPrimaryBrush}"/>
+            <TextBlock Text="Подтвердите пароль" FontSize="21" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Left" />
             <PasswordBox Name="ConfirmPasswordBox" Margin="0,0,0,20" KeyDown="ConfirmPasswordBox_KeyDown" Width="300"/>
 
             <!-- Кнопки -->
-            <ui:Button Background="{DynamicResource DGAccentColor}" Click="RegisterButton_Click" Name="RegisterButton" HorizontalAlignment="Stretch" MinWidth="300" MinHeight="50" Margin="0,0,0,10">
+            <ui:Button  Click="RegisterButton_Click" x:Name="RegisterButton" HorizontalAlignment="Stretch" MinWidth="300" MinHeight="50" Margin="0,0,0,10">
                 <ui:TextBlock Text="Зарегистрироваться" FontSize="18" />
             </ui:Button>
             <Button Content="Назад к авторизации" Click="BackToLoginButton_Click" HorizontalAlignment="Stretch" MinWidth="300" MinHeight="40"/>

@@ -1,0 +1,49 @@
+﻿<Page x:Class="intsis.Views.Settings"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+      ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:intsis.Views"
+      mc:Ignorable="d" 
+      Title="Settings">
+
+   
+    <Grid Margin="10">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" >
+
+            <!-- Путь до JSON файла -->
+            <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Путь до JSON файла:" VerticalAlignment="Center" Width="150"/>
+                <TextBox x:Name="JsonFilePath" Width="300" Margin="5"/>
+                <Button Content="Обзор" Width="80" VerticalAlignment="Center" Margin="5"/>
+            </StackPanel>-->
+
+            <!-- Toggle для использования локальной БД -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Использовать локально:" VerticalAlignment="Center" Width="160"/>
+                <ui:ToggleSwitch x:Name="UseLocalDatabase" Width="100" Height="40" Margin="5" Checked="UseLocalDatabase_Checked"/>
+            </StackPanel>
+            
+          
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Строка подключения:" VerticalAlignment="Center" Width="160"/>
+                <TextBox x:Name="ConnectionString" Width="300" Margin="5"/>
+            </StackPanel>
+
+            <!-- Сменить тему -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Выбор темы:" VerticalAlignment="Center" Width="160"/>
+                <ComboBox x:Name="ThemeComboBox" Width="200" VerticalAlignment="Center" SelectedIndex="0" Margin="5" SelectionChanged="ThemeComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Тёмная" />
+                    <ComboBoxItem Content="Светлая" />
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Кнопка для сохранения -->
+            <Button Content="Сохранить" Width="150" Height="40" HorizontalAlignment="Center" x:Name="SaveSettings" VerticalAlignment="Bottom" Margin="10" />
+        </StackPanel>
+    </Grid>
+</Page>

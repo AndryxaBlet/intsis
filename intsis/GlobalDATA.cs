@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace intsis
 {
@@ -14,5 +15,6 @@ namespace intsis
         public static int SelectRULEID { get; set; }
         public static bool IsFirst { get; set; }
         public static string ConnectToDB { get; set; }
+        public static Brush Accent { get;set; }
     }
 }

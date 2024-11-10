@@ -19,8 +19,8 @@
             <ui:NavigationView x:Name="MainNavigation" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"  IsPaneOpen="False" IsPaneToggleVisible="False" Loaded="MainNavigation_Loaded">
 
                 <ui:NavigationView.MenuItems>
-                    <ui:MenuItem Icon="{ui:SymbolIcon Symbol=Home16, Filled=True}" Tag="HomePage" Name="LogPG" Click="LogPG_Click"  />
-                    <ui:MenuItem Icon="{ui:SymbolIcon Symbol=Settings16, Filled=True}" Tag="SettingsPage"/>
+                    <ui:MenuItem Icon="{ui:SymbolIcon Symbol=Home16, Filled=True}" Tag="HomePage" Name="LogPG" Click="LogPG_Click"/>
+                    <ui:MenuItem Icon="{ui:SymbolIcon Symbol=Settings16, Filled=True}" Tag="SettingsPage" Click="MenuItem_Click"/>
                 </ui:NavigationView.MenuItems>
             </ui:NavigationView>
         

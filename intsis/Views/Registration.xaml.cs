@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 using static intsis.Views.MainWindow;
 
 namespace intsis.Views
@@ -24,9 +25,10 @@ namespace intsis.Views
         
         public Registration()
         {
-            bool First = GlobalDATA.IsFirst;
             InitializeComponent();
-            if(First)
+            RegisterButton.Background = GlobalDATA.Accent;
+            bool First = GlobalDATA.IsFirst;
+            if (First)
             FirstAdmin();
         }
         bool isAdmin = false;
