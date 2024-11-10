@@ -34,7 +34,6 @@ namespace intsis.Views
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Light);
             }
-
         }
 
         Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;

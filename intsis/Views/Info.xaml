@@ -46,8 +46,10 @@
                        Height="40"
                        Margin="0,20"
                        HorizontalAlignment="Center"
-                       Background="{DynamicResource DGAccentColor}"
-                       Click="ContinueButton_Click"/>
+                       Background="{DynamicResource AccentColor}"
+                       Click="ContinueButton_Click"
+                       Name="Continue"/>
+           
         </StackPanel>
     </Grid>
  </Page>

@@ -14,13 +14,14 @@
 
 
             <FontFamily x:Key="SegoeFluentIcons">pack://application:,,,/;component/Fonts/#Segoe Fluent Icons</FontFamily>
-            <SolidColorBrush x:Key="DGAccentColor" Color="#bd3b11"/> 
+            <SolidColorBrush x:Key="AccentColor" Color="#bd3b11"/> 
             <SolidColorBrush x:Key="DGTextFillColorPrimaryBrush" Color="#FFFFFF"/>
             <SolidColorBrush x:Key="TextBrush" Color="#FFFFFF"/>
+            
             <Style TargetType="DataGridRow">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource DGAccentColor}"/>
+                        <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
                         <Setter Property="Foreground" Value="{DynamicResource DGTextFillColorPrimaryBrush}"/>
                         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
                         <Setter Property="BorderThickness" Value="2"/>
@@ -32,7 +33,7 @@
             <Style TargetType="DataGridCell">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource DGAccentColor}"/>
+                        <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
                         <Setter Property="Foreground" Value="{DynamicResource DGTextFillColorPrimaryBrush}"/>
                     </DataTrigger>
                 </Style.Triggers>

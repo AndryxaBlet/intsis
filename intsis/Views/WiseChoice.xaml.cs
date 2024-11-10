@@ -35,6 +35,7 @@ namespace intsis.Views
                 ApplicationThemeManager.Apply(ApplicationTheme.Light);
             }
             GlobalDATA.Accent = ApplicationAccentColorManager.PrimaryAccentBrush;
+            Application.Current.Resources["AccentColor"]=GlobalDATA.Accent;
 
         }
 

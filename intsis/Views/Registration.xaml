@@ -34,7 +34,7 @@
             <PasswordBox Name="ConfirmPasswordBox" Margin="0,0,0,20" KeyDown="ConfirmPasswordBox_KeyDown" Width="300"/>
 
             <!-- Кнопки -->
-            <ui:Button  Click="RegisterButton_Click" x:Name="RegisterButton" HorizontalAlignment="Stretch" MinWidth="300" MinHeight="50" Margin="0,0,0,10">
+            <ui:Button  Click="RegisterButton_Click" Background="{DynamicResource AccentColor}" x:Name="RegisterButton" HorizontalAlignment="Stretch" MinWidth="300" MinHeight="50" Margin="0,0,0,10">
                 <ui:TextBlock Text="Зарегистрироваться" FontSize="18" />
             </ui:Button>
             <Button Content="Назад к авторизации" Click="BackToLoginButton_Click" HorizontalAlignment="Stretch" MinWidth="300" MinHeight="40"/>
