@@ -7,16 +7,16 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ui:ThemesDictionary Theme="Light" />
+                <ui:ThemesDictionary Theme="Light"/>
                 <ui:ControlsDictionary />
                
             </ResourceDictionary.MergedDictionaries>
 
 
             <FontFamily x:Key="SegoeFluentIcons">pack://application:,,,/;component/Fonts/#Segoe Fluent Icons</FontFamily>
-            <SolidColorBrush x:Key="DGAccentColor" Color="#bd3b11"/>
+            <SolidColorBrush x:Key="DGAccentColor" Color="#bd3b11"/> 
             <SolidColorBrush x:Key="DGTextFillColorPrimaryBrush" Color="#FFFFFF"/>
-            
+            <SolidColorBrush x:Key="TextBrush" Color="#FFFFFF"/>
             <Style TargetType="DataGridRow">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True">

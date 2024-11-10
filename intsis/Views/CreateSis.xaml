@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:intsis.Views"
         mc:Ignorable="d"
         Title="WiseChoice" Height="350" Width="500" WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource ApplicationBackgroundBrush}" WindowBackdropType="Mica"
+        Background="{DynamicResource ApplicationBackgroundBrush}"  Foreground="{DynamicResource TextFillColorPrimaryBrush}" WindowBackdropType="Mica"
         WindowCornerPreference="Default" ExtendsContentIntoTitleBar="True">
     <Grid>
     

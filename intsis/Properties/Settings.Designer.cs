@@ -68,12 +68,40 @@ namespace intsis.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        public string Параметр {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Theme {
             get {
-                return ((string)(this["Параметр"]));
+                return ((string)(this["Theme"]));
+            }
+            set {
+                this["Theme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsLocalDB {
+            get {
+                return ((bool)(this["IsLocalDB"]));
+            }
+            set {
+                this["IsLocalDB"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=REVISION-PC;Initial Catalog=intsisIR311;Persist Security Info=True;Us" +
+            "er ID=sa;Password=123")]
+        public string ChoosedServer {
+            get {
+                return ((string)(this["ChoosedServer"]));
+            }
+            set {
+                this["ChoosedServer"] = value;
             }
         }
     }

@@ -12,7 +12,7 @@
 
    
     <Grid Margin="10">
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Top" >
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" >
 
             <!-- Путь до JSON файла -->
             <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -24,26 +24,27 @@
             <!-- Toggle для использования локальной БД -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Использовать локально:" VerticalAlignment="Center" Width="160"/>
-                <ui:ToggleSwitch x:Name="UseLocalDatabase" Width="100" Height="40" Margin="5" Checked="UseLocalDatabase_Checked"/>
+                <ui:ToggleSwitch x:Name="UseLocalDatabase" Width="100" Height="40" Margin="5"  Click="UseLocalDatabase_Click"/>
             </StackPanel>
             
           
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Строка подключения:" VerticalAlignment="Center" Width="160"/>
                 <TextBox x:Name="ConnectionString" Width="300" Margin="5"/>
+                <Button Content="Обзор" Width="80" VerticalAlignment="Center" Margin="5" Click="Button_Click"/>
             </StackPanel>
 
             <!-- Сменить тему -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Выбор темы:" VerticalAlignment="Center" Width="160"/>
-                <ComboBox x:Name="ThemeComboBox" Width="200" VerticalAlignment="Center" SelectedIndex="0" Margin="5" SelectionChanged="ThemeComboBox_SelectionChanged">
+                <ComboBox x:Name="ThemeComboBox" Width="200" VerticalAlignment="Center" SelectedIndex="0" Margin="5" >
                     <ComboBoxItem Content="Тёмная" />
                     <ComboBoxItem Content="Светлая" />
                 </ComboBox>
             </StackPanel>
 
             <!-- Кнопка для сохранения -->
-            <Button Content="Сохранить" Width="150" Height="40" HorizontalAlignment="Center" x:Name="SaveSettings" VerticalAlignment="Bottom" Margin="10" />
+            <Button Content="Сохранить" Width="150" Height="40" HorizontalAlignment="Center" x:Name="SaveSettings" VerticalAlignment="Bottom" Margin="10" Click="SaveSettings_Click" />
         </StackPanel>
     </Grid>
 </Page>

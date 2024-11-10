@@ -24,6 +24,16 @@ namespace intsis.Views
         public WiseChoice()
         {
             InitializeComponent();
+
+            if (intsis.Properties.Settings.Default.Theme == "Тёмная")
+            {
+                ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+
+            }
+            else if (intsis.Properties.Settings.Default.Theme == "Светлая")
+            {
+                ApplicationThemeManager.Apply(ApplicationTheme.Light);
+            }
             GlobalDATA.Accent = ApplicationAccentColorManager.PrimaryAccentBrush;
 
         }

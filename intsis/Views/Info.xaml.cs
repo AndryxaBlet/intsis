@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 
 namespace intsis.Views
 {
@@ -24,6 +25,15 @@ namespace intsis.Views
         public Info()
         {
             InitializeComponent();
+            if (intsis.Properties.Settings.Default.Theme == "Тёмная")
+            {
+                ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+
+            }
+            else if (intsis.Properties.Settings.Default.Theme == "Светлая")
+            {
+                ApplicationThemeManager.Apply(ApplicationTheme.Light);
+            }
 
         }
 
@@ -48,8 +58,12 @@ namespace intsis.Views
         }
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
-            string connect = Properties.Settings.Default.PC;
-            string connects = ConfigurationManager.ConnectionStrings["intsisEntitiesLDB"].ConnectionString;
+            string connects;
+            if (intsis.Properties.Settings.Default.IsLocalDB == true)
+            {
+                connects = ConfigurationManager.ConnectionStrings["intsisEntitiesLDB"].ConnectionString;
+            }
+            else { connects = intsis.Properties.Settings.Default.ChoosedServer; }
             intsisEntities.GetContext().Database.Connection.ConnectionString = connects;
 
             var users = intsisEntities.GetContext().User.FirstOrDefault();

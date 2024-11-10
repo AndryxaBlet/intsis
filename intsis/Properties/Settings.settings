@@ -29,9 +29,14 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=REVISION-PC;Initial Catalog=intsisIR311;Persist Security Info=True;User ID=sa;Password=123</Value>
     </Setting>
-    <Setting Name="Параметр" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)" />
+    <Setting Name="Theme" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="IsLocalDB" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ChoosedServer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Data Source=REVISION-PC;Initial Catalog=intsisIR311;Persist Security Info=True;User ID=sa;Password=123</Value>
     </Setting>
   </Settings>
 </SettingsFile>

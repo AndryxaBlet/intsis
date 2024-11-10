@@ -14,6 +14,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wpf.Ui.Appearance;
+using System.Data.SqlClient;
+using System.Configuration;
+
+
 
 namespace intsis.Views
 {
@@ -25,22 +29,55 @@ namespace intsis.Views
         public Settings()
         {
             InitializeComponent();
-            SaveSettings.Background= GlobalDATA.Accent;
+            SaveSettings.Background = GlobalDATA.Accent;
+            ConnectionString.Text = intsis.Properties.Settings.Default.ChoosedServer;
+            if (intsis.Properties.Settings.Default.Theme == "Тёмная")
+            {
+                ThemeComboBox.SelectedIndex = 0;
+            }
+            else { ThemeComboBox.SelectedIndex = 1; }
+
+            if (intsis.Properties.Settings.Default.IsLocalDB == true)
+            {
+                UseLocalDatabase.IsChecked =true;
+            }
+
+            if (UseLocalDatabase.IsChecked == true) { ConnectionString.IsEnabled = false; }
 
         }
 
-        private void UseLocalDatabase_Checked(object sender, RoutedEventArgs e)
-        {
-            ApplicationThemeManager.Apply(ApplicationTheme.Dark);
-        }
-
-        private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SaveSettings_Click(object sender, RoutedEventArgs e)
         {
             switch (ThemeComboBox.SelectedIndex)
             {
-                case 0: ApplicationThemeManager.Apply(ApplicationTheme.Dark); break;
-                case 1: ApplicationThemeManager.Apply(ApplicationTheme.Light); break;
+                case 0: { ApplicationThemeManager.Apply(ApplicationTheme.Dark); intsis.Properties.Settings.Default.Theme = "Тёмная"; }; break;
+                case 1: { ApplicationThemeManager.Apply(ApplicationTheme.Light); intsis.Properties.Settings.Default.Theme = "Светлая";}; break;
             }
+
+            if (UseLocalDatabase.IsChecked == true)
+            {
+                intsis.Properties.Settings.Default.IsLocalDB = true;
+            }
+            else
+            {
+                intsis.Properties.Settings.Default.IsLocalDB = false;
+                intsis.Properties.Settings.Default.ChoosedServer =ConnectionString.Text ;
+            }
+
+            intsis.Properties.Settings.Default.Save();
+
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.MessageBox.Show("В РАЗРАБОТКЕ");
+        }
+
+        private void UseLocalDatabase_Click(object sender, RoutedEventArgs e)
+        {
+            if(UseLocalDatabase.IsChecked == true) {  ConnectionString.IsEnabled = false; }
+            else { ConnectionString.IsEnabled = true; }
         }
     }
 }
