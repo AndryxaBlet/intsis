@@ -29,13 +29,15 @@ namespace intsis.Views
             if(First)
             FirstAdmin();
         }
+        bool isAdmin = false;
         private void FirstAdmin()
         {
                 isAdmin = true;
                 MessageBox.Show("Ваш аккаунт первый в системе, вы автоматически назначенны администратором, запомните ваши данные аккаунта", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            
+                GlobalDATA.IsFirst =false;
+               
         }
-        bool isAdmin = false;
+       
 
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)

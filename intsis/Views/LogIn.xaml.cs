@@ -31,19 +31,9 @@ namespace intsis.Views
         public LogIn()
         {
             InitializeComponent();
-            intsisEntities.GetContext().Database.Connection.ConnectionString = connects;
             LoginTextBox.Focus();
-            var users = intsisEntities.GetContext().User.FirstOrDefault();
-            if (users == null)
-            {
-                GlobalDATA.IsFirst = true;
-                var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
-                navigateView.Navigate(typeof(Registration));
-
-            }
         }
-        string connect = Properties.Settings.Default.PC;
-        string connects = ConfigurationManager.ConnectionStrings["SQLiteConnection"].ConnectionString;
+       
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {

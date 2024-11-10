@@ -12,7 +12,10 @@ namespace intsis
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+    using System.Data.SQLite;
+    using System.Data.SQLite.EF6;
+    using System.Runtime.Remoting.Contexts;
+
     public partial class intsisEntities : DbContext
     {
         public intsisEntities()
@@ -30,9 +33,9 @@ namespace intsis
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            throw new UnintentionalCodeFirstException();
+           
         }
-    
+
         public virtual DbSet<NameSis> NameSis { get; set; }
         public virtual DbSet<Answer> Answer { get; set; }
         public virtual DbSet<Rules> Rules { get; set; }

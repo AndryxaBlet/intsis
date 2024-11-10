@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,10 @@ namespace intsis.Views
         public Info()
         {
             InitializeComponent();
-        }
-   
 
+        }
+
+        Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // Определяем максимальные и минимальные размеры
@@ -46,8 +48,23 @@ namespace intsis.Views
         }
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
-            var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
-            navigateView.Navigate(typeof(LogIn));
+            string connect = Properties.Settings.Default.PC;
+            string connects = ConfigurationManager.ConnectionStrings["intsisEntitiesLDB"].ConnectionString;
+            intsisEntities.GetContext().Database.Connection.ConnectionString = connects;
+
+            var users = intsisEntities.GetContext().User.FirstOrDefault();
+            if (users == null)
+            {
+                GlobalDATA.IsFirst = true;
+                navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+                navigateView.Navigate(typeof(Registration));
+
+            }
+            else
+            {
+                navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+                navigateView.Navigate(typeof(LogIn));
+            }
         }
     }
 }
