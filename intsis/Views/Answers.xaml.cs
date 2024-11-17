@@ -207,10 +207,18 @@ namespace intsis
                 }
 
                 // Шаг 2: Берем лидера с максимальным весом
+                var lst = LeaderBoard.OrderByDescending(f => f.Value).ToList();
                 var currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
-                int currentFactId = currentLeader.Key;
-
-                while (currentLeader.Value < 0.8m && count <= 5)
+                int currentFactId;
+                if (lst.Count > 1)
+                {
+                    if (lst[0].Key != startFactId)
+                        currentFactId = lst[0].Key;
+                    else
+                        currentFactId = lst[1].Key;
+                }
+                else { currentFactId = lst[0].Key; }
+                    while (count <= 5)
                 {
                     count++;
 
@@ -274,13 +282,12 @@ namespace intsis
 
                         // Обновляем currentLeader
                         currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
-                    }
+                        if (currentLeader.Value >= 0.8m)
+                        {
+                            displayQuestion($"Выбранный факт: ID = {currentLeader.Key}, Вес = {currentLeader.Value}");
+                            break; // Завершаем работу, если вес лидера превышает 0.8
+                        }
 
-                    // Если достигнут порог 0.8, выводим результат
-                    if (currentLeader.Value >= 0.8m)
-                    {
-                        displayQuestion($"Выбранный факт: ID = {currentLeader.Key}, Вес = {currentLeader.Value}");
-                        break; // Завершаем работу, если вес лидера превышает 0.8
                     }
                 }
             }
