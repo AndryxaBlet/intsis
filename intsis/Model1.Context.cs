@@ -12,34 +12,34 @@ namespace intsis
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Data.SQLite;
-    using System.Data.SQLite.EF6;
-    using System.Runtime.Remoting.Contexts;
-
-    public partial class intsisEntities : DbContext
+    
+    public partial class ExpertSystemEntities : DbContext
     {
-        public intsisEntities()
-            : base("name=intsisEntities")
+        public ExpertSystemEntities()
+            : base("name=ExpertSystemEntities")
         {
-            Database.SetInitializer(new CreateDatabaseIfNotExists<intsisEntities>());
+            Database.SetInitializer(new CreateDatabaseIfNotExists<ExpertSystemEntities>());
             Database.Log = log => System.Diagnostics.Debug.WriteLine(log);
         }
-        private static intsisEntities context_;
-        public static intsisEntities GetContext()
+        private static ExpertSystemEntities context;
+        public static ExpertSystemEntities GetContext()
         {
-            if (context_ == null)
-                context_ = new intsisEntities(); return context_;
+            if (context == null)
+                context = new ExpertSystemEntities();
+            return context;
         }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-           
+            throw new UnintentionalCodeFirstException();
         }
-
-        public virtual DbSet<NameSis> NameSis { get; set; }
-        public virtual DbSet<Answer> Answer { get; set; }
-        public virtual DbSet<Rules> Rules { get; set; }
+    
+        public virtual DbSet<ExpSystem> ExpSystem { get; set; }
+        public virtual DbSet<LinearSystem_Answer> LinearSystem_Answer { get; set; }
+        public virtual DbSet<LinearSystem_Question> LinearSystem_Question { get; set; }
         public virtual DbSet<User> User { get; set; }
-
+        public virtual DbSet<WeightedSystem_Answer> WeightedSystem_Answer { get; set; }
+        public virtual DbSet<WeightedSystem_Fact> WeightedSystem_Fact { get; set; }
+        public virtual DbSet<WeightedSystem_Question> WeightedSystem_Question { get; set; }
+        public virtual DbSet<WeightFactAnswer> WeightFactAnswer { get; set; }
     }
 }

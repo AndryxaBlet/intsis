@@ -12,12 +12,20 @@ namespace intsis
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class LinearSystem_Question
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public LinearSystem_Question()
+        {
+            this.LinearSystem_Answer = new HashSet<LinearSystem_Answer>();
+        }
+    
         public int Id { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public Nullable<bool> IsAdmin { get; set; }
+        public Nullable<int> SystemId { get; set; }
+        public string Text { get; set; }
+    
+        public virtual ExpSystem ExpSystem { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LinearSystem_Answer> LinearSystem_Answer { get; set; }
     }
 }

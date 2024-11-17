@@ -30,15 +30,17 @@ namespace intsis.Views
             InitializeComponent();
             if (id != -1)
             {
-                sys=intsisEntities.GetContext().NameSis.Where(x => x.ID == id).FirstOrDefault();
+                sys=ExpertSystemEntities.GetContext().ExpSystem.Where(x => x.Id == id).FirstOrDefault();
                 NameTextBox.Text=sys.Name;
                 ScopeTextBox.Text = sys.ScopeOfApplication;
-                CommentTextBox.Text = sys.Comment;
+                CommentTextBox.Text = sys.Description;
+                WeightSwitch.IsChecked = sys.Type;
+                
 
             }
         }
         public static int SystemId { get; private set; }
-        NameSis sys=null;
+        ExpSystem sys=null;
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -48,12 +50,13 @@ namespace intsis.Views
                 {
                     sys.Name=NameTextBox.Text;
                     sys.ScopeOfApplication=ScopeTextBox.Text;
-                    sys.Comment = CommentTextBox.Text;
-                    intsisEntities.GetContext().SaveChanges();
+                    sys.Description = CommentTextBox.Text;
+                    ExpertSystemEntities.GetContext().SaveChanges();
                 }
                 else
                 {
-                    insert(NameTextBox.Text, ScopeTextBox.Text, CommentTextBox.Text);
+                    insert(NameTextBox.Text, ScopeTextBox.Text, CommentTextBox.Text,Convert.ToBoolean(WeightSwitch.IsChecked));
+                  
                 }
             }
             catch (Exception r)
@@ -67,22 +70,35 @@ namespace intsis.Views
                 this.Close();
             }
         }
-        public void insert(string name, string scope, string comment)
+        public void insert(string name, string scope, string comment,bool type)
         {
             try
             {
                 // Добавляем новую систему
-                var newSystem = new NameSis
+                var newSystem = new ExpSystem
                 {
                     Name = name,
                     ScopeOfApplication = scope,
-                    Comment = comment
+                    Description = comment,
+                    Type = type
                 };
 
-                intsisEntities.GetContext().NameSis.Add(newSystem);
-                intsisEntities.GetContext().SaveChanges();
-                var sisid=intsisEntities.GetContext().NameSis.Where(x=>x.Name==name && x.ScopeOfApplication==scope && x.Comment==comment).FirstOrDefault();
-                SystemId = sisid.ID;
+                ExpertSystemEntities.GetContext().ExpSystem.Add(newSystem);
+                ExpertSystemEntities.GetContext().SaveChanges();
+                var sisid=ExpertSystemEntities.GetContext().ExpSystem.Where(x=>x.Name == name && x.ScopeOfApplication == scope && x.Description == comment && x.Type==type).FirstOrDefault();
+                SystemId = sisid.Id;
+                if (WeightSwitch.IsChecked == true)
+                {
+                    WeightedSystem_Fact first = new WeightedSystem_Fact
+                    {
+                        SystemId = SystemId,
+                        Name = "Fact",
+                        Text="Системный факт по умолчанию, нужен для составления таблицы лидеров. Необходимо заполнить несколько вопросов для работы системы"
+                        
+                    };
+                    ExpertSystemEntities.GetContext().WeightedSystem_Fact.Add(first);
+                    ExpertSystemEntities.GetContext().SaveChanges();
+                }
                 DialogResult = true;
             }
             catch (Exception r)

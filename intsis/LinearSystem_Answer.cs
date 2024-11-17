@@ -12,15 +12,15 @@ namespace intsis
     using System;
     using System.Collections.Generic;
     
-    public partial class Answer
+    public partial class LinearSystem_Answer
     {
-        public int ID { get; set; }
-        public int IDRule { get; set; }
-        public string Ans { get; set; }
-        public Nullable<int> NextR { get; set; }
-        public string Rec { get; set; }
+        public int Id { get; set; }
+        public int QuestionId { get; set; }
+        public string Text { get; set; }
+        public Nullable<int> NextQuestionId { get; set; }
+        public string Recomendation { get; set; }
         public string Out { get; set; }
     
-        public virtual Rules Rules { get; set; }
+        public virtual LinearSystem_Question LinearSystem_Question { get; set; }
     }
 }

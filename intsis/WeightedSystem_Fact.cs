@@ -12,20 +12,21 @@ namespace intsis
     using System;
     using System.Collections.Generic;
     
-    public partial class Rules
+    public partial class WeightedSystem_Fact
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Rules()
+        public WeightedSystem_Fact()
         {
-            this.Answer = new HashSet<Answer>();
+            this.WeightedSystem_Question = new HashSet<WeightedSystem_Question>();
         }
     
-        public int IDRule { get; set; }
-        public int IDSis { get; set; }
+        public int Id { get; set; }
+        public int SystemId { get; set; }
+        public string Name { get; set; }
         public string Text { get; set; }
     
+        public virtual ExpSystem ExpSystem { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Answer> Answer { get; set; }
-        public virtual NameSis NameSis { get; set; }
+        public virtual ICollection<WeightedSystem_Question> WeightedSystem_Question { get; set; }
     }
 }

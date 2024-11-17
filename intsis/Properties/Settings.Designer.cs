@@ -27,7 +27,7 @@ namespace intsis.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-2VLO4HT;Initial Catalog=intsisIR311;Persist Security Info=Tru" +
-            "e;User ID=sa;Password=123;Encrypt=False")]
+            "e;User Id=sa;Password=123;Encrypt=False")]
         public string NotebookSQL {
             get {
                 return ((string)(this["NotebookSQL"]));
@@ -50,7 +50,7 @@ namespace intsis.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-GMNRSQ7;Initial Catalog=intsisIR311;Persist Security Info=Tru" +
-            "e;User ID=sa;Password=123;Encrypt=False")]
+            "e;User Id=sa;Password=123;Encrypt=False")]
         public string NotebookSQL2 {
             get {
                 return ((string)(this["NotebookSQL2"]));
@@ -61,7 +61,7 @@ namespace intsis.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=REVISION-PC;Initial Catalog=intsisIR311;Persist Security Info=True;Us" +
-            "er ID=sa;Password=123")]
+            "er Id=sa;Password=123")]
         public string PC {
             get {
                 return ((string)(this["PC"]));
@@ -94,8 +94,8 @@ namespace intsis.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=REVISION-PC;Initial Catalog=intsisIR311;Persist Security Info=True;Us" +
-            "er ID=sa;Password=123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=REVISION-PC;Initial Catalog=ExpertSystem;Persist Security Info=True;U" +
+            "ser Id=sa;Password=123")]
         public string ChoosedServer {
             get {
                 return ((string)(this["ChoosedServer"]));

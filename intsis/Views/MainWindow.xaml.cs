@@ -43,7 +43,7 @@ namespace intsis.Views
         {
             try
             {
-                Dg.ItemsSource = intsisEntities.GetContext().NameSis.ToList();
+                Dg.ItemsSource = ExpertSystemEntities.GetContext().ExpSystem.ToList();
             }
             catch (Exception r)
             {
@@ -59,7 +59,7 @@ namespace intsis.Views
                 var selectedRuleId = -1;
                 if (Dg.SelectedIndex != -1)
                 {
-                    selectedRuleId = (Dg.ItemsSource as List<NameSis>)[Dg.SelectedIndex].ID;
+                    selectedRuleId = (Dg.ItemsSource as List<ExpSystem>)[Dg.SelectedIndex].Id;
                 }
                 GlobalDATA.IdSisForCREATE = selectedRuleId;
                 var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
@@ -80,8 +80,8 @@ namespace intsis.Views
             {
                 if (Dg.SelectedIndex != -1)
                 {
-                    NameSis selectedRuleId = Dg.SelectedValue as NameSis;
-                    GlobalDATA.IdSisForCREATE = selectedRuleId.ID;
+                    ExpSystem selectedRuleId = Dg.SelectedValue as ExpSystem;
+                    GlobalDATA.IdSisForCREATE = selectedRuleId.Id;
                     var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
                     navigateView.Navigate(typeof(Answers));
                 }

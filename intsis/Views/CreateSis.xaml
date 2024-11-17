@@ -6,12 +6,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:intsis.Views"
         mc:Ignorable="d"
-        Title="WiseChoice" Height="350" Width="500" WindowStartupLocation="CenterScreen"
+        Title="WiseChoice" Height="400" Width="500" WindowStartupLocation="CenterScreen"
         Background="{DynamicResource ApplicationBackgroundBrush}"  Foreground="{DynamicResource TextFillColorPrimaryBrush}" WindowBackdropType="Mica"
         WindowCornerPreference="Default" ExtendsContentIntoTitleBar="True">
     <Grid>
     
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -27,17 +28,20 @@
         <!-- Name -->
         <Label FontWeight="Bold" Content="Название" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,10,10,10" Grid.Row="1" Grid.Column="0"/>
         <TextBox Name="NameTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" Grid.Row="1" Grid.Column="1" KeyDown="NameTextBox_KeyDown"/>
+        
+        <Label FontWeight="Bold" Content="Режим 'Веса'" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,10,10,10" Grid.Row="2" Grid.Column="0"/>
+        <ui:ToggleSwitch Name="WeightSwitch" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" Grid.Row="2" Grid.Column="1" KeyDown="NameTextBox_KeyDown"/>
 
         <!-- Scope of Application -->
-        <Label FontWeight="Bold" Content="Область применения" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,10,10,10" Grid.Row="2" Grid.Column="0"/>
-        <TextBox  Name="ScopeTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" Grid.Row="2" Grid.Column="1" KeyDown="ScopeTextBox_KeyDown"/>
+        <Label FontWeight="Bold" Content="Область применения" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,10,10,10" Grid.Row="3" Grid.Column="0"/>
+        <TextBox  Name="ScopeTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" Grid.Row="3" Grid.Column="1" KeyDown="ScopeTextBox_KeyDown"/>
 
         <!-- Comment -->
-        <Label FontWeight="Bold" Content="Комментарий" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,10,10" Grid.Row="3" Grid.Column="0"/>
-        <TextBox Name="CommentTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10" Grid.Row="3" Grid.Column="1" Height="80" TextWrapping="Wrap" AcceptsReturn="True" KeyDown="CommentTextBox_KeyDown" />
+        <Label FontWeight="Bold" Content="Комментарий" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,10,10" Grid.Row="4" Grid.Column="0"/>
+        <TextBox Name="CommentTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10" Grid.Row="4" Grid.Column="1" Height="80" TextWrapping="Wrap" AcceptsReturn="True" KeyDown="CommentTextBox_KeyDown" />
 
         <!-- Button -->
-        <Button Content="Сохранить" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Width="120" Grid.Row="4" Grid.ColumnSpan="2" Name="SaveButton" Click="SaveButton_Click">
+        <Button Content="Сохранить" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Width="120" Grid.Row="5" Grid.ColumnSpan="2" Name="SaveButton" Click="SaveButton_Click">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>

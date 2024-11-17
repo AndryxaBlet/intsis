@@ -29,6 +29,7 @@
                 <StackPanel Width="300" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <Button Content="Редактировать ЭС" Name="UpdIS" Width="auto" Height="36" Margin="10,3" HorizontalAlignment="Stretch" Click="UpdIS_Click"/>
                     <Button Content="Настроить вопрос" Name="Ans" HorizontalAlignment="Stretch" Margin="10,10" Height="30" Click="C"/>
+                    <Button Content="Настроить факт" Name="ChangeFact" HorizontalAlignment="Stretch" Margin="10,10" Height="30" Visibility="Collapsed" Click="ChangeFact_Click"/>
                     <Button Content="Применить изменения" Name="Create_Copy" HorizontalAlignment="Stretch"  Margin="10,0" Height="30" Click="Create_Copy_Click"/>
                 </StackPanel>
                 <StackPanel Width="160" VerticalAlignment="Top" Height="124">
@@ -46,16 +47,32 @@
 
         <!-- DataGrid -->
 
-        <ui:DataGrid x:Name="Dg" AutoGenerateColumns="False"  VerticalAlignment="Top" HorizontalAlignment="Stretch" MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
+            <ui:DataGrid x:Name="DgLinear" AutoGenerateColumns="False"  VerticalAlignment="Top" HorizontalAlignment="Stretch" Visibility="Collapsed" MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
                   MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}">
             <DataGrid.Columns>
-                <DataGridTextColumn FontSize="20" Visibility="Hidden" Width="22" Header="ID" Binding="{Binding IDRule}" x:Name="ID" IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20"  Width="22" Header="ID" Binding="{Binding Id}" x:Name="ID" Visibility="Hidden" IsReadOnly="True"/>
                 <DataGridTextColumn FontSize="20" Width="*" Header="Вопрос" Binding="{Binding Text}" x:Name="Txt"/>
-                <DataGridTextColumn Header="Прио" Width="0" Binding="{Binding IDSis}" x:Name="IDRul" Visibility="Hidden"/>
+                <DataGridTextColumn Header="Прио" Width="0" Binding="{Binding SystemId}" x:Name="IDRul" Visibility="Hidden"/>
                 <DataGridTemplateColumn Width="auto" Header="Удалить">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Удалить"/>
+                            <Button Content="Удалить" Click="Button_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </ui:DataGrid>
+            <ui:DataGrid x:Name="DgWeight" AutoGenerateColumns="False"  VerticalAlignment="Top" HorizontalAlignment="Stretch"  Visibility="Collapsed" MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"
+                      MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}">
+            <DataGrid.Columns>
+                <DataGridTextColumn FontSize="20" Visibility="Hidden" Width="22" Header="ID" Binding="{Binding Id}"  IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20" Width="*" Header="Факт" Binding="{Binding Name}"/>
+                    <DataGridTextColumn FontSize="20" Width="*" Header="Описание факта" Binding="{Binding Text}"/>
+                    <DataGridTextColumn Header="Прио" Width="0" Binding="{Binding SystemID}"  Visibility="Hidden"/>
+                <DataGridTemplateColumn Width="auto" Header="Удалить">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Удалить" Click="Button_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

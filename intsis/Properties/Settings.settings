@@ -36,7 +36,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ChoosedServer" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Data Source=REVISION-PC;Initial Catalog=intsisIR311;Persist Security Info=True;User ID=sa;Password=123</Value>
+      <Value Profile="(Default)">Data Source=REVISION-PC;Initial Catalog=ExpertSystem;Persist Security Info=True;User ID=sa;Password=123</Value>
     </Setting>
   </Settings>
 </SettingsFile>

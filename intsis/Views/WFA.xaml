@@ -1,4 +1,4 @@
-﻿<Page x:Class="intsis.ANS"
+﻿<Page x:Class="intsis.WFA"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -30,23 +30,25 @@
 
         <DataGrid x:Name="Dg" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False" Grid.Row="1" Margin="0,0,0,5">
             <DataGrid.Columns>
-                <DataGridTextColumn FontSize="20" Width="auto" Header="ID" Visibility="Hidden" Binding="{Binding Id}" IsReadOnly="True"/>
-                <DataGridTextColumn FontSize="20" Width="auto" Header="Ответ" Binding="{Binding Text}"/>
-
-                <!-- Колонка с ComboBox вместо текста -->
-                <DataGridTemplateColumn Header="Следующее правило" Width="Auto">
+                <DataGridTemplateColumn Header="Факт" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.RuleOptions, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                      DisplayMemberPath="Text"   
+                            <ComboBox ItemsSource="{Binding DataContext.Facts, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                      DisplayMemberPath="Name"   
                                       SelectedValuePath="Id"
-                                      SelectedValue="{Binding NextQuestionId, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged"/>
+                                      SelectedValue="{Binding IdFact, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Рекомендации" Width="auto" Binding="{Binding Recomendation}"/>
-                <DataGridTextColumn FontSize="20" Width="auto"  Header="Вывод" Binding="{Binding Out}"/>
+                <DataGridTemplateColumn Header="Плюс или минус">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ui:ToggleSwitch IsChecked="{Binding PlusOrMinus, Mode=TwoWay}" Checked="ToggleSwitch_Checked" Content="" Click="ToggleSwitch_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Значение" Width="auto" Binding="{Binding Weight}"/>
                 <DataGridTextColumn Header="Прио" Binding="{Binding Id}" Visibility="Hidden"/>
 
                 <DataGridTemplateColumn Width="auto" Header="Удалить">
@@ -58,7 +60,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        
+
         <Button Content="Сохранить изменения" HorizontalAlignment="Right" Width="200" Margin="10" VerticalAlignment="Top" Click="Button_Click" Grid.Row="2">
         </Button>
     </Grid>

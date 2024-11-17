@@ -65,7 +65,7 @@ namespace intsis.Views
             }
 
 
-            var existingUser = intsisEntities.GetContext().User.FirstOrDefault(u => u.Login == username || u.Email == email);
+            var existingUser = ExpertSystemEntities.GetContext().User.FirstOrDefault(u => u.Login == username || u.Email == email);
 
             if (existingUser != null)
             {
@@ -96,14 +96,14 @@ namespace intsis.Views
                 };
             }
 
-            intsisEntities.GetContext().User.Add(newUser);
-            intsisEntities.GetContext().SaveChanges();
+            ExpertSystemEntities.GetContext().User.Add(newUser);
+            ExpertSystemEntities.GetContext().SaveChanges();
 
             MessageBox.Show("Регистрация успешна!");
 
             // Optionally, open the main window after registration
 
-            GlobalDATA.recvadmin = newUser.IsAdmin;
+            GlobalDATA.recvadmin = Convert.ToBoolean(newUser.IsAdmin);
             var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
             navigateView.Navigate(typeof(MainWindow));
 

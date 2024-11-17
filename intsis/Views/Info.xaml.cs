@@ -63,9 +63,9 @@ namespace intsis.Views
                 connects = ConfigurationManager.ConnectionStrings["intsisEntitiesLDB"].ConnectionString;
             }
             else { connects = intsis.Properties.Settings.Default.ChoosedServer; }
-            intsisEntities.GetContext().Database.Connection.ConnectionString = connects;
+            ExpertSystemEntities.GetContext().Database.Connection.ConnectionString = connects;
 
-            var users = intsisEntities.GetContext().User.FirstOrDefault();
+            var users = ExpertSystemEntities.GetContext().User.FirstOrDefault();
             if (users == null)
             {
                 GlobalDATA.IsFirst = true;

@@ -18,50 +18,50 @@ GO
 -- --------------------------------------------------
 
 IF OBJECT_ID(N'[dbo].[FK_Answer_Rules]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Answer] DROP CONSTRAINT [FK_Answer_Rules];
+    ALTER TABLE [dbo].[LinearSystem_Answer] DROP CONSTRAINT [FK_Answer_Rules];
 GO
 IF OBJECT_ID(N'[dbo].[FK_Rules_NameSis]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Rules] DROP CONSTRAINT [FK_Rules_NameSis];
+    ALTER TABLE [dbo].[LinearSystem_Question] DROP CONSTRAINT [FK_Rules_NameSis];
 GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[Answer]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Answer];
+IF OBJECT_ID(N'[dbo].[LinearSystem_Answer]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[LinearSystem_Answer];
 GO
-IF OBJECT_ID(N'[dbo].[NameSis]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[NameSis];
+IF OBJECT_ID(N'[dbo].[ExpSystem]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ExpSystem];
 GO
-IF OBJECT_ID(N'[dbo].[Rules]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Rules];
+IF OBJECT_ID(N'[dbo].[LinearSystem_Question]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[LinearSystem_Question];
 GO
 
 -- --------------------------------------------------
 -- Creating all tables
 -- --------------------------------------------------
 
--- Creating table 'NameSis'
-CREATE TABLE [dbo].[NameSis] (
+-- Creating table 'ExpSystem'
+CREATE TABLE [dbo].[ExpSystem] (
     [ID] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(50)  NOT NULL
 );
 GO
 
--- Creating table 'Answer'
-CREATE TABLE [dbo].[Answer] (
+-- Creating table 'LinearSystem_Answer'
+CREATE TABLE [dbo].[LinearSystem_Answer] (
     [ID] int IDENTITY(1,1) NOT NULL,
-    [IDRule] int  NOT NULL,
+    [Id] int  NOT NULL,
     [Ans] nvarchar(250)  NOT NULL,
     [NextR] nvarchar(250)  NOT NULL,
     [Rec] nvarchar(250)  NULL
 );
 GO
 
--- Creating table 'Rules'
-CREATE TABLE [dbo].[Rules] (
-    [IDRule] int IDENTITY(1,1) NOT NULL,
+-- Creating table 'LinearSystem_Question'
+CREATE TABLE [dbo].[LinearSystem_Question] (
+    [Id] int IDENTITY(1,1) NOT NULL,
     [IDSis] int  NOT NULL,
     [Text] nvarchar(250)  NOT NULL
 );
@@ -71,55 +71,55 @@ GO
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
 
--- Creating primary key on [ID] in table 'NameSis'
-ALTER TABLE [dbo].[NameSis]
+-- Creating primary key on [ID] in table 'ExpSystem'
+ALTER TABLE [dbo].[ExpSystem]
 ADD CONSTRAINT [PK_NameSis]
     PRIMARY KEY CLUSTERED ([ID] ASC);
 GO
 
--- Creating primary key on [ID] in table 'Answer'
-ALTER TABLE [dbo].[Answer]
+-- Creating primary key on [ID] in table 'LinearSystem_Answer'
+ALTER TABLE [dbo].[LinearSystem_Answer]
 ADD CONSTRAINT [PK_Answer]
     PRIMARY KEY CLUSTERED ([ID] ASC);
 GO
 
--- Creating primary key on [IDRule] in table 'Rules'
-ALTER TABLE [dbo].[Rules]
+-- Creating primary key on [Id] in table 'LinearSystem_Question'
+ALTER TABLE [dbo].[LinearSystem_Question]
 ADD CONSTRAINT [PK_Rules]
-    PRIMARY KEY CLUSTERED ([IDRule] ASC);
+    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
 
--- Creating foreign key on [IDRule] in table 'Answer'
-ALTER TABLE [dbo].[Answer]
+-- Creating foreign key on [Id] in table 'LinearSystem_Answer'
+ALTER TABLE [dbo].[LinearSystem_Answer]
 ADD CONSTRAINT [FK_Answer_Rules]
-    FOREIGN KEY ([IDRule])
-    REFERENCES [dbo].[Rules]
-        ([IDRule])
+    FOREIGN KEY ([Id])
+    REFERENCES [dbo].[LinearSystem_Question]
+        ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_Answer_Rules'
 CREATE INDEX [IX_FK_Answer_Rules]
-ON [dbo].[Answer]
-    ([IDRule]);
+ON [dbo].[LinearSystem_Answer]
+    ([Id]);
 GO
 
--- Creating foreign key on [IDSis] in table 'Rules'
-ALTER TABLE [dbo].[Rules]
+-- Creating foreign key on [IDSis] in table 'LinearSystem_Question'
+ALTER TABLE [dbo].[LinearSystem_Question]
 ADD CONSTRAINT [FK_Rules_NameSis]
     FOREIGN KEY ([IDSis])
-    REFERENCES [dbo].[NameSis]
+    REFERENCES [dbo].[ExpSystem]
         ([ID])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
 -- Creating non-clustered index for FOREIGN KEY 'FK_Rules_NameSis'
 CREATE INDEX [IX_FK_Rules_NameSis]
-ON [dbo].[Rules]
+ON [dbo].[LinearSystem_Question]
     ([IDSis]);
 GO
 

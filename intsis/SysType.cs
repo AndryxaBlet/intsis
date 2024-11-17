@@ -13,159 +13,236 @@ namespace intsis
 
     public class SqlJSON
     {
-        public void ExportData(int systemId, string filePath)
-        {
-            try
-            {
-                var context = intsisEntities.GetContext();
-                {
-                    // Извлекаем выбранную систему по ID
-                    var system = context.NameSis
-                        .Where(s => s.ID == systemId)
-                        .Select(s => new ImportedSystem
-                        {
-                            ID = s.ID,
-                            Name = s.Name,
-                            ScopeOfApplication = s.ScopeOfApplication,
-                            Comment = s.Comment,
-                            Rules = s.Rules.Select(r => new ImportedRule
-                            {
-                                IDRule = r.IDRule,
-                                Text = r.Text,
-                                Answers = r.Answer.Select(a => new ImportedAnswer
-                                {
-                                    ID = a.ID,
-                                    Ans = a.Ans,
-                                    NextR = a.NextR.ToString(),
-                                    Rec = string.IsNullOrEmpty(a.Rec) ? null : a.Rec,
-                                    Out = a.Out
-                                }).ToList()
-                            }).ToList()
-                        }).ToList();
+        public void ExportData(int systemId, string filePath) { }
+        //{ try
+        //    {
+        //        var context = ExpertSystemEntities.GetContext();
+        //        {
+        //            // Извлекаем выбранную систему по ID
+        //            var system = context.ExpSystem
+        //                .Where(s => s.Id == systemId)
+        //                .Select(s => new ImportedSystem
+        //                {
+        //                    ID = s.Id,
+        //                    Name = s.Name,
+        //                    ScopeOfApplication = s.ScopeOfApplication,
+        //                    Comment = s.Description,
+        //                    LinearSystem_Question = s.LinearSystem_Question.Select(r => new ImportedRule
+        //                    {
+        //                        Id = r.Id,
+        //                        Text = r.Text,
+        //                        Answers = r.LinearSystem_Answer.Select(a => new ImportedAnswer
+        //                        {
+        //                            ID = a.ID,
+        //                            Ans = a.Ans,
+        //                            NextR = a.NextR.ToString(),
+        //                            Rec = string.IsNullOrEmpty(a.Rec) ? null : a.Rec,
+        //                            Out = a.Out
+        //                        }).ToList()
+        //                    }).ToList()
+        //                }).ToList();
 
-                    // Сериализация данных в JSON
-                    var jsonData = JsonConvert.SerializeObject(system, Formatting.Indented);
+        //            // Сериализация данных в JSON
+        //            var jsonData = JsonConvert.SerializeObject(system, Formatting.Indented);
 
-                    // Запись данных в файл
-                    File.WriteAllText(filePath, jsonData);
-                    MessageBox.Show("Файл успешно сохранён");
-                }
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
+        //            // Запись данных в файл
+        //            File.WriteAllText(filePath, jsonData);
+        //            MessageBox.Show("Файл успешно сохранён");
+        //        }
+        //    }
+        //    catch (Exception ex) { MessageBox.Show(ex.Message); }
+
 
 
         public void ImportData(string filePath)
         {
-            
-            var context = intsisEntities.GetContext();
+
+
+            var context = ExpertSystemEntities.GetContext();
             {
                 var jsonData = File.ReadAllText(filePath);
-                var importedSystems = JsonConvert.DeserializeObject<List<ImportedSystem>>(jsonData);
+                var importedSystems = JsonConvert.DeserializeObject<List<ExpSystem>>(jsonData);
 
                 foreach (var system in importedSystems)
                 {
                     // Создаем новую систему
-                    var newSystem = new NameSis
+                    var newSystem = new ExpSystem
                     {
                         Name = system.Name,
                         ScopeOfApplication = system.ScopeOfApplication,
-                        Comment = system.Comment
+                        Description = system.Description,
+                        Type = system.Type
                     };
 
-                    context.NameSis.Add(newSystem);
+                    context.ExpSystem.Add(newSystem);
                     context.SaveChanges(); // Сохраняем систему, чтобы получить ID
-                    try
+                    if (newSystem.Type == false)
                     {
-                        var ruleMapping = new Dictionary<int, int>(); // Словарь для соответствия оригинальных и новых ID
-
-                        // Добавляем правила и заполняем словарь
-                        foreach (var rule in system.Rules)
+                        try
                         {
-                            var newRule = new Rules
+                            var ruleMapping = new Dictionary<int, int>(); // Словарь для соответствия оригинальных и новых ID
+
+                            // Добавляем правила и заполняем словарь
+                            foreach (var rule in system.LinearSystem_Question)
                             {
-                                IDSis = newSystem.ID,
-                                Text = rule.Text
-                            };
-
-                            context.Rules.Add(newRule);
-                            context.SaveChanges(); // Сохраняем правило, чтобы получить IDRule
-
-                            // Сохраняем соответствие IDRule из JSON и IDRule из базы данных
-                            ruleMapping[rule.IDRule] = newRule.IDRule;
-                        }
-
-                        // Добавляем ответы, используя словарь для преобразования NextR
-                        foreach (var rule in system.Rules)
-                        {
-                            // Получаем IDRule для текущего правила
-                            var newRuleId = ruleMapping[rule.IDRule];
-
-                            foreach (var answer in rule.Answers)
-                            {
-                                // Преобразуем NextR на основе словаря
-                                int? nextR = string.IsNullOrEmpty(answer.NextR)
-                                    ? (int?)null
-                                    : (ruleMapping.TryGetValue(int.Parse(answer.NextR), out var mappedId) ? (int?)mappedId : null);
-
-                                var newAnswer = new Answer
+                                var newRule = new LinearSystem_Question
                                 {
-                                    IDRule = newRuleId, // Здесь используем правильный IDRule из словаря
-                                    Ans = answer.Ans,
-                                    NextR = nextR, // Здесь устанавливаем новое значение
-                                    Rec = answer.Rec,
-                                    Out = answer.Out
+                                    SystemId = newSystem.Id,
+                                    Text = rule.Text
                                 };
 
-                                context.Answer.Add(newAnswer);
+                                context.LinearSystem_Question.Add(newRule);
+                                context.SaveChanges(); // Сохраняем правило, чтобы получить Id
+
+                                // Сохраняем соответствие Id из JSON и Id из базы данных
+                                ruleMapping[rule.Id] = newRule.Id;
+                            }
+
+                            // Добавляем ответы, используя словарь для преобразования NextR
+                            foreach (var rule in system.LinearSystem_Question)
+                            {
+                                // Получаем Id для текущего правила
+                                var newRuleId = ruleMapping[rule.Id];
+
+                                foreach (var answer in rule.LinearSystem_Answer)
+                                {
+                                    int? nextq = -1;
+                                    if (answer.NextQuestionId != null)
+                                    { nextq = ruleMapping[Convert.ToInt32(answer.NextQuestionId)]; }
+                                    else nextq = null;
+
+                                    var newAnswer = new LinearSystem_Answer
+                                    {
+                                        NextQuestionId = nextq, // Здесь используем правильный Id из словаря
+                                        Text = answer.Text,
+                                        Recomendation = answer.Recomendation,
+                                        Out = answer.Out,
+                                        QuestionId = newRuleId
+                                    };
+
+                                    context.LinearSystem_Answer.Add(newAnswer);
+                                    context.SaveChanges();
+                                }
 
                             }
+
+
+
+
+
+                            context.SaveChanges(); // Сохраняем все изменения
+                            MessageBox.Show("Файл успешно импортирован");
                         }
-                    
-
-                          context.SaveChanges(); // Сохраняем все изменения
-                        MessageBox.Show("Файл успешно импортирован");
+                        catch (Exception)
+                        {
+                            context.ExpSystem.Remove(newSystem);
+                        }
+                        finally
+                        {
+                            context.SaveChanges(); // Сохраняем все изменения в конце
+                        }
                     }
-                    catch (Exception)
+                    else
                     {
-                        context.NameSis.Remove(newSystem);
-                    }
-                    finally
-                    {
-                        context.SaveChanges(); // Сохраняем все изменения в конце
+                        try
+                        {
+                            var factMapping = new Dictionary<int, int>(); // Словарь для соответствия оригинальных и новых ID
 
+                            // Добавляем факты
+                            foreach (var fact in system.WeightedSystem_Fact)
+                            {
+                                var newFact = new WeightedSystem_Fact
+                                {
+                                    SystemId = newSystem.Id,
+                                    Name = fact.Name,
+                                    Text = fact.Text
+                                };
+
+                                context.WeightedSystem_Fact.Add(newFact);
+                                context.SaveChanges(); // Сохраняем факт, чтобы получить ID
+
+                                // Сохраняем соответствие IDFact
+                                factMapping[fact.Id] = newFact.Id;
+                            }
+
+                            var QuestMapping = new Dictionary<int, int>(); // Словарь для соответствия оригинальных и новых ID
+                                                                           // Добавляем вопросы, используя словарь для преобразования NextR
+                            foreach (var fact in system.WeightedSystem_Fact)
+                            {
+                                // Получаем IDFact для текущего факта
+                                var newFactId = factMapping[fact.Id];
+
+                                foreach (var question in fact.WeightedSystem_Question)
+                                {
+                                    var newQuestion = new WeightedSystem_Question
+                                    {
+                                        FactID = newFactId, // Используем правильный IDFact из словаря
+                                        Text = question.Text
+                                    };
+
+                                    context.WeightedSystem_Question.Add(newQuestion);
+                                    context.SaveChanges(); // Сохраняем все изменения
+
+                                    QuestMapping[question.Id] = newQuestion.Id;
+
+                                    var AnsMapping = new Dictionary<int, int>(); // Словарь для соответствия оригинальных и новых ID
+                                    var weightedSystem_Answer = question.WeightedSystem_Answer.ToList(); // Создаём копию коллекции
+
+                                    foreach (var ans in weightedSystem_Answer)
+                                    {
+                                        var newQuestId = newQuestion.Id;
+                                        var newAnswer = new WeightedSystem_Answer
+                                        {
+                                            QuestionId = newQuestId,
+                                            Text = ans.Text,
+                                            Recomendation = ans.Recomendation
+                                        };
+
+                                        context.WeightedSystem_Answer.Add(newAnswer);
+                                        context.SaveChanges();
+                                        AnsMapping[ans.Id] = newAnswer.Id; // Сохраняем соответствие оригинальных и новых ID
+
+                                        // Привязываем WeightFactAnswer
+                                        foreach (var wfa in ans.WeightFactAnswer)
+                                        {
+                                            var newWFA = new WeightFactAnswer
+                                            {
+                                                IdAnswer = newAnswer.Id,
+                                                IdFact = factMapping[wfa.IdFact],
+                                                PlusOrMinus = wfa.PlusOrMinus,
+                                                Weight = wfa.Weight
+                                            };
+
+                                            context.WeightFactAnswer.Add(newWFA);
+                                            context.SaveChanges();
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Сохраняем все изменения в конце, чтобы не вызывать SaveChanges() слишком часто
+                            context.SaveChanges();
+
+                            MessageBox.Show("Файл успешно импортирован");
+                        }
+                        catch (Exception ex)
+                        {
+                            // В случае ошибки удаляем созданную систему
+                            context.ExpSystem.Remove(newSystem);
+                            MessageBox.Show("Ошибка импорта данных: " + ex.Message);
+                        }
+                        finally
+                        {
+                            // Сохраняем все изменения в конце
+                            context.SaveChanges();
+                        }
                     }
-                   
                 }
             }
         }
-    
-
-        // Класс для десериализации JSON
-        public class ImportedSystem
-        {
-            public int ID { get; set; }
-            public string Name { get; set; }
-            public string ScopeOfApplication { get; set; }
-            public string Comment { get; set; }
-            public List<ImportedRule> Rules { get; set; }
-        }
-
-        public class ImportedRule
-        {
-            public int IDRule { get; set; }
-            public string Text { get; set; }
-            public List<ImportedAnswer> Answers { get; set; }
-        }
-
-        public class ImportedAnswer
-        {
-            public int ID { get; set; }
-            public string Ans { get; set; }
-            public string NextR { get; set; }
-            public string Rec { get; set; }
-            public string Out { get; set; }
-            
-        }
     }
 }
+                   
+                
+            
+   

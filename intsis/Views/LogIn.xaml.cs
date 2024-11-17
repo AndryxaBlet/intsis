@@ -46,12 +46,12 @@ namespace intsis.Views
             if (username != "" && password != "")
             {
 
-                var login = intsisEntities.GetContext().User.FirstOrDefault(l => l.Login == username && l.Password == password);
+                var login = ExpertSystemEntities.GetContext().User.FirstOrDefault(l => l.Login == username && l.Password == password);
 
                 if (login != null)
                 {
                  
-                    GlobalDATA.recvadmin= login.IsAdmin; 
+                    GlobalDATA.recvadmin= Convert.ToBoolean(login.IsAdmin); 
                     var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
                     navigateView.Navigate(typeof(MainWindow));
                    

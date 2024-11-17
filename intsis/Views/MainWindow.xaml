@@ -32,7 +32,8 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn FontSize="18" Width="*" MaxWidth="300" Header="Название" Binding="{Binding Name}" IsReadOnly="True"/>
                         <DataGridTextColumn FontSize="18" Width="*" MaxWidth="300" Header="Сфера применения" Binding="{Binding ScopeOfApplication}" IsReadOnly="True"/>
-                        <DataGridTextColumn FontSize="18" Width="*" Header="Комментарий" Binding="{Binding Comment}" IsReadOnly="True"/>
+                        <DataGridTextColumn FontSize="18" Width="*" MaxWidth="300" Header="Весовая" Binding="{Binding Type}" IsReadOnly="True"/>
+                        <DataGridTextColumn FontSize="18" Width="*" Header="Комментарий" Binding="{Binding Description}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <TextBlock Margin="15" VerticalAlignment="Center" Text="Нажатие правой кнопки мыши очищает выделение строки в таблице"/>

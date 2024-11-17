@@ -12,12 +12,14 @@ namespace intsis
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class WeightFactAnswer
     {
         public int Id { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public Nullable<bool> IsAdmin { get; set; }
+        public int IdAnswer { get; set; }
+        public int IdFact { get; set; }
+        public bool PlusOrMinus { get; set; }
+        public decimal Weight { get; set; }
+    
+        public virtual WeightedSystem_Answer WeightedSystem_Answer { get; set; }
     }
 }
