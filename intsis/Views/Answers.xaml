@@ -20,9 +20,13 @@
             <RowDefinition Height="Auto"/>
             <!-- Для кнопки Домой -->
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
         <!-- Метка по центру -->
-        <TextBlock Name="VOP" Text="TEST"  Grid.Row="0" TextWrapping="Wrap" 
+        <TextBlock Name="VOP" Text="TEST"  Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" 
                           TextAlignment="Center" 
                           FontSize="24" 
                           FontFamily="Segoe UI Semibold"
@@ -31,18 +35,21 @@
                           VerticalAlignment="Center"/>
 
         <!-- Панель для комбобокса и кнопки Подтвердить под меткой -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center" Margin="10">
             <ComboBox Name="CB" Width="281" Margin="0,0,10,0"/>
             <Button Content="Подтвердить" Width="108" Name="Deny" Click="Deny_Click">
             </Button>
         </StackPanel>
 
         <!-- Кнопка Начать сначала под комбобоксом -->
-        <Button Content="Начать сначала" Grid.Row="2" HorizontalAlignment="Center" x:Name="Repeat" Click="Repeat_Click" Height="32" Visibility="Hidden"/>
+        <Button Content="Начать сначала" Grid.Row="2" HorizontalAlignment="Center" Grid.Column="1" x:Name="Repeat" Click="Repeat_Click" Height="32" Visibility="Hidden"/>
 
         <!-- Кнопка Домой внизу справа -->
-        <Button Content="Домой" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Top"  Click="Button_Click" Margin="20">
+        <Button Content="Домой" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1"  Click="Button_Click" Margin="20">
         </Button>
+        <ui:BreadcrumbBar Grid.Column="0" Grid.RowSpan="3">
+            <ListBox x:Name="AnswerLog" Grid.Column="0" Grid.RowSpan="3"/>
+        </ui:BreadcrumbBar>
     </Grid>
 
 </Page>

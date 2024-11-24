@@ -13,51 +13,88 @@ namespace intsis
 
     public class SqlJSON
     {
-        public void ExportData(int systemId, string filePath) { }
-        //{ try
-        //    {
-        //        var context = ExpertSystemEntities.GetContext();
-        //        {
-        //            // Извлекаем выбранную систему по ID
-        //            var system = context.ExpSystem
-        //                .Where(s => s.Id == systemId)
-        //                .Select(s => new ImportedSystem
-        //                {
-        //                    ID = s.Id,
-        //                    Name = s.Name,
-        //                    ScopeOfApplication = s.ScopeOfApplication,
-        //                    Comment = s.Description,
-        //                    LinearSystem_Question = s.LinearSystem_Question.Select(r => new ImportedRule
-        //                    {
-        //                        Id = r.Id,
-        //                        Text = r.Text,
-        //                        Answers = r.LinearSystem_Answer.Select(a => new ImportedAnswer
-        //                        {
-        //                            ID = a.ID,
-        //                            Ans = a.Ans,
-        //                            NextR = a.NextR.ToString(),
-        //                            Rec = string.IsNullOrEmpty(a.Rec) ? null : a.Rec,
-        //                            Out = a.Out
-        //                        }).ToList()
-        //                    }).ToList()
-        //                }).ToList();
 
-        //            // Сериализация данных в JSON
-        //            var jsonData = JsonConvert.SerializeObject(system, Formatting.Indented);
-
-        //            // Запись данных в файл
-        //            File.WriteAllText(filePath, jsonData);
-        //            MessageBox.Show("Файл успешно сохранён");
-        //        }
-        //    }
-        //    catch (Exception ex) { MessageBox.Show(ex.Message); }
-
-
-
-        public void ImportData(string filePath)
+        public void ExportData(int systemId, string filePath)
         {
+            try
+            {
+                var context = ExpertSystemEntities.GetContext();
+
+                // Загружаем систему с навигационными свойствами через LINQ
+                var systemToExport = context.ExpSystem
+                    .Where(s => s.Id == systemId)
+                    .Select(s => new
+                    {
+                        s.Id,
+                        s.Name,
+                        s.ScopeOfApplication,
+                        s.Description,
+                        s.Type,
+                        WeightedSystem_Fact = s.WeightedSystem_Fact.Select(f => new
+                        {
+                            f.Id,
+                            f.Name,
+                            f.Text,
+                            WeightedSystem_Question = f.WeightedSystem_Question.Select(q => new
+                            {
+                                q.Id,
+                                q.Text,
+                                WeightedSystem_Answer = q.WeightedSystem_Answer.Select(a => new
+                                {
+                                    a.Id,
+                                    a.Text,
+                                    a.Recomendation,
+                                    WeightFactAnswer = a.WeightFactAnswer.Select(wfa => new
+                                    {
+                                        wfa.Id,
+                                        wfa.IdFact,
+                                        wfa.Weight,
+                                        wfa.PlusOrMinus
+                                    })
+                                })
+                            })
+                        }),
+                        LinearSystem_Question = s.LinearSystem_Question.Select(q => new
+                        {
+                            q.Id,
+                            q.Text,
+                            LinearSystem_Answer = q.LinearSystem_Answer.Select(a => new
+                            {
+                                a.Id,
+                                a.Text,
+                                a.Recomendation,
+                                a.Out,
+                                a.NextQuestionId
+                            })
+                        })
+                    })
+                    .FirstOrDefault();
+
+                if (systemToExport == null)
+                {
+                    throw new Exception("Система с указанным ID не найдена.");
+                }
+
+                var systemArray = new[] { systemToExport };
+                // Сериализация в JSON
+                var jsonData = JsonConvert.SerializeObject(systemArray, Formatting.Indented);
+
+                // Сохранение JSON в файл
+                File.WriteAllText(filePath, jsonData);
+
+                MessageBox.Show("Система успешно экспортирована!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка экспорта системы: {ex.Message}");
+            }
+        }
+
+    
 
 
+    public void ImportData(string filePath)
+        {
             var context = ExpertSystemEntities.GetContext();
             {
                 var jsonData = File.ReadAllText(filePath);
