@@ -162,23 +162,40 @@ namespace intsis
         }
 
         private void ChangeAns_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button)
+        {   
+            try        
             {
-
-                var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
-                if (dataGridRow?.Item is WeightedSystem_Question choosed)
+                if (sender is Button button)
                 {
+                
 
-                    var selected = ExpertSystemEntities.GetContext().WeightedSystem_Question
-                        .FirstOrDefault(x => x.Id == choosed.Id);
-                  
+                    var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
+                    if (dataGridRow?.Item is WeightedSystem_Question choosed)
+                    {
+                        var selected = ExpertSystemEntities.GetContext().WeightedSystem_Question.FirstOrDefault(x => x.Id == choosed.Id);
+
                         // Открываем окно с вопросами для выбранного правила
                         GlobalDATA.SelectRULEID = selected.Id;
                         navigateView.Navigate(typeof(WeightAnsChanger));
                     
+                    }
+                
                 }
             }
+
+            catch (System.NullReferenceException)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Сохраните данные.", CloseButtonText = "OK" };
+                messagebox.ShowDialogAsync();
+                
+            }
+
+            catch (Exception r)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
+            }
+
         }
     }
 }
