@@ -61,12 +61,14 @@ namespace intsis.Views
             }
             catch (Exception r)
             {
-                MessageBox.Show(r.Message);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
 
             }
             finally 
             {
-                MessageBox.Show("Успешно сохранено");
+                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Успешно сохранено.", CloseButtonText = "OK" };
+                messagebox.ShowDialogAsync();
                 this.Close();
             }
         }
@@ -103,7 +105,8 @@ namespace intsis.Views
             }
             catch (Exception r)
             {
-                MessageBox.Show(r.Message);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message};
+                messagebox.ShowDialogAsync();
 
             }
         }

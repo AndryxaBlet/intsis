@@ -54,7 +54,8 @@ namespace intsis
             }
             catch (Exception r)
             {
-                MessageBox.Show(r.Message);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message};
+                messagebox.ShowDialogAsync();
 
             }
 
@@ -96,7 +97,8 @@ namespace intsis
                 // Повторно привязываем обновленные данные к DataGrid
                 binddatagrid(id);
 
-                MessageBox.Show("Обновление прошло успешно");
+                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Обновление прошло успешно!"};
+                messagebox.ShowDialogAsync();
 
             }
             //catch (Exception r)
@@ -160,11 +162,13 @@ namespace intsis
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Сохраните изменения, прежде чем удалять.", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Сохраните изменения, прежде чем удалять.", CloseButtonText = "OK" };
+                messagebox.ShowDialogAsync();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = ex.Message};
+                messagebox.ShowDialogAsync();
             }
 
         }

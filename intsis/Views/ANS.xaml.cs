@@ -8,6 +8,11 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Wpf.Ui.Controls;
+using MessageBox = System.Windows.MessageBox;
+using MessageBoxButton = System.Windows.MessageBoxButton;
+using MessageBoxResult = System.Windows.MessageBoxResult;
+using CustomMessageBox = Wpf.Ui.Controls.MessageBox;
 
 namespace intsis
 {
@@ -16,6 +21,7 @@ namespace intsis
     /// </summary>
     public partial class ANS : Page
     {
+        
         private int id = 0;
         public ObservableCollection<LinearSystem_Question> RuleOptions { get; set; }
         Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
@@ -36,8 +42,9 @@ namespace intsis
         public void binddatagrid(int ID)
         {
             try 
-            { 
-          
+            {
+                
+
                 // Получаем ответы по Id
                 var answersFromDb = ExpertSystemEntities.GetContext().LinearSystem_Answer
                     .Where(a => a.QuestionId == ID)
@@ -46,7 +53,8 @@ namespace intsis
             }
             catch (Exception r)
             {
-                MessageBox.Show(r.Message);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
 
             }
 
@@ -89,8 +97,8 @@ namespace intsis
                     // Повторно привязываем обновленные данные к DataGrid
                     binddatagrid(id);
 
-                    MessageBox.Show("Обновление прошло успешно");
-                
+                    var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Обновление прошло успешно." };
+                    messagebox.ShowDialogAsync();
             }
             //catch (Exception r)
             //{
@@ -197,7 +205,7 @@ namespace intsis
         {
             try
             {
-                if (sender is Button button)
+                if (sender is System.Windows.Controls.Button button)
                 {
                     // Получаем текущий объект строки, к которому относится Button
                     var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
@@ -223,11 +231,13 @@ namespace intsis
             }
             catch (NullReferenceException)
             {
-                MessageBox.Show("Сохраните изменения, прежде чем удалять.", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Сохраните изменения, прежде чем удалять." };
+                messagebox.ShowDialogAsync();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = ex.Message };
+                messagebox.ShowDialogAsync();
             }
 
         }

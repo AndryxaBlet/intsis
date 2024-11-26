@@ -47,7 +47,8 @@ namespace intsis.Views
             }
             catch (Exception r)
             {
-                MessageBox.Show(r.Message);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message};
+                messagebox.ShowDialogAsync();
 
             }
         }
@@ -69,7 +70,8 @@ namespace intsis.Views
             }
             catch (Exception r)
             {
-                MessageBox.Show(r.Message);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
 
             }
         }
@@ -85,16 +87,22 @@ namespace intsis.Views
                     var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
                     navigateView.Navigate(typeof(Answers));
                 }
-                else MessageBox.Show("Выберите систему", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                else
+                {
+                    var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Выберите систему", CloseButtonText = "OK" };
+                    messagebox.ShowDialogAsync();
+                }
                 
             }
             catch (ArgumentOutOfRangeException)
             {
-                MessageBox.Show("Нужно выбрать существующий набор вопросов", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Нужно выбрать существующий набор вопросов", CloseButtonText = "OK" };
+                messagebox.ShowDialogAsync();
             }
             catch (Exception r)
             {
-                MessageBox.Show(r.Message);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
 
             }
             

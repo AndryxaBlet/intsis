@@ -35,7 +35,8 @@ namespace intsis.Views
         private void FirstAdmin()
         {
                 isAdmin = true;
-                MessageBox.Show("Ваш аккаунт первый в системе, вы автоматически назначенны администратором, запомните ваши данные аккаунта", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Ваш аккаунт первый в системе, вы автоматически назначенны администратором, запомните ваши данные аккаунта." };
+                messagebox.ShowDialogAsync();
                 GlobalDATA.IsFirst =false;
                
         }
@@ -53,14 +54,16 @@ namespace intsis.Views
             if (string.IsNullOrEmpty(email) ||
                 string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Все поля должны быть заполнены!");
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Все поля должны быть заполнены." };
+                messagebox.ShowDialogAsync();
                 return;
             }
 
 
             if (password != confirmPassword)
             {
-                MessageBox.Show("Пароли не совпадают!");
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Пароли не совпадают!" };
+                messagebox.ShowDialogAsync();
                 return;
             }
 
@@ -69,7 +72,8 @@ namespace intsis.Views
 
             if (existingUser != null)
             {
-                MessageBox.Show("Пользователь с таким логином или электронной почтой уже существует!");
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Пользователь с таким логином или электронной почтой уже существует!" };
+                messagebox.ShowDialogAsync();
                 return;
             }
             User newUser;
@@ -99,7 +103,8 @@ namespace intsis.Views
             ExpertSystemEntities.GetContext().User.Add(newUser);
             ExpertSystemEntities.GetContext().SaveChanges();
 
-            MessageBox.Show("Регистрация успешна!");
+            var messageboxx = new Wpf.Ui.Controls.MessageBox { Content = "Регистрация успешна!" };
+            messageboxx.ShowDialogAsync();
 
             // Optionally, open the main window after registration
 

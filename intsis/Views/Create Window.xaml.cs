@@ -48,7 +48,7 @@ namespace intsis.Views
                 binddatagrid(id);
             }
         }
-    
+
         void BindComboBox()
         {
             var Sis = ExpertSystemEntities.GetContext().ExpSystem.ToList();
@@ -206,12 +206,14 @@ namespace intsis.Views
                 }
                 else
                 {
-                    MessageBox.Show("Не выбранна система");
+                    var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Не выбрана система." };
+                    messagebox.ShowDialogAsync();
                 }
             }
             else
             {
-                MessageBox.Show("Выберите систему", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Выберите систему." };
+                messagebox.ShowDialogAsync();
             }
 
         }
@@ -232,7 +234,8 @@ namespace intsis.Views
             }
             else
             {
-                MessageBox.Show("Выберите вопрос или систему", "",MessageBoxButton.OK, MessageBoxImage.Warning);
+                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Выберите вопрос или систему." };
+                messagebox.ShowDialogAsync();
             }
         }
 
@@ -284,7 +287,8 @@ namespace intsis.Views
             }
             else
             {
-                MessageBox.Show("Выберите систему", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Выберите систему." };
+                messagebox.ShowDialogAsync();
             }
         }
 
@@ -337,7 +341,8 @@ namespace intsis.Views
             }
             catch(ArgumentNullException)
             {
-                MessageBox.Show("Примените изменения, прежде чем удалять.", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = "Примените изменения перед удалением." };
+                messagebox.ShowDialogAsync();
             }
         }
 
@@ -359,7 +364,8 @@ namespace intsis.Views
             }
             else
             {
-                MessageBox.Show("Выберите систему для редактирования", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = "Выберите систему для редактирования" };
+                messagebox.ShowDialogAsync();
             }
 
         }
@@ -407,7 +413,8 @@ namespace intsis.Views
             }
             else
             {
-                MessageBox.Show("Выберите систему для экспорта","Ошибка",MessageBoxButton.OK,MessageBoxImage.Error);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = "Выберите систему для экспорта." };
+                messagebox.ShowDialogAsync();
             }
 
         }
@@ -427,7 +434,8 @@ namespace intsis.Views
             }
             else
             {
-                MessageBox.Show("Выберите вопрос или систему", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = "Выберите вопрос или систему." };
+                messagebox.ShowDialogAsync();
             }
         }
     }
