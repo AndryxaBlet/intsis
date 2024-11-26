@@ -105,7 +105,7 @@ namespace intsis
                 {
                     // Получаем текущий объект строки, к которому относится Button
                     var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
-                    if (dataGridRow?.Item is WeightedSystem_Question deleted)
+                    if (dataGridRow?.Item is WeightedSystem_Answer deleted)
                     {
                         // Находим объект для удаления в контексте
                         var itemToDelete = ExpertSystemEntities.GetContext().WeightedSystem_Answer

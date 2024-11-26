@@ -1,0 +1,19 @@
+﻿<ui:FluentWindow x:Class="intsis.Views.Log"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:intsis.Views"
+        mc:Ignorable="d"
+        Title="WiseChoice"  WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource ApplicationBackgroundBrush}"  Foreground="{DynamicResource TextFillColorPrimaryBrush}" WindowBackdropType="Mica"
+        WindowCornerPreference="Default" ExtendsContentIntoTitleBar="True">
+    <Grid>
+        <StackPanel>
+        <ui:TitleBar  Title="Описание выбора" Grid.ColumnSpan="2"/>
+        <ui:ListView Name="list"></ui:ListView>
+        </StackPanel>
+       
+    </Grid>
+</ui:FluentWindow>

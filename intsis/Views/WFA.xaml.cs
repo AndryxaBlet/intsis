@@ -33,7 +33,8 @@ namespace intsis
             int idsis = GlobalDATA.IdSisForCREATE;
             binddatagrid(ID);
             id = Convert.ToInt32(ID);
-            Facts = new ObservableCollection<WeightedSystem_Fact>(ExpertSystemEntities.GetContext().WeightedSystem_Fact.Where(x => x.SystemId == idsis));
+            var first = ExpertSystemEntities.GetContext().WeightedSystem_Fact.Where(x => x.SystemId == idsis).FirstOrDefault();
+            Facts = new ObservableCollection<WeightedSystem_Fact>(ExpertSystemEntities.GetContext().WeightedSystem_Fact.Where(x => x.SystemId == idsis && x.Id!=first.Id));
             RuleTextBlock.Text = "Настройка ответа: " + ExpertSystemEntities.GetContext().WeightedSystem_Answer.Where(x => x.Id == ID).FirstOrDefault()?.Text;
             // Устанавливаем DataContext для MainWindow, чтобы RuleOptions был доступен
             DataContext = this;
@@ -137,7 +138,7 @@ namespace intsis
                 {
                     // Получаем текущий объект строки, к которому относится Button
                     var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
-                    if (dataGridRow?.Item is LinearSystem_Answer deleted)
+                    if (dataGridRow?.Item is WeightFactAnswer deleted)
                     {
                         // Находим объект для удаления в контексте
                         var itemToDelete = ExpertSystemEntities.GetContext().WeightFactAnswer

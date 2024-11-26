@@ -14,6 +14,10 @@ using System.Windows.Shapes;
 using System.Data;
 using System.Data.Sql;
 using System.Data.SqlClient;
+using System.Windows.Threading;
+using System.Web.UI.WebControls;
+using MaterialDesignThemes.Wpf;
+using intsis.Views;
 
 namespace intsis
 {
@@ -150,10 +154,11 @@ namespace intsis
 
             }
         }
+        List<string> logs = new List<string>();
         private void LogToListBox(string message)
         {
             // Добавляем сообщение в ListBox
-            AnswerLog.Items.Add(message);
+            logs.Add(message);
         }
         
 
@@ -162,7 +167,7 @@ namespace intsis
             ExpSystem system,
             Action<string> displayQuestion,
             Func<List<string>, Task<int>> getAnswer,
-            Action<string> logToListBox) // Метод для добавления логов в ListBox
+            Action<string> logToListBox, Action<string> exit) // Метод для добавления логов в ListBox
         {
             int count = 0;
             if (system != null)
@@ -173,11 +178,13 @@ namespace intsis
                 logToListBox("Запуск системы."); // Логируем запуск системы
 
                 // Шаг 1: Начинаем с факта 1 (стартовый факт)
-                int startFactId = context.WeightedSystem_Fact
-                                        .Where(f => f.SystemId == system.Id)
-                                        .FirstOrDefault()?.Id ?? 0;
 
-                logToListBox($"Стартовый факт: {startFactId}");
+                var startFact = context.WeightedSystem_Fact
+                                        .Where(f => f.SystemId == system.Id)
+                                        .FirstOrDefault();
+                int startFactId = startFact.Id;
+
+                logToListBox($"Стартовый факт: {startFact.Name}");
 
                 var startFactQuestions = context.WeightedSystem_Question
                     .Where(q => q.FactID == startFactId)
@@ -207,12 +214,17 @@ namespace intsis
                             decimal weightValue = weight.Weight;
                             bool isPositive = weight.PlusOrMinus;
 
+
                             if (LeaderBoard.ContainsKey(factId))
                                 LeaderBoard[factId] += isPositive ? weightValue : -weightValue;
                             else
                                 LeaderBoard[factId] = isPositive ? weightValue : -weightValue;
 
-                            logToListBox($"Факт {factId} обновлён: вес {LeaderBoard[factId]}");
+                            var thisfact = context.WeightedSystem_Fact
+                                        .Where(f => f.Id == factId)
+                                        .FirstOrDefault();
+
+                            logToListBox($"Факт {thisfact.Name} обновлён: вес {LeaderBoard[factId]}");
                         }
                     }
                 }
@@ -222,7 +234,11 @@ namespace intsis
                 // Шаг 2: Берем лидера с максимальным весом
                 var currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
                 int currentFactId = currentLeader.Key;
-                logToListBox($"Текущий лидер: {currentFactId}, вес: {currentLeader.Value}");
+
+                var fact = context.WeightedSystem_Fact
+                            .Where(f => f.Id == currentFactId)
+                            .FirstOrDefault();
+                logToListBox($"Текущий лидер: {fact.Name}, вес: {currentLeader.Value}");
 
                 while (count <= 5)
                 {
@@ -270,7 +286,11 @@ namespace intsis
                                 else
                                     LeaderBoard[factId] = isPositive ? weightValue : -weightValue;
 
-                                logToListBox($"Факт {factId} обновлён: вес {LeaderBoard[factId]}");
+                                var thisfact = context.WeightedSystem_Fact
+                                       .Where(f => f.Id == factId)
+                                       .FirstOrDefault();
+
+                                logToListBox($"Факт {thisfact.Name} обновлён: вес {LeaderBoard[factId]}");
                             }
                         }
 
@@ -289,30 +309,41 @@ namespace intsis
 
                     if (currentLeader.Value >= 0.8m)
                     {
-                        logToListBox($"Факт достиг порога 0.8: ID = {currentLeader.Key}, Вес = {currentLeader.Value}");
-                        displayQuestion($"Выбранный факт: ID = {currentLeader.Key}, Вес = {currentLeader.Value}");
+                        var thisfact = context.WeightedSystem_Fact
+                                       .Where(f => f.Id == currentLeader.Key)
+                                       .FirstOrDefault();
+
+                        logToListBox($"Факт достиг порога 0.8: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
+                        displayQuestion($"Выбранный факт: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
+                        exit("");
+                        // Если это не число, выводим строковое сообщение
                         break;
                     }
 
                     if (count == 5)
                     {
+                        
                         logToListBox($"Достигнуто максимальное количество попыток. Проверяем лидера...");
                         if (currentLeader.Value > 0.5m)
-                        {
-                            logToListBox($"Факт с весом > 0.5: ID = {currentLeader.Key}, Вес = {currentLeader.Value}");
-                            displayQuestion($"Выбранный факт: ID = {currentLeader.Key}, Вес = {currentLeader.Value}");
+
+                        {var thisfact = context.WeightedSystem_Fact
+                                       .Where(f => f.Id == currentLeader.Key)
+                                       .FirstOrDefault();
+                            logToListBox($"Факт с весом > 0.5: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
+                            displayQuestion($"Выбранный факт: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
+                            exit("");
                         }
                         else
                         {
                             logToListBox($"Лидер с весом <= 0.5. Перезапуск системы...");
-                            await RunSisAsync(system, displayQuestion, getAnswer, logToListBox);
+                            await RunSisAsync(system, displayQuestion, getAnswer, logToListBox,exit);
                         }
                         break;
                     }
                 }
             }
         }
-
+      
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
@@ -323,7 +354,8 @@ namespace intsis
                 sys,
                 DisplayQuestion,    // Передаём метод для отображения вопроса
                 GetAnswerFromUI,
-                logToListBox: LogToListBox // Передаём метод для логов     // Передаём метод для получения ответа
+                logToListBox: LogToListBox,
+                exit:Exit// Передаём метод для логов     // Передаём метод для получения ответа
             );
         }
 
@@ -336,9 +368,21 @@ namespace intsis
                 VOP.Text = question; // Показываем текст вопроса на UI
             });
         }
+    private void Exit(string s)
+    {
+        // Используем Dispatcher для обновления UI в потоке UI
+        Dispatcher.Invoke(() =>
+        {
+            CB.Visibility = Visibility.Hidden;
+            Deny.Visibility = Visibility.Hidden;
+            Repeat.Visibility = Visibility.Visible;
+            Log window = new Log(logs);
+            window.Show();
+        });
+    }
 
-        // Метод для получения ответа (реализация делегата getAnswer)
-        private async Task<int> GetAnswerFromUI(List<string> options)
+    // Метод для получения ответа (реализация делегата getAnswer)
+    private async Task<int> GetAnswerFromUI(List<string> options)
         {
             // Заполняем список ответов
             Dispatcher.Invoke(() =>
@@ -385,23 +429,13 @@ namespace intsis
 
         private void Repeat_Click(object sender, RoutedEventArgs e)
         {
+            navigateView.Navigate(typeof(MainWindow));
+            navigateView.Navigate(typeof(Answers));
+        }
+        private async void Deny_Click(object sender, RoutedEventArgs e)
+        {
             try
             {
-                next = FIRST(log);
-                CB.Visibility = Visibility.Visible;
-                Deny.Visibility = Visibility.Visible;
-                Repeat.Visibility = Visibility.Hidden;
-            }
-            catch (Exception r)
-            {
-                MessageBox.Show(r.Message);
-
-            }
-        }
-        private void Deny_Click(object sender, RoutedEventArgs e)
-        {
-            try 
-            { 
                 BNext();
             }
             catch (Exception r)
