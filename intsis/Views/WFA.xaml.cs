@@ -14,6 +14,8 @@ using MessageBoxButton = System.Windows.MessageBoxButton;
 using MessageBoxResult = System.Windows.MessageBoxResult;
 using CustomMessageBox = Wpf.Ui.Controls.MessageBox;
 using Button = System.Windows.Controls.Button;
+using System.Data.Entity;
+using System.Xml;
 
 
 namespace intsis
@@ -218,6 +220,41 @@ namespace intsis
 
                     }
                 }
+            }
+        }
+
+        private void NumberBox_ValueChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is NumberBox nb)
+            {
+                // Получаем текущий объект строки, к которому относится ComboBox
+                var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(nb);
+                if (dataGridRow?.Item is WeightFactAnswer answer)
+                {
+                    // Обновляем значение NextR для текущего элемента
+                    answer.Weight =Convert.ToDecimal(nb.Value);
+
+                    // Сохраняем изменения для текущего объекта в базе данных
+                    var context = ExpertSystemEntities.GetContext();
+                    var existingAnswer = context.WeightFactAnswer.FirstOrDefault(a => a.Id == answer.Id);
+                    if (existingAnswer != null)
+                    {
+
+                        existingAnswer.Weight = answer.Weight;
+                    }
+                }
+            }
+
+        }
+
+        private void Dg_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            var newEntity = e.Row.Item as WeightFactAnswer;
+            if (newEntity != null && !ExpertSystemEntities.GetContext().WeightFactAnswer.Contains(newEntity))
+            {
+                ExpertSystemEntities.GetContext().WeightFactAnswer.Add(newEntity);
+                    ExpertSystemEntities.GetContext().SaveChanges();
+                
             }
         }
     }

@@ -28,11 +28,17 @@
             <!-- DataGrid с растягивающейся панелью -->
             <StackPanel Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1">
                 <DataGrid x:Name="Dg" AutoGenerateColumns="False" MaxHeight="270" CanUserAddRows="False" Margin="10"
-                          MouseLeave="Dg_MouseLeave" MouseRightButtonDown="Dg_MouseRightButtonDown">
+                          MouseLeave="Dg_MouseLeave" MouseRightButtonDown="Dg_MouseRightButtonDown" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn FontSize="18" Width="*" MaxWidth="300" Header="Название" Binding="{Binding Name}" IsReadOnly="True"/>
                         <DataGridTextColumn FontSize="18" Width="*" MaxWidth="300" Header="Сфера применения" Binding="{Binding ScopeOfApplication}" IsReadOnly="True"/>
-                        <DataGridTextColumn FontSize="18" Width="*" MaxWidth="300" Header="Весовая" Binding="{Binding Type}" IsReadOnly="True"/>
+                        <DataGridTemplateColumn  Width="*" MaxWidth="300" Header="Весовая" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding Type, Mode=TwoWay}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn FontSize="18" Width="*" Header="Комментарий" Binding="{Binding Description}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>

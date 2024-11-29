@@ -14,8 +14,8 @@
         <StackPanel Margin="5">
         <!-- Title Bar -->
         <ui:TextBlock Text="Конфигурация системы" Padding="5" Height="25"  />
-
-        <!-- Название и ComboBox -->
+            <ContentPresenter x:Name="RootContentDialogPresenter" Grid.Row="0" />
+            <!-- Название и ComboBox -->
         <ui:Card MaxWidth="790" Margin="0,5" HorizontalAlignment="Left">
             <StackPanel Orientation="Horizontal" >
                 <StackPanel Width="300" VerticalAlignment="Top" HorizontalAlignment="Left">
@@ -33,6 +33,7 @@
                     <Button Content="Применить изменения" Name="Create_Copy" HorizontalAlignment="Stretch"  Margin="10,0" Height="30" Click="Create_Copy_Click"/>
                 </StackPanel>
                 <StackPanel Width="160" VerticalAlignment="Top" Height="124">
+                    
 
                     <Button  HorizontalAlignment="Stretch" Margin="10" Click="Button_Click_1"   Height="48">
                         <TextBlock Text="Импортировать JSON" FontSize="14" TextWrapping="Wrap" TextAlignment="Center"/>

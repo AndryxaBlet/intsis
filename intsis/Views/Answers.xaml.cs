@@ -18,6 +18,8 @@ using System.Windows.Threading;
 using System.Web.UI.WebControls;
 using MaterialDesignThemes.Wpf;
 using intsis.Views;
+using Wpf.Ui.Controls;
+using MessageBox = Wpf.Ui.Controls.MessageBox;
 
 namespace intsis
 {
@@ -123,7 +125,7 @@ namespace intsis
 
                             if (!string.IsNullOrEmpty(rec))
                             {
-                                MessageBox.Show(rec);
+                                new MessageBox {Content=rec}.ShowDialogAsync();
                             }
 
                             // Получаем текст следующего вопроса
@@ -154,7 +156,7 @@ namespace intsis
             }
             catch (Exception r)
             {
-                MessageBox.Show(r.Message);
+                new MessageBox { Content = r.Message }.ShowDialogAsync();
 
             }
         }
@@ -164,12 +166,12 @@ namespace intsis
             // Добавляем сообщение в ListBox
             logs.Add(message);
         }
-        
+
 
 
         public static async Task RunSisAsync(
             ExpSystem system,
-            Action<string> displayQuestion,
+            Action< string> displayQuestion,
             Func<List<string>, Task<int>> getAnswer,
             Action<string> logToListBox, Action<string> exit) // Метод для добавления логов в ListBox
         {
@@ -210,6 +212,7 @@ namespace intsis
                     if (selectedAnswer != null)
                     {
                         logToListBox($"Выбран ответ: {selectedAnswer.Text}");
+                        new MessageBox { Content = selectedAnswer.Recomendation, CloseButtonText="Ок" }.ShowDialogAsync();
 
                         var weightAnswers = selectedAnswer.WeightFactAnswer.Where(r => r.IdAnswer == selectedAnswer.Id).ToList();
                         foreach (var weight in weightAnswers)
@@ -275,6 +278,7 @@ namespace intsis
                         {
                             leaderChosenAnswers.Add(leaderChosenAnswer);
                             logToListBox($"Выбран ответ: {leaderChosenAnswer.Text}");
+                            new MessageBox { Content = leaderChosenAnswer.Recomendation, CloseButtonText = "Ок" }.ShowDialogAsync();
 
                             var weightAnswersForLeader = leaderChosenAnswer.WeightFactAnswer
                                 .Where(r => r.IdAnswer == leaderChosenAnswer.Id)
@@ -366,10 +370,12 @@ namespace intsis
         // Метод для отображения вопроса (реализация делегата displayQuestion)
         private void DisplayQuestion(string question)
         {
+           
             // Используем Dispatcher для обновления UI в потоке UI
             Dispatcher.Invoke(() =>
             {
                 VOP.Text = question; // Показываем текст вопроса на UI
+               
             });
         }
     private void Exit(string s)

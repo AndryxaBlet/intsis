@@ -28,7 +28,7 @@
                           Padding="10"
                           HorizontalAlignment="Stretch"/>
 
-        <DataGrid x:Name="Dg" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False" Grid.Row="1" Margin="0,0,0,5">
+        <DataGrid x:Name="Dg" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False" Grid.Row="1" Margin="0,0,0,5" CanUserAddRows="True" RowEditEnding="Dg_RowEditEnding">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Факт" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
@@ -48,8 +48,14 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Значение" Width="auto" Binding="{Binding Weight}"/>
-                <DataGridTextColumn Header="Прио" Binding="{Binding Id}" Visibility="Hidden"/>
+                <DataGridTemplateColumn Header="Значение">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ui:NumberBox Maximum="1" Minimum="0.1" Value="{Binding Weight, Mode=TwoWay}"  ValueChanged="NumberBox_ValueChanged" SmallChange="0.1"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                 </DataGridTemplateColumn>
+                 <DataGridTextColumn Header="Прио" Binding="{Binding Id}" Visibility="Hidden"/>
 
                 <DataGridTemplateColumn Width="auto" Header="Удалить">
                     <DataGridTemplateColumn.CellTemplate>
@@ -60,6 +66,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        
 
         <Button Content="Сохранить изменения" HorizontalAlignment="Right" Width="200" Margin="10" VerticalAlignment="Top" Click="Button_Click" Grid.Row="2">
         </Button>

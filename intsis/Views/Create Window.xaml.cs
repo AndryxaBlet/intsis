@@ -206,13 +206,13 @@ namespace intsis.Views
                 }
                 else
                 {
-                    var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Не выбрана система." };
+                    var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок",Content = "Не выбрана система." };
                     messagebox.ShowDialogAsync();
                 }
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Выберите систему." };
+                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок",Content = "Выберите систему." };
                 messagebox.ShowDialogAsync();
             }
 
@@ -234,7 +234,7 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Выберите вопрос или систему." };
+                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок",Content = "Выберите вопрос или систему." };
                 messagebox.ShowDialogAsync();
             }
         }
@@ -249,7 +249,7 @@ namespace intsis.Views
             {
                 int t = Convert.ToInt32(NameI.SelectedValue);
                 IsWeight = ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == t).First().Type;
-                MessageBox.Show("Редактирование данных");
+                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок", Content = "Редактирование данных." }.ShowDialogAsync();
                 binddatagrid(Convert.ToInt32(NameI.SelectedValue));
                 SelectedSys = Convert.ToInt32(NameI.SelectedValue);
                 GlobalDATA.IdSisForCREATE = SelectedSys;
@@ -265,14 +265,15 @@ namespace intsis.Views
                 var itemToDelete = ExpertSystemEntities.GetContext().ExpSystem.FirstOrDefault(x => x.Id == del);
 
                 if (itemToDelete != null)
-                {
-                    MessageBoxResult result = MessageBox.Show("Удалить систему?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                {     
 
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить систему невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    var result = new Wpf.Ui.Controls.MessageBox { Content = "Удалить систему?",Title= "Подтверждение", PrimaryButtonText = "Дa", CloseButtonText = "Нет" }.ShowDialogAsync().Result;
 
-                        if (result == MessageBoxResult.Yes)
+                    if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
+                    { 
+                        result = new Wpf.Ui.Controls.MessageBox {Content = "Вы уверены, что хотите продолжить?", Title = "Подтверждение", PrimaryButtonText = "Дa", CloseButtonText = "Нет" }.ShowDialogAsync().Result;
+
+                        if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                         {
                             // Удалить объект из контекста
                             ExpertSystemEntities.GetContext().ExpSystem.Remove(itemToDelete);
@@ -287,7 +288,7 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Выберите систему." };
+                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок",Content = "Выберите систему." };
                 messagebox.ShowDialogAsync();
             }
         }
@@ -301,9 +302,8 @@ namespace intsis.Views
             if (result == true) // Проверяем, что окно закрыто с успешным результатом
             {
                 int systemId = CreateSis.SystemId;
-                binddatagrid(systemId);
                 BindComboBox();
-                NameI.SelectedValue = systemId;
+                NameI.SelectedIndex = NameI.Items.Count - 1;
             }
            
         }
@@ -341,7 +341,7 @@ namespace intsis.Views
             }
             catch(ArgumentNullException)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = "Примените изменения перед удалением." };
+                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок", Title = "Ошибка", Content = "Примените изменения перед удалением." };
                 messagebox.ShowDialogAsync();
             }
         }
@@ -364,7 +364,7 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = "Выберите систему для редактирования" };
+                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок", Title = "Ошибка", Content = "Выберите систему для редактирования" };
                 messagebox.ShowDialogAsync();
             }
 
@@ -413,7 +413,7 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = "Выберите систему для экспорта." };
+                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок", Title = "Ошибка", Content = "Выберите систему для экспорта." };
                 messagebox.ShowDialogAsync();
             }
 
@@ -434,7 +434,7 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = "Выберите вопрос или систему." };
+                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок", Title = "Ошибка", Content = "Выберите вопрос или систему." };
                 messagebox.ShowDialogAsync();
             }
         }
