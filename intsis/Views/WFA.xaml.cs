@@ -103,11 +103,6 @@ namespace intsis
                 messagebox.ShowDialogAsync();
 
             }
-            //catch (Exception r)
-            //{
-            //    MessageBox.Show(r.Message);
-
-            //}
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -115,11 +110,15 @@ namespace intsis
             if (sender is ComboBox comboBox && comboBox.SelectedValue != null)
             {
                 // Получаем текущий объект строки, к которому относится ComboBox
+                
+                System.Windows.Controls.TextBlock textBlock = new System.Windows.Controls.TextBlock();
                 var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(comboBox);
+
                 if (dataGridRow?.Item is WeightFactAnswer answer)
                 {
                     // Обновляем значение NextR для текущего элемента
                     answer.IdFact = Convert.ToInt32(comboBox.SelectedValue);
+                   
 
                     // Сохраняем изменения для текущего объекта в базе данных
                     var context = ExpertSystemEntities.GetContext();
@@ -130,6 +129,18 @@ namespace intsis
                         existingAnswer.IdFact = answer.IdFact;
 
                     }
+                }
+                else
+                {
+                    WeightFactAnswer answerr = new WeightFactAnswer();
+                    answerr.IdFact = Convert.ToInt32(comboBox.SelectedValue);
+                    // Сохраняем изменения для текущего объекта в базе данных
+                    var context = ExpertSystemEntities.GetContext();
+                    answerr.IdAnswer = id;
+                    context.WeightFactAnswer.Add(answerr);
+                    context.SaveChanges();
+                    binddatagrid(id);
+
                 }
             }
         }
@@ -193,12 +204,6 @@ namespace intsis
             scaleTransform.ScaleX = scaleFactor;
             scaleTransform.ScaleY = scaleFactor;
         }
-
-        private void ToggleSwitch_Checked(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void ToggleSwitch_Click(object sender, RoutedEventArgs e)
         {
             if (sender is ToggleSwitch toggle && toggle.IsChecked != null)
@@ -239,23 +244,11 @@ namespace intsis
                     var existingAnswer = context.WeightFactAnswer.FirstOrDefault(a => a.Id == answer.Id);
                     if (existingAnswer != null)
                     {
-
                         existingAnswer.Weight = answer.Weight;
                     }
                 }
             }
 
-        }
-
-        private void Dg_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-            var newEntity = e.Row.Item as WeightFactAnswer;
-            if (newEntity != null && !ExpertSystemEntities.GetContext().WeightFactAnswer.Contains(newEntity))
-            {
-                ExpertSystemEntities.GetContext().WeightFactAnswer.Add(newEntity);
-                    ExpertSystemEntities.GetContext().SaveChanges();
-                
-            }
         }
     }
 }

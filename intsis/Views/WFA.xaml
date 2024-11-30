@@ -28,7 +28,7 @@
                           Padding="10"
                           HorizontalAlignment="Stretch"/>
 
-        <DataGrid x:Name="Dg" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False" Grid.Row="1" Margin="0,0,0,5" CanUserAddRows="True" RowEditEnding="Dg_RowEditEnding">
+        <DataGrid x:Name="Dg" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False" Grid.Row="1" Margin="0,0,0,5" CanUserAddRows="True">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Факт" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
@@ -44,18 +44,21 @@
                 <DataGridTemplateColumn Header="Плюс или минус">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ui:ToggleSwitch IsChecked="{Binding PlusOrMinus, Mode=TwoWay}" Checked="ToggleSwitch_Checked" Content="" Click="ToggleSwitch_Click"/>
+                            <ui:ToggleSwitch IsChecked="{Binding PlusOrMinus, Mode=TwoWay}" Content="" Click="ToggleSwitch_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Значение">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ui:NumberBox Maximum="1" Minimum="0.1" Value="{Binding Weight, Mode=TwoWay}"  ValueChanged="NumberBox_ValueChanged" SmallChange="0.1"/>
+                            <StackPanel>
+                                <ui:NumberBox Maximum="1" Minimum="0.1" Value="{Binding Weight, Mode=TwoWay}"  ValueChanged="NumberBox_ValueChanged" SmallChange="0.1"/>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                  </DataGridTemplateColumn>
                  <DataGridTextColumn Header="Прио" Binding="{Binding Id}" Visibility="Hidden"/>
+                
 
                 <DataGridTemplateColumn Width="auto" Header="Удалить">
                     <DataGridTemplateColumn.CellTemplate>

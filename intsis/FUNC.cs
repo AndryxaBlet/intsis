@@ -20,5 +20,24 @@ namespace intsis
             else
                 return FindParent<T>(parentObject);
         }
+        public static T FindChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            if (parent == null) return null;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                // Если нашли элемент нужного типа, возвращаем его
+                if (child is T foundChild)
+                    return foundChild;
+
+                // Рекурсивно ищем среди дочерних элементов
+                var result = FindChild<T>(child);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
     }
 }
