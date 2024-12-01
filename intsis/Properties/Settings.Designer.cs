@@ -12,7 +12,7 @@ namespace intsis.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.12.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -27,7 +27,7 @@ namespace intsis.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-2VLO4HT;Initial Catalog=intsisIR311;Persist Security Info=Tru" +
-            "e;User Id=sa;Password=123;Encrypt=False")]
+            "e;User ID=sa;Password=123;Encrypt=False")]
         public string NotebookSQL {
             get {
                 return ((string)(this["NotebookSQL"]));
@@ -43,28 +43,6 @@ namespace intsis.Properties {
             }
             set {
                 this["RestAPI_URL"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-GMNRSQ7;Initial Catalog=intsisIR311;Persist Security Info=Tru" +
-            "e;User Id=sa;Password=123;Encrypt=False")]
-        public string NotebookSQL2 {
-            get {
-                return ((string)(this["NotebookSQL2"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=REVISION-PC;Initial Catalog=intsisIR311;Persist Security Info=True;Us" +
-            "er Id=sa;Password=123")]
-        public string PC {
-            get {
-                return ((string)(this["PC"]));
             }
         }
         
@@ -95,13 +73,71 @@ namespace intsis.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=REVISION-PC;Initial Catalog=ExpertSystem;Persist Security Info=True;U" +
-            "ser Id=sa;Password=123")]
+            "ser ID=sa;Password=123")]
         public string ChoosedServer {
             get {
                 return ((string)(this["ChoosedServer"]));
             }
             set {
                 this["ChoosedServer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-GMNRSQ7;Initial Catalog=ExpertSystem;Persist Security Info=Tr" +
+            "ue;User ID=sa;Password=123;Encrypt=False")]
+        public string NotebookSQL2 {
+            get {
+                return ((string)(this["NotebookSQL2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=REVISION-PC;Initial Catalog=ExpertSystem;Persist Security Info=True;U" +
+            "ser ID=sa;Password=123")]
+        public string PC {
+            get {
+                return ((string)(this["PC"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RemembeR {
+            get {
+                return ((bool)(this["RemembeR"]));
+            }
+            set {
+                this["RemembeR"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Login {
+            get {
+                return ((string)(this["Login"]));
+            }
+            set {
+                this["Login"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Password {
+            get {
+                return ((string)(this["Password"]));
+            }
+            set {
+                this["Password"] = value;
             }
         }
     }

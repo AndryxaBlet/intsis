@@ -35,7 +35,7 @@ namespace intsis.Views
         private void FirstAdmin()
         {
                 isAdmin = true;
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Ваш аккаунт первый в системе, вы автоматически назначенны администратором, запомните ваши данные аккаунта." };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Ваш аккаунт первый в системе, вы автоматически назначенны администратором, запомните ваши данные аккаунта." };
                 messagebox.ShowDialogAsync();
                 GlobalDATA.IsFirst =false;
                
@@ -54,7 +54,7 @@ namespace intsis.Views
             if (string.IsNullOrEmpty(email) ||
                 string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Все поля должны быть заполнены." };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Все поля должны быть заполнены." };
                 messagebox.ShowDialogAsync();
                 return;
             }
@@ -62,7 +62,7 @@ namespace intsis.Views
 
             if (password != confirmPassword)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Пароли не совпадают!" };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Пароли не совпадают!" };
                 messagebox.ShowDialogAsync();
                 return;
             }
@@ -72,7 +72,7 @@ namespace intsis.Views
 
             if (existingUser != null)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Пользователь с таким логином или электронной почтой уже существует!" };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Пользователь с таким логином или электронной почтой уже существует!" };
                 messagebox.ShowDialogAsync();
                 return;
             }
@@ -103,7 +103,7 @@ namespace intsis.Views
             ExpertSystemEntities.GetContext().User.Add(newUser);
             ExpertSystemEntities.GetContext().SaveChanges();
 
-            var messageboxx = new Wpf.Ui.Controls.MessageBox { Content = "Регистрация успешна!" };
+            var messageboxx =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Content = "Регистрация успешна!" };
             messageboxx.ShowDialogAsync();
 
             // Optionally, open the main window after registration

@@ -20,6 +20,7 @@ using static intsis.Views.MainWindow;
 using System.Web.UI.WebControls;
 using System.Configuration;
 using Wpf.Ui.Appearance;
+using intsis.Properties;
 
 namespace intsis.Views
 {
@@ -34,6 +35,8 @@ namespace intsis.Views
             InitializeComponent();
             LoginTextBox.Focus();
             LoginButton.Background = ApplicationAccentColorManager.PrimaryAccentBrush;
+
+           
         }
        
 
@@ -51,7 +54,15 @@ namespace intsis.Views
                 if (login != null)
                 {
                  
-                    GlobalDATA.recvadmin= Convert.ToBoolean(login.IsAdmin); 
+                    GlobalDATA.recvadmin= Convert.ToBoolean(login.IsAdmin);
+                    if (RememberMe.IsChecked == true)
+                    {
+                        Properties.Settings.Default.RemembeR = Convert.ToBoolean(RememberMe.IsChecked);
+                        Properties.Settings.Default.Login = username;
+                        Properties.Settings.Default.Password = password;
+                        Properties.Settings.Default.Save();
+
+                    }
                     var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
                     navigateView.Navigate(typeof(MainWindow));
                    
@@ -61,7 +72,7 @@ namespace intsis.Views
                 }
                 else
                 {
-                    var messagebox = new Wpf.Ui.Controls.MessageBox {
+                    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",
                         Title = "Ошибка",
                         Content= "Неверно введены данные аккаунта!",
                         PrimaryButtonText = "OK",
@@ -71,15 +82,9 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = "Оба поля авторизации должны быть заполнены!" };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = "Оба поля авторизации должны быть заполнены!" };
                 messagebox.ShowDialogAsync();
             }
-            //}
-            //catch (Exception r)
-            //{
-            //    MessageBox.Show(r.Message);
-
-            //}
         }
 
 
@@ -133,6 +138,17 @@ namespace intsis.Views
             // Применяем масштаб к элементам
             scaleTransform.ScaleX = scaleFactor;
             scaleTransform.ScaleY = scaleFactor;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Properties.Settings.Default.RemembeR == true)
+            {
+                LoginTextBox.Text = Properties.Settings.Default.Login;
+                PasswordBox.Password = Properties.Settings.Default.Password;
+                RememberMe.IsChecked = Properties.Settings.Default.RemembeR;
+                LoginButton_Click(LoginButton, new RoutedEventArgs());
+            }
         }
     }
 }

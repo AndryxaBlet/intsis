@@ -43,7 +43,7 @@ namespace intsis
             }
             catch (Exception r)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message};
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
                 messagebox.ShowDialogAsync();
             }
 
@@ -85,13 +85,13 @@ namespace intsis
                 // Повторно привязываем обновленные данные к DataGrid
                 binddatagrid(id);
 
-                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Обновление прошло успешно" };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Обновление прошло успешно" };
                 messagebox.ShowDialogAsync();
 
             }
             catch (Exception r)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {Title = "Ошибка", Content = r.Message };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Title = "Ошибка", Content = r.Message };
                 messagebox.ShowDialogAsync();
 
             }
@@ -130,12 +130,12 @@ namespace intsis
             }
             catch (NullReferenceException)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Сохраните изменения, прежде чем удалять.", CloseButtonText = "OK"};
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Сохраните изменения, прежде чем удалять."};
                 messagebox.ShowDialogAsync();
             }
             catch (Exception ex)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = ex.Message};
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = ex.Message};
                 messagebox.ShowDialogAsync();
             }
 

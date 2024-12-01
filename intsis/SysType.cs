@@ -82,11 +82,11 @@ namespace intsis
                 // Сохранение JSON в файл
                 File.WriteAllText(filePath, jsonData);
 
-                MessageBox.Show("Система успешно экспортирована!");
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Экспорт", Content = "Система успешно экспортирована" };
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка экспорта системы: {ex.Message}");
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Экспорт", Content = "Ошибка экспорта" + ex.Message };
             }
         }
 
@@ -168,7 +168,7 @@ namespace intsis
 
 
                             context.SaveChanges(); // Сохраняем все изменения
-                            MessageBox.Show("Файл успешно импортирован");
+                            var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Импорт", Content ="Файл успешно импортирован"};
                         }
                         catch (Exception)
                         {
@@ -260,13 +260,13 @@ namespace intsis
                             // Сохраняем все изменения в конце, чтобы не вызывать SaveChanges() слишком часто
                             context.SaveChanges();
 
-                            MessageBox.Show("Файл успешно импортирован");
+                            var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Импорт", Content = "Файл успешно импортирован" };
                         }
                         catch (Exception ex)
                         {
                             // В случае ошибки удаляем созданную систему
                             context.ExpSystem.Remove(newSystem);
-                            MessageBox.Show("Ошибка импорта данных: " + ex.Message);
+                            var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Импорт", Content = "Ошибка импорта: "+ex.Message };
                         }
                         finally
                         {

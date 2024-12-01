@@ -206,13 +206,13 @@ namespace intsis.Views
                 }
                 else
                 {
-                    var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок",Content = "Не выбрана система." };
+                    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Не выбрана система." };
                     messagebox.ShowDialogAsync();
                 }
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок",Content = "Выберите систему." };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Выберите систему." };
                 messagebox.ShowDialogAsync();
             }
 
@@ -234,7 +234,7 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок",Content = "Выберите вопрос или систему." };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Выберите вопрос или систему." };
                 messagebox.ShowDialogAsync();
             }
         }
@@ -249,7 +249,7 @@ namespace intsis.Views
             {
                 int t = Convert.ToInt32(NameI.SelectedValue);
                 IsWeight = ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == t).First().Type;
-                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок", Content = "Редактирование данных." }.ShowDialogAsync();
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Content = "Редактирование данных." }.ShowDialogAsync();
                 binddatagrid(Convert.ToInt32(NameI.SelectedValue));
                 SelectedSys = Convert.ToInt32(NameI.SelectedValue);
                 GlobalDATA.IdSisForCREATE = SelectedSys;
@@ -267,11 +267,11 @@ namespace intsis.Views
                 if (itemToDelete != null)
                 {     
 
-                    var result = new Wpf.Ui.Controls.MessageBox { Content = "Удалить систему?",Title= "Подтверждение", PrimaryButtonText = "Дa", CloseButtonText = "Нет" }.ShowDialogAsync().Result;
+                    var result =new Wpf.Ui.Controls.MessageBox {  Content = "Удалить систему?",Title= "Подтверждение", PrimaryButtonText = "Дa", CloseButtonText = "Нет" }.ShowDialogAsync().Result;
 
                     if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                     { 
-                        result = new Wpf.Ui.Controls.MessageBox {Content = "Вы уверены, что хотите продолжить?", Title = "Подтверждение", PrimaryButtonText = "Дa", CloseButtonText = "Нет" }.ShowDialogAsync().Result;
+                        result =new Wpf.Ui.Controls.MessageBox { Content = "Вы уверены, что хотите продолжить?", Title = "Подтверждение", PrimaryButtonText = "Дa", CloseButtonText = "Нет" }.ShowDialogAsync().Result;
 
                         if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                         {
@@ -288,7 +288,7 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок",Content = "Выберите систему." };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Выберите систему." };
                 messagebox.ShowDialogAsync();
             }
         }
@@ -341,7 +341,7 @@ namespace intsis.Views
             }
             catch(ArgumentNullException)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок", Title = "Ошибка", Content = "Примените изменения перед удалением." };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = "Примените изменения перед удалением." };
                 messagebox.ShowDialogAsync();
             }
         }
@@ -364,7 +364,7 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок", Title = "Ошибка", Content = "Выберите систему для редактирования" };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = "Выберите систему для редактирования" };
                 messagebox.ShowDialogAsync();
             }
 
@@ -413,7 +413,7 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок", Title = "Ошибка", Content = "Выберите систему для экспорта." };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = "Выберите систему для экспорта." };
                 messagebox.ShowDialogAsync();
             }
 
@@ -434,7 +434,7 @@ namespace intsis.Views
             }
             else
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {CloseButtonText = "Ок", Title = "Ошибка", Content = "Выберите вопрос или систему." };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = "Выберите вопрос или систему." };
                 messagebox.ShowDialogAsync();
             }
         }

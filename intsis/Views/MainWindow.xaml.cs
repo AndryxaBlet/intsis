@@ -47,7 +47,7 @@ namespace intsis.Views
             }
             catch (Exception r)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message};
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
                 messagebox.ShowDialogAsync();
 
             }
@@ -70,7 +70,7 @@ namespace intsis.Views
             }
             catch (Exception r)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message };
+                var messagebox =new Wpf.Ui.Controls.MessageBox {  CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
                 messagebox.ShowDialogAsync();
 
             }
@@ -89,19 +89,19 @@ namespace intsis.Views
                 }
                 else
                 {
-                    var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Выберите систему", CloseButtonText = "OK" };
+                    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Выберите систему" };
                     messagebox.ShowDialogAsync();
                 }
                 
             }
             catch (ArgumentOutOfRangeException)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Нужно выбрать существующий набор вопросов", CloseButtonText = "OK" };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Нужно выбрать существующий набор вопросов" };
                 messagebox.ShowDialogAsync();
             }
             catch (Exception r)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
                 messagebox.ShowDialogAsync();
 
             }

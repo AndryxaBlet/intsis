@@ -89,7 +89,7 @@ namespace intsis
             }
             catch (Exception r)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {Title = "Ошибка", Content = r.Message };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Title = "Ошибка", Content = r.Message };
                 messagebox.ShowDialogAsync();
 
             }
@@ -150,7 +150,7 @@ namespace intsis
                 }
                 else
                 {
-                    var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Выберите ваприант ответа.", CloseButtonText = "OK" };
+                    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Выберите ваприант ответа." };
                     messagebox.ShowDialogAsync();
                 }
             }
@@ -415,7 +415,7 @@ namespace intsis
                 }
                 else
                 {
-                    var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Предупреждение", Content = "Выберите ваприант ответа.", CloseButtonText = "OK" };
+                    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Выберите ваприант ответа." };
                     messagebox.ShowDialogAsync();
                 }
             };
@@ -451,7 +451,7 @@ namespace intsis
             }
             catch (Exception r)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message};
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
                 messagebox.ShowDialogAsync();
             }
         }

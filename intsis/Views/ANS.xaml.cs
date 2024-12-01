@@ -53,7 +53,7 @@ namespace intsis
             }
             catch (Exception r)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = r.Message };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
                 messagebox.ShowDialogAsync();
 
             }
@@ -97,7 +97,7 @@ namespace intsis
                     // Повторно привязываем обновленные данные к DataGrid
                     binddatagrid(id);
 
-                    var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Обновление прошло успешно." };
+                    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Обновление прошло успешно." };
                     messagebox.ShowDialogAsync();
             }
             //catch (Exception r)
@@ -116,13 +116,13 @@ namespace intsis
 
                 if (itemToDelete != null)
                 {
-                    MessageBoxResult result = MessageBox.Show("Удалить вопрос?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    var result = new Wpf.Ui.Controls.MessageBox { Content = "Удалить вопрос?", Title = "Подтверждение", PrimaryButtonText = "Дa", CloseButtonText = "Нет" }.ShowDialogAsync().Result;
 
-                    if (result == MessageBoxResult.Yes)
+                    if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                     {
-                        result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить вопрос невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                        result = new Wpf.Ui.Controls.MessageBox { Content = "Вы уверены, что хотите продолжить?", Title = "Подтверждение", PrimaryButtonText = "Дa", CloseButtonText = "Нет" }.ShowDialogAsync().Result;
 
-                        if (result == MessageBoxResult.Yes)
+                        if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                         {
                             // Удалить объект из контекста
                             ExpertSystemEntities.GetContext().LinearSystem_Question.Remove(itemToDelete);
@@ -151,14 +151,15 @@ namespace intsis
 
                 if (itemToDelete != null)
                 {
-                    MessageBoxResult result = MessageBox.Show("Удалить ответ на вопрос?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    var result = new Wpf.Ui.Controls.MessageBox { Content = "Удалить ответ на вопрос?", Title = "Подтверждение", PrimaryButtonText = "Дa", CloseButtonText = "Нет" }.ShowDialogAsync().Result;
 
-                    if (result == MessageBoxResult.Yes)
+                    if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                     {
-                        result = MessageBox.Show("Вы уверены, что хотите продолжить? Восстановить ответ невозможно", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                        result = new Wpf.Ui.Controls.MessageBox { Content = "Вы уверены, что хотите продолжить?", Title = "Подтверждение", PrimaryButtonText = "Дa", CloseButtonText = "Нет" }.ShowDialogAsync().Result;
 
-                        if (result == MessageBoxResult.Yes)
+                        if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                         {
+                            
                             // Удалить объект из контекста
                             ExpertSystemEntities.GetContext().LinearSystem_Answer.Remove(itemToDelete);
 
@@ -231,12 +232,12 @@ namespace intsis
             }
             catch (NullReferenceException)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox {Content = "Сохраните изменения, прежде чем удалять." };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Сохраните изменения, прежде чем удалять." };
                 messagebox.ShowDialogAsync();
             }
             catch (Exception ex)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { Title = "Ошибка", Content = ex.Message };
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = ex.Message };
                 messagebox.ShowDialogAsync();
             }
 

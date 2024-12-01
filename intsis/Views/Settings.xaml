@@ -10,24 +10,18 @@
       mc:Ignorable="d" 
       Title="Settings">
 
-   
+
     <Grid Margin="10">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" >
 
-            <!-- Путь до JSON файла -->
-            <!--<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="Путь до JSON файла:" VerticalAlignment="Center" Width="150"/>
-                <TextBox x:Name="JsonFilePath" Width="300" Margin="5"/>
-                <Button Content="Обзор" Width="80" VerticalAlignment="Center" Margin="5"/>
-            </StackPanel>-->
-
+            <ui:Button x:Name="OutLog" Content="Выйти из аккаунта"  Margin="5" HorizontalAlignment="Stretch" Click="OutLog_Click"/>
             <!-- Toggle для использования локальной БД -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Использовать локально:" VerticalAlignment="Center" Width="160"/>
                 <ui:ToggleSwitch x:Name="UseLocalDatabase" Width="100" Height="40" Margin="5"  Click="UseLocalDatabase_Click"/>
             </StackPanel>
-            
-          
+
+
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Строка подключения:" VerticalAlignment="Center" Width="160"/>
                 <TextBox x:Name="ConnectionString" Width="300" Margin="5"/>

@@ -10,7 +10,7 @@
     xmlns:local="clr-namespace:intsis.Views"
     mc:Ignorable="d"
     Title="Авторизация"
-    SizeChanged="Page_SizeChanged">
+    SizeChanged="Page_SizeChanged" Loaded="Page_Loaded">
 
     <!-- Контейнер для масштабирования -->
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -41,6 +41,7 @@
 
                 <TextBlock Text="Пароль" FontSize="24" FontWeight="Bold" HorizontalAlignment="Left"/>
                 <PasswordBox Name="PasswordBox" MinWidth="300" MinHeight="50" Margin="0,0,0,20" KeyDown="PasswordBox_KeyDown" HorizontalAlignment="Stretch"/>
+                <CheckBox Content="Запомнить меня"  Margin="0,-15,0,0" Name="RememberMe"></CheckBox>
             </StackPanel>
 
             <!-- Кнопки -->

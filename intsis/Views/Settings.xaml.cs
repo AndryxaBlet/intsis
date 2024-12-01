@@ -31,6 +31,12 @@ namespace intsis.Views
             InitializeComponent();
             SaveSettings.Background = GlobalDATA.Accent;
             ConnectionString.Text = intsis.Properties.Settings.Default.ChoosedServer;
+            OutLog.Visibility = Visibility.Collapsed;
+
+            if (intsis.Properties.Settings.Default.RemembeR == true)
+            {
+                OutLog.Visibility = Visibility.Visible;
+            }
             if (intsis.Properties.Settings.Default.Theme == "Тёмная")
             {
                 ThemeComboBox.SelectedIndex = 0;
@@ -78,6 +84,13 @@ namespace intsis.Views
         {
             if(UseLocalDatabase.IsChecked == true) {  ConnectionString.IsEnabled = false; }
             else { ConnectionString.IsEnabled = true; }
+        }
+
+        private void OutLog_Click(object sender, RoutedEventArgs e)
+        {
+            intsis.Properties.Settings.Default.RemembeR = false;
+            intsis.Properties.Settings.Default.Save();
+            OutLog.Visibility = Visibility.Collapsed;
         }
     }
 }
