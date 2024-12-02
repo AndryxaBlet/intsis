@@ -202,17 +202,51 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ExpertSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ExpertSystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ExpSystem" EntityType="ExpertSystemModel.ExpSystem" />
+          <EntitySet Name="LinearSystem_Answer" EntityType="ExpertSystemModel.LinearSystem_Answer" />
+          <EntitySet Name="LinearSystem_Question" EntityType="ExpertSystemModel.LinearSystem_Question" />
+          <EntitySet Name="User" EntityType="ExpertSystemModel.User" />
+          <EntitySet Name="WeightedSystem_Answer" EntityType="ExpertSystemModel.WeightedSystem_Answer" />
+          <EntitySet Name="WeightedSystem_Fact" EntityType="ExpertSystemModel.WeightedSystem_Fact" />
+          <EntitySet Name="WeightedSystem_Question" EntityType="ExpertSystemModel.WeightedSystem_Question" />
+          <EntitySet Name="WeightFactAnswer" EntityType="ExpertSystemModel.WeightFactAnswer" />
+          <AssociationSet Name="FK__LinearSys__Syste__398D8EEE" Association="ExpertSystemModel.FK__LinearSys__Syste__398D8EEE">
+            <End Role="ExpSystem" EntitySet="ExpSystem" />
+            <End Role="LinearSystem_Question" EntitySet="LinearSystem_Question" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WeightedSystem_Fact_ExpSystem" Association="ExpertSystemModel.FK_WeightedSystem_Fact_ExpSystem">
+            <End Role="ExpSystem" EntitySet="ExpSystem" />
+            <End Role="WeightedSystem_Fact" EntitySet="WeightedSystem_Fact" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LinearSystem_Answer_LinearSystem_Question" Association="ExpertSystemModel.FK_LinearSystem_Answer_LinearSystem_Question">
+            <End Role="LinearSystem_Question" EntitySet="LinearSystem_Question" />
+            <End Role="LinearSystem_Answer" EntitySet="LinearSystem_Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__WeightedS__Quest__46E78A0C" Association="ExpertSystemModel.FK__WeightedS__Quest__46E78A0C">
+            <End Role="WeightedSystem_Question" EntitySet="WeightedSystem_Question" />
+            <End Role="WeightedSystem_Answer" EntitySet="WeightedSystem_Answer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WeightFactAnswer_WeightedSystem_Answer" Association="ExpertSystemModel.FK_WeightFactAnswer_WeightedSystem_Answer">
+            <End Role="WeightedSystem_Answer" EntitySet="WeightedSystem_Answer" />
+            <End Role="WeightFactAnswer" EntitySet="WeightFactAnswer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WeightedSystem_Question_WeightedSystem_Fact" Association="ExpertSystemModel.FK_WeightedSystem_Question_WeightedSystem_Fact">
+            <End Role="WeightedSystem_Fact" EntitySet="WeightedSystem_Fact" />
+            <End Role="WeightedSystem_Question" EntitySet="WeightedSystem_Question" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="ExpSystem">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="ScopeOfApplication" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ScopeOfApplication" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="LinearSystem_Question" Relationship="Self.FK__LinearSys__Syste__398D8EEE" FromRole="ExpSystem" ToRole="LinearSystem_Question" />
-          <NavigationProperty Name="WeightedSystem_Fact" Relationship="Self.FK_WeightedSystem_Fact_ExpSystem" FromRole="ExpSystem" ToRole="WeightedSystem_Fact" />
+          <NavigationProperty Name="LinearSystem_Question" Relationship="ExpertSystemModel.FK__LinearSys__Syste__398D8EEE" FromRole="ExpSystem" ToRole="LinearSystem_Question" />
+          <NavigationProperty Name="WeightedSystem_Fact" Relationship="ExpertSystemModel.FK_WeightedSystem_Fact_ExpSystem" FromRole="ExpSystem" ToRole="WeightedSystem_Fact" />
         </EntityType>
         <EntityType Name="LinearSystem_Answer">
           <Key>
@@ -220,11 +254,11 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuestionId" Type="Int32" Nullable="false" />
-          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="NextQuestionId" Type="Int32" />
           <Property Name="Recomendation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Out" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="LinearSystem_Question" Relationship="Self.FK_LinearSystem_Answer_LinearSystem_Question" FromRole="LinearSystem_Answer" ToRole="LinearSystem_Question" />
+          <NavigationProperty Name="LinearSystem_Question" Relationship="ExpertSystemModel.FK_LinearSystem_Answer_LinearSystem_Question" FromRole="LinearSystem_Answer" ToRole="LinearSystem_Question" />
         </EntityType>
         <EntityType Name="LinearSystem_Question">
           <Key>
@@ -232,9 +266,9 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SystemId" Type="Int32" />
-          <Property Name="Text" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="ExpSystem" Relationship="Self.FK__LinearSys__Syste__398D8EEE" FromRole="LinearSystem_Question" ToRole="ExpSystem" />
-          <NavigationProperty Name="LinearSystem_Answer" Relationship="Self.FK_LinearSystem_Answer_LinearSystem_Question" FromRole="LinearSystem_Question" ToRole="LinearSystem_Answer" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ExpSystem" Relationship="ExpertSystemModel.FK__LinearSys__Syste__398D8EEE" FromRole="LinearSystem_Question" ToRole="ExpSystem" />
+          <NavigationProperty Name="LinearSystem_Answer" Relationship="ExpertSystemModel.FK_LinearSystem_Answer_LinearSystem_Question" FromRole="LinearSystem_Question" ToRole="LinearSystem_Answer" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -243,7 +277,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Login" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsAdmin" Type="Boolean" />
         </EntityType>
         <EntityType Name="WeightedSystem_Answer">
@@ -252,10 +286,10 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuestionId" Type="Int32" Nullable="false" />
-          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Recomendation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="WeightedSystem_Question" Relationship="Self.FK__WeightedS__Quest__46E78A0C" FromRole="WeightedSystem_Answer" ToRole="WeightedSystem_Question" />
-          <NavigationProperty Name="WeightFactAnswer" Relationship="Self.FK_WeightFactAnswer_WeightedSystem_Answer" FromRole="WeightedSystem_Answer" ToRole="WeightFactAnswer" />
+          <NavigationProperty Name="WeightedSystem_Question" Relationship="ExpertSystemModel.FK__WeightedS__Quest__46E78A0C" FromRole="WeightedSystem_Answer" ToRole="WeightedSystem_Question" />
+          <NavigationProperty Name="WeightFactAnswer" Relationship="ExpertSystemModel.FK_WeightFactAnswer_WeightedSystem_Answer" FromRole="WeightedSystem_Answer" ToRole="WeightFactAnswer" />
         </EntityType>
         <EntityType Name="WeightedSystem_Fact">
           <Key>
@@ -263,20 +297,20 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SystemId" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ExpSystem" Relationship="Self.FK_WeightedSystem_Fact_ExpSystem" FromRole="WeightedSystem_Fact" ToRole="ExpSystem" />
-          <NavigationProperty Name="WeightedSystem_Question" Relationship="Self.FK_WeightedSystem_Question_WeightedSystem_Fact" FromRole="WeightedSystem_Fact" ToRole="WeightedSystem_Question" />
+          <NavigationProperty Name="ExpSystem" Relationship="ExpertSystemModel.FK_WeightedSystem_Fact_ExpSystem" FromRole="WeightedSystem_Fact" ToRole="ExpSystem" />
+          <NavigationProperty Name="WeightedSystem_Question" Relationship="ExpertSystemModel.FK_WeightedSystem_Question_WeightedSystem_Fact" FromRole="WeightedSystem_Fact" ToRole="WeightedSystem_Question" />
         </EntityType>
         <EntityType Name="WeightedSystem_Question">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Text" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="FactID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="WeightedSystem_Answer" Relationship="Self.FK__WeightedS__Quest__46E78A0C" FromRole="WeightedSystem_Question" ToRole="WeightedSystem_Answer" />
-          <NavigationProperty Name="WeightedSystem_Fact" Relationship="Self.FK_WeightedSystem_Question_WeightedSystem_Fact" FromRole="WeightedSystem_Question" ToRole="WeightedSystem_Fact" />
+          <NavigationProperty Name="WeightedSystem_Answer" Relationship="ExpertSystemModel.FK__WeightedS__Quest__46E78A0C" FromRole="WeightedSystem_Question" ToRole="WeightedSystem_Answer" />
+          <NavigationProperty Name="WeightedSystem_Fact" Relationship="ExpertSystemModel.FK_WeightedSystem_Question_WeightedSystem_Fact" FromRole="WeightedSystem_Question" ToRole="WeightedSystem_Fact" />
         </EntityType>
         <EntityType Name="WeightFactAnswer">
           <Key>
@@ -286,14 +320,14 @@
           <Property Name="IdAnswer" Type="Int32" Nullable="false" />
           <Property Name="IdFact" Type="Int32" Nullable="false" />
           <Property Name="PlusOrMinus" Type="Boolean" Nullable="false" />
-          <Property Name="Weight" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
-          <NavigationProperty Name="WeightedSystem_Answer" Relationship="Self.FK_WeightFactAnswer_WeightedSystem_Answer" FromRole="WeightFactAnswer" ToRole="WeightedSystem_Answer" />
+          <Property Name="Weight" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <NavigationProperty Name="WeightedSystem_Answer" Relationship="ExpertSystemModel.FK_WeightFactAnswer_WeightedSystem_Answer" FromRole="WeightFactAnswer" ToRole="WeightedSystem_Answer" />
         </EntityType>
         <Association Name="FK__LinearSys__Syste__398D8EEE">
-          <End Role="ExpSystem" Type="Self.ExpSystem" Multiplicity="0..1" >
+          <End Type="ExpertSystemModel.ExpSystem" Role="ExpSystem" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="LinearSystem_Question" Type="Self.LinearSystem_Question" Multiplicity="*" />
+          <End Type="ExpertSystemModel.LinearSystem_Question" Role="LinearSystem_Question" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ExpSystem">
               <PropertyRef Name="Id" />
@@ -304,10 +338,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_WeightedSystem_Fact_ExpSystem">
-          <End Role="ExpSystem" Type="Self.ExpSystem" Multiplicity="1" >
+          <End Type="ExpertSystemModel.ExpSystem" Role="ExpSystem" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="WeightedSystem_Fact" Type="Self.WeightedSystem_Fact" Multiplicity="*" />
+          <End Type="ExpertSystemModel.WeightedSystem_Fact" Role="WeightedSystem_Fact" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ExpSystem">
               <PropertyRef Name="Id" />
@@ -318,10 +352,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_LinearSystem_Answer_LinearSystem_Question">
-          <End Role="LinearSystem_Question" Type="Self.LinearSystem_Question" Multiplicity="1" >
+          <End Type="ExpertSystemModel.LinearSystem_Question" Role="LinearSystem_Question" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="LinearSystem_Answer" Type="Self.LinearSystem_Answer" Multiplicity="*" />
+          <End Type="ExpertSystemModel.LinearSystem_Answer" Role="LinearSystem_Answer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="LinearSystem_Question">
               <PropertyRef Name="Id" />
@@ -332,10 +366,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__WeightedS__Quest__46E78A0C">
-          <End Role="WeightedSystem_Question" Type="Self.WeightedSystem_Question" Multiplicity="1" >
+          <End Type="ExpertSystemModel.WeightedSystem_Question" Role="WeightedSystem_Question" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="WeightedSystem_Answer" Type="Self.WeightedSystem_Answer" Multiplicity="*" />
+          <End Type="ExpertSystemModel.WeightedSystem_Answer" Role="WeightedSystem_Answer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WeightedSystem_Question">
               <PropertyRef Name="Id" />
@@ -346,10 +380,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_WeightFactAnswer_WeightedSystem_Answer">
-          <End Role="WeightedSystem_Answer" Type="Self.WeightedSystem_Answer" Multiplicity="1" >
+          <End Type="ExpertSystemModel.WeightedSystem_Answer" Role="WeightedSystem_Answer" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="WeightFactAnswer" Type="Self.WeightFactAnswer" Multiplicity="*" />
+          <End Type="ExpertSystemModel.WeightFactAnswer" Role="WeightFactAnswer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WeightedSystem_Answer">
               <PropertyRef Name="Id" />
@@ -360,10 +394,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_WeightedSystem_Question_WeightedSystem_Fact">
-          <End Role="WeightedSystem_Fact" Type="Self.WeightedSystem_Fact" Multiplicity="1" >
+          <End Type="ExpertSystemModel.WeightedSystem_Fact" Role="WeightedSystem_Fact" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="WeightedSystem_Question" Type="Self.WeightedSystem_Question" Multiplicity="*" />
+          <End Type="ExpertSystemModel.WeightedSystem_Question" Role="WeightedSystem_Question" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="WeightedSystem_Fact">
               <PropertyRef Name="Id" />
@@ -373,40 +407,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ExpertSystemEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="ExpSystem" EntityType="Self.ExpSystem" />
-          <EntitySet Name="LinearSystem_Answer" EntityType="Self.LinearSystem_Answer" />
-          <EntitySet Name="LinearSystem_Question" EntityType="Self.LinearSystem_Question" />
-          <EntitySet Name="User" EntityType="Self.User" />
-          <EntitySet Name="WeightedSystem_Answer" EntityType="Self.WeightedSystem_Answer" />
-          <EntitySet Name="WeightedSystem_Fact" EntityType="Self.WeightedSystem_Fact" />
-          <EntitySet Name="WeightedSystem_Question" EntityType="Self.WeightedSystem_Question" />
-          <EntitySet Name="WeightFactAnswer" EntityType="Self.WeightFactAnswer" />
-          <AssociationSet Name="FK__LinearSys__Syste__398D8EEE" Association="Self.FK__LinearSys__Syste__398D8EEE">
-            <End Role="ExpSystem" EntitySet="ExpSystem" />
-            <End Role="LinearSystem_Question" EntitySet="LinearSystem_Question" />
-          </AssociationSet>
-          <AssociationSet Name="FK_WeightedSystem_Fact_ExpSystem" Association="Self.FK_WeightedSystem_Fact_ExpSystem">
-            <End Role="ExpSystem" EntitySet="ExpSystem" />
-            <End Role="WeightedSystem_Fact" EntitySet="WeightedSystem_Fact" />
-          </AssociationSet>
-          <AssociationSet Name="FK_LinearSystem_Answer_LinearSystem_Question" Association="Self.FK_LinearSystem_Answer_LinearSystem_Question">
-            <End Role="LinearSystem_Question" EntitySet="LinearSystem_Question" />
-            <End Role="LinearSystem_Answer" EntitySet="LinearSystem_Answer" />
-          </AssociationSet>
-          <AssociationSet Name="FK__WeightedS__Quest__46E78A0C" Association="Self.FK__WeightedS__Quest__46E78A0C">
-            <End Role="WeightedSystem_Question" EntitySet="WeightedSystem_Question" />
-            <End Role="WeightedSystem_Answer" EntitySet="WeightedSystem_Answer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_WeightFactAnswer_WeightedSystem_Answer" Association="Self.FK_WeightFactAnswer_WeightedSystem_Answer">
-            <End Role="WeightedSystem_Answer" EntitySet="WeightedSystem_Answer" />
-            <End Role="WeightFactAnswer" EntitySet="WeightFactAnswer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_WeightedSystem_Question_WeightedSystem_Fact" Association="Self.FK_WeightedSystem_Question_WeightedSystem_Fact">
-            <End Role="WeightedSystem_Fact" EntitySet="WeightedSystem_Fact" />
-            <End Role="WeightedSystem_Question" EntitySet="WeightedSystem_Question" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -416,83 +416,83 @@
           <EntitySetMapping Name="ExpSystem">
             <EntityTypeMapping TypeName="ExpertSystemModel.ExpSystem">
               <MappingFragment StoreEntitySet="ExpSystem">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ScopeOfApplication" ColumnName="ScopeOfApplication" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ScopeOfApplication" ColumnName="ScopeOfApplication" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LinearSystem_Answer">
             <EntityTypeMapping TypeName="ExpertSystemModel.LinearSystem_Answer">
               <MappingFragment StoreEntitySet="LinearSystem_Answer">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
-                <ScalarProperty Name="Text" ColumnName="Text" />
-                <ScalarProperty Name="NextQuestionId" ColumnName="NextQuestionId" />
-                <ScalarProperty Name="Recomendation" ColumnName="Recomendation" />
                 <ScalarProperty Name="Out" ColumnName="Out" />
+                <ScalarProperty Name="Recomendation" ColumnName="Recomendation" />
+                <ScalarProperty Name="NextQuestionId" ColumnName="NextQuestionId" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LinearSystem_Question">
             <EntityTypeMapping TypeName="ExpertSystemModel.LinearSystem_Question">
               <MappingFragment StoreEntitySet="LinearSystem_Question">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="SystemId" ColumnName="SystemId" />
                 <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="SystemId" ColumnName="SystemId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="ExpertSystemModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Login" ColumnName="Login" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="WeightedSystem_Answer">
             <EntityTypeMapping TypeName="ExpertSystemModel.WeightedSystem_Answer">
               <MappingFragment StoreEntitySet="WeightedSystem_Answer">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
-                <ScalarProperty Name="Text" ColumnName="Text" />
                 <ScalarProperty Name="Recomendation" ColumnName="Recomendation" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="WeightedSystem_Fact">
             <EntityTypeMapping TypeName="ExpertSystemModel.WeightedSystem_Fact">
               <MappingFragment StoreEntitySet="WeightedSystem_Fact">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="SystemId" ColumnName="SystemId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SystemId" ColumnName="SystemId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="WeightedSystem_Question">
             <EntityTypeMapping TypeName="ExpertSystemModel.WeightedSystem_Question">
               <MappingFragment StoreEntitySet="WeightedSystem_Question">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Text" ColumnName="Text" />
                 <ScalarProperty Name="FactID" ColumnName="FactID" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="WeightFactAnswer">
             <EntityTypeMapping TypeName="ExpertSystemModel.WeightFactAnswer">
               <MappingFragment StoreEntitySet="WeightFactAnswer">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdAnswer" ColumnName="IdAnswer" />
-                <ScalarProperty Name="IdFact" ColumnName="IdFact" />
-                <ScalarProperty Name="PlusOrMinus" ColumnName="PlusOrMinus" />
                 <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="PlusOrMinus" ColumnName="PlusOrMinus" />
+                <ScalarProperty Name="IdFact" ColumnName="IdFact" />
+                <ScalarProperty Name="IdAnswer" ColumnName="IdAnswer" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
