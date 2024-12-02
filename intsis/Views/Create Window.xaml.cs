@@ -242,14 +242,13 @@ namespace intsis.Views
         private void NameI_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             // Проверяем, существует ли система с таким именем
-
-            var systemExists = ExpertSystemEntities.GetContext().ExpSystem.Any(ns => ns.Name == NameI.Text);
+            var temp = NameI.SelectedItem as ExpSystem;
+            var systemExists = ExpertSystemEntities.GetContext().ExpSystem.Any(ns => ns.Name == temp.Name);
 
             if (systemExists)
             {
                 int t = Convert.ToInt32(NameI.SelectedValue);
                 IsWeight = ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == t).First().Type;
-                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Content = "Редактирование данных." }.ShowDialogAsync();
                 binddatagrid(Convert.ToInt32(NameI.SelectedValue));
                 SelectedSys = Convert.ToInt32(NameI.SelectedValue);
                 GlobalDATA.IdSisForCREATE = SelectedSys;
@@ -302,6 +301,7 @@ namespace intsis.Views
             if (result == true) // Проверяем, что окно закрыто с успешным результатом
             {
                 int systemId = CreateSis.SystemId;
+                IsWeight = ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == systemId).First().Type;
                 BindComboBox();
                 NameI.SelectedIndex = NameI.Items.Count - 1;
             }
@@ -384,9 +384,10 @@ namespace intsis.Views
                 string filePath = openFileDialog.FileName;
 
                 // Здесь можно добавить код для обработки файла
-                MessageBox.Show($"Выбранный файл: {filePath}");
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Content = $"Выбранный файл: {filePath}", Title = "Импорт" }.ShowDialogAsync();
                 sqlJSON.ImportData(filePath);
             }
+            IsWeight = GlobalDATA.weigth;
             BindComboBox();
             NameI.SelectedIndex=NameI.Items.Count-1;
 

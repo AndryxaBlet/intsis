@@ -21,7 +21,7 @@
                 <StackPanel Width="300" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <StackPanel Orientation="Horizontal" >
                         <Label FontWeight="Bold" Content="Название"  VerticalAlignment="Top" Margin="10"/>
-                        <ComboBox SelectedIndex="0" Name="NameI" IsEditable="False"  SelectionChanged="NameI_SelectionChanged"  Width="205"/>
+                        <ComboBox SelectedIndex="-1" Name="NameI" IsEditable="False"  SelectionChanged="NameI_SelectionChanged"  Width="205"/>
                     </StackPanel>
                     <ui:Button Content="Создать систему" Name="CreateSystem"  Height="30" Margin="10" Click="CreateSystem_Click" HorizontalAlignment="Stretch"/>
                     <Button Content="Удалить ЭС" Name="Delete"  Height="30" Margin="10,0"  Click="Delete_Click" HorizontalAlignment="Stretch"/>
@@ -67,7 +67,7 @@
                       MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}">
             <DataGrid.Columns>
                 <DataGridTextColumn FontSize="20" Visibility="Hidden" Width="22" Header="ID" Binding="{Binding Id}"  IsReadOnly="True"/>
-                <DataGridTextColumn FontSize="20" Width="*" Header="Факт" Binding="{Binding Name}"/>
+                <DataGridTextColumn FontSize="20" Width="auto" Header="Факт" Binding="{Binding Name}"/>
                     <DataGridTextColumn FontSize="20" Width="*" Header="Описание факта" Binding="{Binding Text}"/>
                     <DataGridTextColumn Header="Прио" Width="0" Binding="{Binding SystemID}"  Visibility="Hidden"/>
                 <DataGridTemplateColumn Width="auto" Header="Удалить">

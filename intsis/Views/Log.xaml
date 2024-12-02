@@ -10,10 +10,15 @@
         Background="{DynamicResource ApplicationBackgroundBrush}"  Foreground="{DynamicResource TextFillColorPrimaryBrush}" WindowBackdropType="Mica"
         WindowCornerPreference="Default" ExtendsContentIntoTitleBar="True">
     <Grid>
-        <StackPanel>
-        <ui:TitleBar  Title="Описание выбора" Grid.ColumnSpan="2"/>
-        <ui:ListView Name="list"></ui:ListView>
-        </StackPanel>
-       
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Для заголовка -->
+            <RowDefinition Height="*"/>
+            <!-- Для ListView -->
+        </Grid.RowDefinitions>
+        <ui:TitleBar Title="Описание выбора" Grid.Row="0"/>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ui:ListView Name="list"/>
+        </ScrollViewer>
     </Grid>
 </ui:FluentWindow>

@@ -212,6 +212,7 @@ namespace intsis
                     if (selectedAnswer != null)
                     {
                         logToListBox($"Выбран ответ: {selectedAnswer.Text}");
+                        if (selectedAnswer.Recomendation != "") 
                         new MessageBox { Content = selectedAnswer.Recomendation, CloseButtonText="Ок" }.ShowDialogAsync();
 
                         var weightAnswers = selectedAnswer.WeightFactAnswer.Where(r => r.IdAnswer == selectedAnswer.Id).ToList();
@@ -313,6 +314,7 @@ namespace intsis
                         }
 
                         currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
+                        if (currentLeader.Value >= 0.8m) { break; }
                     }
 
                     if (currentLeader.Value >= 0.8m)

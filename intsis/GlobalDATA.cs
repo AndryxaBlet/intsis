@@ -20,6 +20,8 @@ namespace intsis
         public static string ConnectToDB { get; set; }
         public static Brush Accent { get;set; }
 
+        public static bool weigth { get; set; }
+
     //      {
     //        Database.SetInitializer(new CreateDatabaseIfNotExists<ExpertSystemEntities>());
     //        Database.Log = log => System.Diagnostics.Debug.WriteLine(log);

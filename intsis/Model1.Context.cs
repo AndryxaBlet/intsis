@@ -12,7 +12,7 @@ namespace intsis
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+
     public partial class ExpertSystemEntities : DbContext
     {
         public ExpertSystemEntities()
@@ -32,7 +32,7 @@ namespace intsis
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+
         public virtual DbSet<ExpSystem> ExpSystem { get; set; }
         public virtual DbSet<LinearSystem_Answer> LinearSystem_Answer { get; set; }
         public virtual DbSet<LinearSystem_Question> LinearSystem_Question { get; set; }

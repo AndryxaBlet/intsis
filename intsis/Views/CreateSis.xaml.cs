@@ -81,13 +81,12 @@ namespace intsis.Views
 
                 ExpertSystemEntities.GetContext().ExpSystem.Add(newSystem);
                 ExpertSystemEntities.GetContext().SaveChanges();
-                var sisid=ExpertSystemEntities.GetContext().ExpSystem.Where(x=>x.Name == name && x.ScopeOfApplication == scope && x.Description == comment && x.Type==type).FirstOrDefault();
-                SystemId = sisid.Id;
+               
                 if (WeightSwitch.IsChecked == true)
                 {
                     WeightedSystem_Fact first = new WeightedSystem_Fact
                     {
-                        SystemId = SystemId,
+                        SystemId = newSystem.Id,
                         Name = "Fact",
                         Text="Системный факт по умолчанию, нужен для составления таблицы лидеров. Необходимо заполнить несколько вопросов для работы системы"
                         
@@ -96,10 +95,11 @@ namespace intsis.Views
                     ExpertSystemEntities.GetContext().SaveChanges();
                 }
                 DialogResult = true;
+                SystemId = newSystem.Id;
             }
             catch (Exception r)
             {
-                
+                MessageBox.Show(r.Message);
             }
         }
 

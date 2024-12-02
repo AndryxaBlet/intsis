@@ -166,8 +166,9 @@ namespace intsis
 
 
 
-
+                           
                             context.SaveChanges(); // Сохраняем все изменения
+                            GlobalDATA.weigth = newSystem.Type;
                             var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Импорт", Content ="Файл успешно импортирован"};
                         }
                         catch (Exception)
@@ -259,7 +260,7 @@ namespace intsis
 
                             // Сохраняем все изменения в конце, чтобы не вызывать SaveChanges() слишком часто
                             context.SaveChanges();
-
+                            GlobalDATA.weigth = newSystem.Type;
                             var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Импорт", Content = "Файл успешно импортирован" };
                         }
                         catch (Exception ex)
