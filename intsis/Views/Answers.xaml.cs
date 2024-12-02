@@ -324,7 +324,7 @@ namespace intsis
                                        .FirstOrDefault();
 
                         logToListBox($"Факт достиг порога 0.8: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
-                        displayQuestion($"Выбранный факт: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
+                        displayQuestion($"Выбранный факт: {thisfact.Name}");
                         exit("");
                         // Если это не число, выводим строковое сообщение
                         break;
@@ -340,7 +340,7 @@ namespace intsis
                                        .Where(f => f.Id == currentLeader.Key)
                                        .FirstOrDefault();
                             logToListBox($"Факт с весом > 0.5: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
-                            displayQuestion($"Выбранный факт: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
+                            displayQuestion($"Выбранный факт: {thisfact.Name}");
                             exit("");
                         }
                         else
