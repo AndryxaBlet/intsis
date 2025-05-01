@@ -26,14 +26,14 @@ namespace intsis
     /// <summary>
     /// Логика взаимодействия для Answers.xaml
     /// </summary>
-    public partial class Answers : Page
+    public partial class AnswersWPF : Page
     {
         Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
-        public Answers()
+        public AnswersWPF()
         {
             int ID = GlobalDATA.IdSisForCREATE;
             InitializeComponent();log = ID;
-            if (ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == ID).First().Type == true)
+            if (ExpertSystemV2Entities.GetContext().ExpSystems.Where(r => r.ExpSysID == ID).First().TypeID == 1)
             {
                 Deny.Click -= Deny_Click;
                 StartButton_Click(Deny, new RoutedEventArgs());
@@ -52,15 +52,15 @@ namespace intsis
         public int FIRST(int id)
         {
                 // Получаем текст правила по IDSis
-                var ruleText = ExpertSystemEntities.GetContext().LinearSystem_Question
-                    .Where(r => r.SystemId == id)
+                var ruleText = ExpertSystemV2Entities.GetContext().Questions
+                    .Where(r => r.ExpSysID == id)
                     .Select(r => r.Text)
                     .FirstOrDefault();
 
                 // Получаем Id по IDSis
-                var ruleID = ExpertSystemEntities.GetContext().LinearSystem_Question
-                    .Where(r => r.SystemId == id)
-                    .Select(r => r.Id)
+                var ruleID = ExpertSystemV2Entities.GetContext().Questions
+                    .Where(r => r.ExpSysID == id)
+                    .Select(r => r.QuestionID)
                     .FirstOrDefault();
 
                 // Устанавливаем текст вопроса в интерфейсе
@@ -74,31 +74,31 @@ namespace intsis
         }
         private void UpdateItems(int id)
         {
-            try
+            //try
             {
                 // Получаем список ответов по Id
-                var answers = ExpertSystemEntities.GetContext().LinearSystem_Answer
-                    .Where(a => a.QuestionId == id)
+                var answers = ExpertSystemV2Entities.GetContext().Answers
+                    .Where(a => a.QuestionID == id)
                     .ToList();
 
                 // Присваиваем данные источнику ComboBox
                 CB.ItemsSource = answers;
                 CB.DisplayMemberPath = "Text";
-                CB.SelectedValuePath = "Id";
+                CB.SelectedValuePath = "AnswerID";
 
             }
-            catch (Exception r)
-            {
-                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Title = "Ошибка", Content = r.Message };
-                messagebox.ShowDialogAsync();
+            //catch (Exception r)
+            //{
+            //    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Title = "Ошибка", Content = r.Message };
+            //    messagebox.ShowDialogAsync();
 
-            }
+            //}
         }
 
         public void BNext()
         {
-            try
-            {
+            //try
+            //{
                 if (CB.SelectedIndex != -1)
                 {
                     var selectedValue = CB.SelectedValue.ToString();
@@ -108,19 +108,19 @@ namespace intsis
                     {
 
                         // Получаем значение поля NextR
-                        var nextValue = ExpertSystemEntities.GetContext().LinearSystem_Answer
-                            .Where(a => a.Id == sv)
+                        var nextValue = ExpertSystemV2Entities.GetContext().Answers
+                            .Where(a => a.AnswerID == sv)
                             .FirstOrDefault();
 
 
                       
-                        if (nextValue.Out == "" || nextValue.Out == null)
+                        if (nextValue.NextQuestion != null)
                         {
-                            next = int.Parse(nextValue.NextQuestionId.ToString());
+                            next = int.Parse(nextValue.NextQuestion.ToString());
                             // Получаем текст ответа
-                            var rec = ExpertSystemEntities.GetContext().LinearSystem_Answer
-                                .Where(a => a.Id == sv)
-                                .Select(a => a.Recomendation)
+                            var rec = ExpertSystemV2Entities.GetContext().Answers
+                                .Where(a => a.AnswerID == sv)
+                                .Select(a => a.Recommendation)
                                 .FirstOrDefault();
 
                             if (!string.IsNullOrEmpty(rec))
@@ -129,8 +129,8 @@ namespace intsis
                             }
 
                             // Получаем текст следующего вопроса
-                            var nextText = ExpertSystemEntities.GetContext().LinearSystem_Question
-                                .Where(r => r.Id == next)
+                            var nextText = ExpertSystemV2Entities.GetContext().Questions
+                                .Where(r => r.QuestionID == next)
                                 .Select(r => r.Text)
                                 .FirstOrDefault();
 
@@ -140,7 +140,7 @@ namespace intsis
                         else
                         {
                             // Если это не число, выводим строковое сообщение
-                            VOP.Text = nextValue.Out.ToString();
+                            VOP.Text = nextValue.Recommendation.ToString(); //////////////////////////////////////////////////////////
                             CB.Visibility = Visibility.Hidden;
                             Deny.Visibility = Visibility.Hidden;
                             Repeat.Visibility = Visibility.Visible;
@@ -153,12 +153,12 @@ namespace intsis
                     var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Выберите ваприант ответа." };
                     messagebox.ShowDialogAsync();
                 }
-            }
-            catch (Exception r)
-            {
-                new MessageBox { Content = r.Message }.ShowDialogAsync();
+            //}
+            //catch (Exception r)
+            //{
+            //    new MessageBox { Content = r.Message }.ShowDialogAsync();
 
-            }
+            //}
         }
         List<string> logs = new List<string>();
         private void LogToListBox(string message)
@@ -170,7 +170,7 @@ namespace intsis
 
 
         public static async Task RunSisAsync(
-            ExpSystem system,
+            ExpSystems system,
             Action< string> displayQuestion,
             Func<List<string>, Task<int>> getAnswer,
             Action<string> logToListBox, Action<string> exit) // Метод для добавления логов в ListBox
@@ -178,21 +178,21 @@ namespace intsis
             int count = 0;
             if (system != null)
             {
-                ExpertSystemEntities context = ExpertSystemEntities.GetContext();
+                ExpertSystemV2Entities context = ExpertSystemV2Entities.GetContext();
                 Dictionary<int, decimal> LeaderBoard = new Dictionary<int, decimal>();
 
                 logToListBox("Запуск системы."); // Логируем запуск системы
 
                 // Шаг 1: Начинаем с факта 1 (стартовый факт)
 
-                var startFact = context.WeightedSystem_Fact
-                                        .Where(f => f.SystemId == system.Id)
+                var startFact = context.Facts
+                                        .Where(f => f.ExpSysID == system.ExpSysID)
                                         .FirstOrDefault();
-                int startFactId = startFact.Id;
+                int startFactId = startFact.FactID;
 
                 logToListBox($"Стартовый факт: {startFact.Name}");
 
-                var startFactQuestions = context.WeightedSystem_Question
+                var startFactQuestions = context.Questions
                     .Where(q => q.FactID == startFactId)
                     .ToList();
 
@@ -201,25 +201,25 @@ namespace intsis
                     displayQuestion(factQuestion.Text);
                     logToListBox($"Задан вопрос: {factQuestion.Text}");
 
-                    var factAnswers = factQuestion.WeightedSystem_Answer
-                        .Where(r => r.QuestionId == factQuestion.Id)
+                    var factAnswers = factQuestion.Answers
+                        .Where(r => r.QuestionID == factQuestion.QuestionID)
                         .ToList();
-                    var answerOptionsForFact = factAnswers.Select(a => $"{a.Id}: {a.Text}").ToList();
+                    var answerOptionsForFact = factAnswers.Select(a => $"{a.AnswerID}: {a.Text}").ToList();
 
                     int selectedAnswerId = await getAnswer(answerOptionsForFact);
 
-                    var selectedAnswer = context.WeightedSystem_Answer.FirstOrDefault(r => r.Id == selectedAnswerId);
+                    var selectedAnswer = context.Answers.FirstOrDefault(r => r.AnswerID == selectedAnswerId);
                     if (selectedAnswer != null)
                     {
                         logToListBox($"Выбран ответ: {selectedAnswer.Text}");
-                        if (selectedAnswer.Recomendation != "") 
-                        new MessageBox { Content = selectedAnswer.Recomendation, CloseButtonText="Ок" }.ShowDialogAsync();
+                        if (selectedAnswer.Recommendation != "") 
+                        new MessageBox { Content = selectedAnswer.Recommendation, CloseButtonText="Ок" }.ShowDialogAsync();
 
-                        var weightAnswers = selectedAnswer.WeightFactAnswer.Where(r => r.IdAnswer == selectedAnswer.Id).ToList();
+                        var weightAnswers = selectedAnswer.WeightAnswers.Where(r => r.AnswerID == selectedAnswer.AnswerID).ToList();
                         foreach (var weight in weightAnswers)
                         {
-                            int factId = weight.IdFact;
-                            decimal weightValue = weight.Weight;
+                            int factId = weight.FactID;
+                            decimal weightValue = weight.Value;
                             bool isPositive = weight.PlusOrMinus;
 
 
@@ -228,8 +228,8 @@ namespace intsis
                             else
                                 LeaderBoard[factId] = isPositive ? weightValue : -weightValue;
 
-                            var thisfact = context.WeightedSystem_Fact
-                                        .Where(f => f.Id == factId)
+                            var thisfact = context.Facts
+                                        .Where(f => f.FactID == factId)
                                         .FirstOrDefault();
 
                             logToListBox($"Факт {thisfact.Name} обновлён: вес {LeaderBoard[factId]}");
@@ -243,8 +243,8 @@ namespace intsis
                 var currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
                 int currentFactId = currentLeader.Key;
 
-                var fact = context.WeightedSystem_Fact
-                            .Where(f => f.Id == currentFactId)
+                var fact = context.Facts
+                            .Where(f => f.FactID == currentFactId)
                             .FirstOrDefault();
                 logToListBox($"Текущий лидер: {fact.Name}, вес: {currentLeader.Value}");
 
@@ -252,42 +252,42 @@ namespace intsis
                 {
                     count++;
 
-                    var factQuestionsForLeader = context.WeightedSystem_Question
+                    var factQuestionsForLeader = context.Questions
                         .Where(q => q.FactID == currentFactId)
                         .ToList();
 
-                    List<WeightedSystem_Answer> leaderChosenAnswers = new List<WeightedSystem_Answer>();
+                    List<Answers> leaderChosenAnswers = new List<Answers>();
                     HashSet<int> answeredQuestions = new HashSet<int>();
 
                     foreach (var leaderQuestion in factQuestionsForLeader)
                     {
-                        if (answeredQuestions.Contains(leaderQuestion.Id)) continue;
+                        if (answeredQuestions.Contains(leaderQuestion.QuestionID)) continue;
 
                         displayQuestion(leaderQuestion.Text);
                         logToListBox($"Задан вопрос: {leaderQuestion.Text}");
 
-                        var leaderAnswers = leaderQuestion.WeightedSystem_Answer
-                            .Where(r => r.QuestionId == leaderQuestion.Id)
+                        var leaderAnswers = leaderQuestion.Answers
+                            .Where(r => r.QuestionID == leaderQuestion.QuestionID)
                             .ToList();
-                        var leaderAnswerOptions = leaderAnswers.Select(a => $"{a.Id}: {a.Text}").ToList();
+                        var leaderAnswerOptions = leaderAnswers.Select(a => $"{a.AnswerID}: {a.Text}").ToList();
 
                         int leaderChosenAnswerId = await getAnswer(leaderAnswerOptions);
 
-                        var leaderChosenAnswer = context.WeightedSystem_Answer
-                            .FirstOrDefault(r => r.Id == leaderChosenAnswerId);
+                        var leaderChosenAnswer = context.Answers
+                            .FirstOrDefault(r => r.AnswerID == leaderChosenAnswerId);
                         if (leaderChosenAnswer != null)
                         {
                             leaderChosenAnswers.Add(leaderChosenAnswer);
                             logToListBox($"Выбран ответ: {leaderChosenAnswer.Text}");
-                            new MessageBox { Content = leaderChosenAnswer.Recomendation, CloseButtonText = "Ок" }.ShowDialogAsync();
+                            new MessageBox { Content = leaderChosenAnswer.Recommendation, CloseButtonText = "Ок" }.ShowDialogAsync();
 
-                            var weightAnswersForLeader = leaderChosenAnswer.WeightFactAnswer
-                                .Where(r => r.IdAnswer == leaderChosenAnswer.Id)
+                            var weightAnswersForLeader = leaderChosenAnswer.WeightAnswers
+                                .Where(r => r.AnswerID == leaderChosenAnswer.AnswerID)
                                 .ToList();
                             foreach (var weight in weightAnswersForLeader)
                             {
-                                int factId = weight.IdFact;
-                                decimal weightValue = weight.Weight;
+                                int factId = weight.FactID;
+                                decimal weightValue = weight.Value;
                                 bool isPositive = weight.PlusOrMinus;
 
                                 if (LeaderBoard.ContainsKey(factId))
@@ -295,15 +295,15 @@ namespace intsis
                                 else
                                     LeaderBoard[factId] = isPositive ? weightValue : -weightValue;
 
-                                var thisfact = context.WeightedSystem_Fact
-                                       .Where(f => f.Id == factId)
+                                var thisfact = context.Facts
+                                       .Where(f => f.FactID == factId)
                                        .FirstOrDefault();
 
                                 logToListBox($"Факт {thisfact.Name} обновлён: вес {LeaderBoard[factId]}");
                             }
                         }
 
-                        answeredQuestions.Add(leaderQuestion.Id);
+                        answeredQuestions.Add(leaderQuestion.QuestionID);
 
                         var updatedLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
                         if (updatedLeader.Key != currentFactId)
@@ -319,8 +319,8 @@ namespace intsis
 
                     if (currentLeader.Value >= 0.8m)
                     {
-                        var thisfact = context.WeightedSystem_Fact
-                                       .Where(f => f.Id == currentLeader.Key)
+                        var thisfact = context.Facts
+                                       .Where(f => f.FactID == currentLeader.Key)
                                        .FirstOrDefault();
 
                         logToListBox($"Факт достиг порога 0.8: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
@@ -336,8 +336,8 @@ namespace intsis
                         logToListBox($"Достигнуто максимальное количество попыток. Проверяем лидера...");
                         if (currentLeader.Value > 0.5m)
 
-                        {var thisfact = context.WeightedSystem_Fact
-                                       .Where(f => f.Id == currentLeader.Key)
+                        {var thisfact = context.Facts
+                                       .Where(f => f.FactID == currentLeader.Key)
                                        .FirstOrDefault();
                             logToListBox($"Факт с весом > 0.5: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
                             displayQuestion($"Выбранный факт: {thisfact.Name}");
@@ -357,8 +357,8 @@ namespace intsis
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            ExpertSystemEntities context = ExpertSystemEntities.GetContext();
-            var sys = context.ExpSystem.Where(x => x.Id == log).First();
+            ExpertSystemV2Entities context = ExpertSystemV2Entities.GetContext();
+            var sys = context.ExpSystems.Where(x => x.ExpSysID == log).First();
             // Запускаем алгоритм системы
             await RunSisAsync(
                 sys,
@@ -443,19 +443,19 @@ namespace intsis
         private void Repeat_Click(object sender, RoutedEventArgs e)
         {
             navigateView.Navigate(typeof(MainWindow));
-            navigateView.Navigate(typeof(Answers));
+            navigateView.Navigate(typeof(AnswersWPF));
         }
         private async void Deny_Click(object sender, RoutedEventArgs e)
         {
-            try
+            //try
             {
                 BNext();
             }
-            catch (Exception r)
-            {
-                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
-                messagebox.ShowDialogAsync();
-            }
+            //catch (Exception r)
+            //{
+            //    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
+            //    messagebox.ShowDialogAsync();
+            //}
         }
     }
 }

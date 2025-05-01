@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9b87e2e0e51b4f1489982f1a4bfc475a" Name="Diagram1">
+        <EntityTypeShape EntityType="ExpertSystemV2Model.Answers" Width="1.5" PointX="7.5" PointY="4.125" />
+        <EntityTypeShape EntityType="ExpertSystemV2Model.ExpSystems" Width="1.5" PointX="3" PointY="2.5" />
+        <EntityTypeShape EntityType="ExpertSystemV2Model.Facts" Width="1.5" PointX="5.25" PointY="1.25" />
+        <EntityTypeShape EntityType="ExpertSystemV2Model.Questions" Width="1.5" PointX="5.25" PointY="4.25" />
+        <EntityTypeShape EntityType="ExpertSystemV2Model.TypeOfSys" Width="1.5" PointX="0.75" PointY="3" />
+        <EntityTypeShape EntityType="ExpertSystemV2Model.Users" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="ExpertSystemV2Model.WeightAnswers" Width="1.5" PointX="9.75" PointY="2.625" />
+        <AssociationConnector Association="ExpertSystemV2Model.FK__Answers__Questio__32E0915F" />
+        <AssociationConnector Association="ExpertSystemV2Model.FK__WeightAns__Answe__37A5467C" />
+        <AssociationConnector Association="ExpertSystemV2Model.FK__ExpSystem__TypeI__29572725" />
+        <AssociationConnector Association="ExpertSystemV2Model.FK__Facts__ExpSysID__2D27B809" />
+        <AssociationConnector Association="ExpertSystemV2Model.FK__Questions__ExpSy__300424B4" />
+        <AssociationConnector Association="ExpertSystemV2Model.FK__WeightAns__FactI__36B12243" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

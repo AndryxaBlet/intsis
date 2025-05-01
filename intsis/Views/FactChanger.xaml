@@ -30,8 +30,8 @@
 
         <DataGrid x:Name="Dg" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False" Grid.Row="1" Margin="0,0,0,5">
             <DataGrid.Columns>
-                <DataGridTextColumn FontSize="20" Width="auto" Header="ID" Visibility="Hidden" Binding="{Binding Id}" IsReadOnly="True"/>
-                <DataGridTextColumn FontSize="20" Width="auto" Header="FACTID" Visibility="Hidden" Binding="{Binding FactId}" IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20" Width="auto" Header="ID" Visibility="Hidden" Binding="{Binding ExpSysID}" IsReadOnly="True"/>
+                <DataGridTextColumn FontSize="20" Width="auto" Header="FACTID" Visibility="Hidden" Binding="{Binding FactID}" IsReadOnly="True"/>
                 <DataGridTextColumn FontSize="20" Width="auto" Header="Вопрос" Binding="{Binding Text}"/>
                 <DataGridTemplateColumn Width="auto" Header="Настроить">
                     <DataGridTemplateColumn.CellTemplate>

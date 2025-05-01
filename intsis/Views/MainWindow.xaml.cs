@@ -33,34 +33,34 @@ namespace intsis.Views
         {
             InitializeComponent();
             binddatagrid();
-            bool admin = GlobalDATA.recvadmin;
-            if (!admin) {
+            string admin = GlobalDATA.recvadmin;
+            if (admin!="Admin") {
                 Create.Visibility = Visibility.Hidden;
             }
             
         }
         public void binddatagrid()
         {
-            try
+           // try
             {
-                Dg.ItemsSource = ExpertSystemEntities.GetContext().ExpSystem.ToList();
+                Dg.ItemsSource = ExpertSystemV2Entities.GetContext().ExpSystems.ToList();
             }
-            catch (Exception r)
-            {
-                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
-                messagebox.ShowDialogAsync();
+         ////   catch (Exception r)
+         //   {
+         //       var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
+         //       messagebox.ShowDialogAsync();
 
-            }
+         //   }
         }
 
         private void Create_Click(object sender, RoutedEventArgs e)
         {
-            try
+           // try
             {
                 var selectedRuleId = -1;
                 if (Dg.SelectedIndex != -1)
                 {
-                    selectedRuleId = (Dg.ItemsSource as List<ExpSystem>)[Dg.SelectedIndex].Id;
+                    selectedRuleId = (Dg.ItemsSource as List<ExpSystems>)[Dg.SelectedIndex].ExpSysID;
                 }
                 GlobalDATA.IdSisForCREATE = selectedRuleId;
                 var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
@@ -68,24 +68,24 @@ namespace intsis.Views
 
                 binddatagrid();
             }
-            catch (Exception r)
-            {
-                var messagebox =new Wpf.Ui.Controls.MessageBox {  CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
-                messagebox.ShowDialogAsync();
+           // catch (Exception r)
+            //{
+            //    var messagebox =new Wpf.Ui.Controls.MessageBox {  CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
+            //    messagebox.ShowDialogAsync();
 
-            }
+            //}
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            try
+         //   try
             {
                 if (Dg.SelectedIndex != -1)
                 {
-                    ExpSystem selectedRuleId = Dg.SelectedValue as ExpSystem;
-                    GlobalDATA.IdSisForCREATE = selectedRuleId.Id;
+                    ExpSystems selectedRuleId = Dg.SelectedValue as ExpSystems;
+                    GlobalDATA.IdSisForCREATE = selectedRuleId.ExpSysID;
                     var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
-                    navigateView.Navigate(typeof(Answers));
+                    navigateView.Navigate(typeof(AnswersWPF));
                 }
                 else
                 {
@@ -94,17 +94,17 @@ namespace intsis.Views
                 }
                 
             }
-            catch (ArgumentOutOfRangeException)
-            {
-                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Нужно выбрать существующий набор вопросов" };
-                messagebox.ShowDialogAsync();
-            }
-            catch (Exception r)
-            {
-                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
-                messagebox.ShowDialogAsync();
+           //// catch (ArgumentOutOfRangeException)
+           // {
+           //     var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Нужно выбрать существующий набор вопросов" };
+           //     messagebox.ShowDialogAsync();
+           // }
+           //// catch (Exception r)
+           // {
+           //     var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
+           //     messagebox.ShowDialogAsync();
 
-            }
+           // }
             
         }
 

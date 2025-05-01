@@ -23,17 +23,6 @@ namespace intsis.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-2VLO4HT;Initial Catalog=intsisIR311;Persist Security Info=Tru" +
-            "e;User ID=sa;Password=123;Encrypt=False")]
-        public string NotebookSQL {
-            get {
-                return ((string)(this["NotebookSQL"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://192.168.0.109:8000/")]
@@ -83,28 +72,6 @@ namespace intsis.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-GMNRSQ7;Initial Catalog=ExpertSystem;Persist Security Info=Tr" +
-            "ue;User ID=sa;Password=123;Encrypt=False")]
-        public string NotebookSQL2 {
-            get {
-                return ((string)(this["NotebookSQL2"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=REVISION-PC;Initial Catalog=ExpertSystem;Persist Security Info=True;U" +
-            "ser ID=sa;Password=123")]
-        public string PC {
-            get {
-                return ((string)(this["PC"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -138,6 +105,50 @@ namespace intsis.Properties {
             }
             set {
                 this["Password"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-2VLO4HT;Initial Catalog=intsisIR311;Persist Security Info=Tru" +
+            "e;User ID=sa;Password=123;Encrypt=False")]
+        public string NotebookSQL {
+            get {
+                return ((string)(this["NotebookSQL"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-GMNRSQ7;Initial Catalog=ExpertSystem;Persist Security Info=Tr" +
+            "ue;User ID=sa;Password=123;Encrypt=False")]
+        public string NotebookSQL2 {
+            get {
+                return ((string)(this["NotebookSQL2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=REVISION-PC;Initial Catalog=ExpertSystem;Persist Security Info=True;U" +
+            "ser ID=sa;Password=123")]
+        public string PC {
+            get {
+                return ((string)(this["PC"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=ExpertSystemV2;Integrated Secu" +
+            "rity=True")]
+        public string SSS {
+            get {
+                return ((string)(this["SSS"]));
             }
         }
     }

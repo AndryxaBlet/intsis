@@ -68,7 +68,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn FontSize="20" Visibility="Hidden" Width="22" Header="ID" Binding="{Binding Id}"  IsReadOnly="True"/>
                 <DataGridTextColumn FontSize="20" Width="auto" Header="Факт" Binding="{Binding Name}"/>
-                    <DataGridTextColumn FontSize="20" Width="*" Header="Описание факта" Binding="{Binding Text}"/>
+                    <DataGridTextColumn FontSize="20" Width="*" Header="Описание факта" Binding="{Binding Description}"/>
                     <DataGridTextColumn Header="Прио" Width="0" Binding="{Binding SystemID}"  Visibility="Hidden"/>
                 <DataGridTemplateColumn Width="auto" Header="Удалить">
                     <DataGridTemplateColumn.CellTemplate>

@@ -49,12 +49,12 @@ namespace intsis.Views
             if (username != "" && password != "")
             {
 
-                var login = ExpertSystemEntities.GetContext().User.FirstOrDefault(l => l.Login == username && l.Password == password);
+                var login = ExpertSystemV2Entities.GetContext().Users.FirstOrDefault(l => l.Login == username && l.Password == password);
 
                 if (login != null)
                 {
                  
-                    GlobalDATA.recvadmin= Convert.ToBoolean(login.IsAdmin);
+                    GlobalDATA.recvadmin= login.Status;
                     if (RememberMe.IsChecked == true)
                     {
                         Properties.Settings.Default.RemembeR = Convert.ToBoolean(RememberMe.IsChecked);

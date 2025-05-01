@@ -11,7 +11,7 @@ namespace intsis
     public static class GlobalDATA
     {
 
-        public static bool recvadmin { get; set; }
+        public static string recvadmin { get; set; }
         public static int IdSisForCREATE { get; set; }
         public static int SelectRULEID { get; set; }
         public static int SelectANSID { get; set; }
@@ -20,7 +20,7 @@ namespace intsis
         public static string ConnectToDB { get; set; }
         public static Brush Accent { get;set; }
 
-        public static bool weigth { get; set; }
+        public static int SystemType { get; set; }
 
     //      {
     //        Database.SetInitializer(new CreateDatabaseIfNotExists<ExpertSystemEntities>());

@@ -251,42 +251,48 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ExpSystem.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="Answers.cs">
+      <DependentUpon>ExpSysV2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpSystems.cs">
+      <DependentUpon>ExpSysV2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpSysV2.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExpSysV2.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpSysV2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExpSysV2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ExpSysV2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExpSysV2.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Facts.cs">
+      <DependentUpon>ExpSysV2.tt</DependentUpon>
     </Compile>
     <Compile Include="GlobalDATA.cs" />
-    <Compile Include="LinearSystem_Answer.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="Questions.cs">
+      <DependentUpon>ExpSysV2.tt</DependentUpon>
     </Compile>
-    <Compile Include="LinearSystem_Question.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="TypeOfSys.cs">
+      <DependentUpon>ExpSysV2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Users.cs">
+      <DependentUpon>ExpSysV2.tt</DependentUpon>
     </Compile>
     <Compile Include="Views\Log.xaml.cs">
       <DependentUpon>Log.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model1.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="User.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Views\ANS.xaml.cs">
       <DependentUpon>ANS.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Answers.xaml.cs">
-      <DependentUpon>Answers.xaml</DependentUpon>
+    <Compile Include="Views\AnswersWPF.xaml.cs">
+      <DependentUpon>AnswersWPF.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CreateSis.xaml.cs">
       <DependentUpon>CreateSis.xaml</DependentUpon>
@@ -317,17 +323,8 @@
     <Compile Include="Views\WiseChoice.xaml.cs">
       <DependentUpon>WiseChoice.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WeightedSystem_Answer.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="WeightedSystem_Fact.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="WeightedSystem_Question.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="WeightFactAnswer.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="WeightAnswers.cs">
+      <DependentUpon>ExpSysV2.tt</DependentUpon>
     </Compile>
     <Page Include="Views\Log.xaml">
       <SubType>Designer</SubType>
@@ -337,7 +334,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Answers.xaml">
+    <Page Include="Views\AnswersWPF.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -415,12 +412,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="Model1.edmx">
+    <EntityDeploy Include="ExpSysV2.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+      <LastGenOutput>ExpSysV2.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
+    <None Include="ExpSysV2.edmx.diagram">
+      <DependentUpon>ExpSysV2.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -432,22 +429,23 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Model1.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
-    </Content>
     <Resource Include="Views\logos.png" />
     <Resource Include="logos.ico" />
-    <Content Include="Model1.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Model1.edmx.sql" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ExpSysV2.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ExpSysV2.edmx</DependentUpon>
+      <LastGenOutput>ExpSysV2.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ExpSysV2.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ExpSysV2.edmx</DependentUpon>
+      <LastGenOutput>ExpSysV2.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.5.1.0\build\MaterialDesignThemes.targets')" />

@@ -35,8 +35,8 @@
                         <DataTemplate>
                             <ComboBox ItemsSource="{Binding DataContext.Facts, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                       DisplayMemberPath="Name"   
-                                      SelectedValuePath="Id"
-                                      SelectedValue="{Binding IdFact, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged"/>
+                                      SelectedValuePath="FactID"
+                                      SelectedValue="{Binding FactID, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -52,12 +52,12 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <ui:NumberBox Maximum="1" Minimum="0.1" Value="{Binding Weight, Mode=TwoWay}"  ValueChanged="NumberBox_ValueChanged" SmallChange="0.1"/>
+                                <ui:NumberBox Maximum="1" Minimum="0.1" Value="{Binding Value, Mode=TwoWay}"  ValueChanged="NumberBox_ValueChanged" SmallChange="0.1"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                  </DataGridTemplateColumn>
-                 <DataGridTextColumn Header="Прио" Binding="{Binding Id}" Visibility="Hidden"/>
+                 <DataGridTextColumn Header="Прио" Binding="{Binding AnswerID}" Visibility="Hidden"/>
                 
 
                 <DataGridTemplateColumn Width="auto" Header="Удалить">

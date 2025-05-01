@@ -25,7 +25,7 @@ namespace intsis
             int idsis = GlobalDATA.IdSisForCREATE;
             binddatagrid(ID);
             id = Convert.ToInt32(ID);
-            RuleTextBlock.Text = "Настройка вопроса: " + ExpertSystemEntities.GetContext().WeightedSystem_Question.Where(x => x.Id == ID).FirstOrDefault()?.Text;
+            RuleTextBlock.Text = "Настройка вопроса: " +ExpertSystemV2Entities.GetContext().Questions.Where(x => x.QuestionID == ID).FirstOrDefault()?.Text;
             // Устанавливаем DataContext для MainWindow, чтобы RuleOptions был доступен
 
         }
@@ -36,8 +36,8 @@ namespace intsis
             {
 
                 // Получаем ответы по Id
-                var answersFromDb = ExpertSystemEntities.GetContext().WeightedSystem_Answer
-                    .Where(a => a.QuestionId == ID)
+                var answersFromDb = ExpertSystemV2Entities.GetContext().Answers
+                    .Where(a => a.QuestionID == ID)
                     .ToList();
                 Dg.ItemsSource = answersFromDb; // Привязываем коллекцию к DataGrid
             }
@@ -54,33 +54,33 @@ namespace intsis
             try
             {
                 // Получаем измененные записи из DataGrid
-                var answers = Dg.ItemsSource as List<WeightedSystem_Answer>;
+                var answers = Dg.ItemsSource as List<Answers>;
                 foreach (var answer in answers)
                 {
-                    answer.QuestionId = id;
+                    answer.QuestionID = id;
 
                     // Проверяем, существует ли запись в базе данных
-                    var existingQuest = ExpertSystemEntities.GetContext().WeightedSystem_Answer
-                        .FirstOrDefault(a => a.Id == answer.Id);
+                    var existingQuest = ExpertSystemV2Entities.GetContext().Answers
+                        .FirstOrDefault(a => a.AnswerID == answer.AnswerID);
 
                     if (existingQuest != null)
                     {
                         // Обновляем запись
 
                         existingQuest.Text = answer.Text;
-                        existingQuest.QuestionId = answer.QuestionId;
+                        existingQuest.QuestionID = answer.QuestionID;
 
                     }
                     else
                     {
                         // Добавляем новую запись
-                        ExpertSystemEntities.GetContext().WeightedSystem_Answer.Add(answer);
+                        ExpertSystemV2Entities.GetContext().Answers.Add(answer);
                     }
                 }
 
 
                 // Сохраняем изменения в базе данных
-                ExpertSystemEntities.GetContext().SaveChanges();
+                ExpertSystemV2Entities.GetContext().SaveChanges();
 
                 // Повторно привязываем обновленные данные к DataGrid
                 binddatagrid(id);
@@ -108,19 +108,19 @@ namespace intsis
                 {
                     // Получаем текущий объект строки, к которому относится Button
                     var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
-                    if (dataGridRow?.Item is WeightedSystem_Answer deleted)
+                    if (dataGridRow?.Item is Answers deleted)
                     {
                         // Находим объект для удаления в контексте
-                        var itemToDelete = ExpertSystemEntities.GetContext().WeightedSystem_Answer
-                            .FirstOrDefault(x => x.Id == deleted.Id);
+                        var itemToDelete = ExpertSystemV2Entities.GetContext().Answers
+                            .FirstOrDefault(x => x.AnswerID == deleted.AnswerID);
 
                         if (itemToDelete != null)
                         {
                             // Удаляем объект
-                            ExpertSystemEntities.GetContext().WeightedSystem_Answer.Remove(itemToDelete);
+                            ExpertSystemV2Entities.GetContext().Answers.Remove(itemToDelete);
 
                             // Сохраняем изменения в базе данных
-                            ExpertSystemEntities.GetContext().SaveChanges();
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
 
                             // Обновляем DataGrid
                             binddatagrid(id); // Используйте корректный идентификатор системы
@@ -166,11 +166,11 @@ namespace intsis
             {
 
                 var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
-                if (dataGridRow?.Item is WeightedSystem_Answer choosed)
+                if (dataGridRow?.Item is Answers choosed)
                 {
 
                     // Открываем окно с вопросами для выбранного правила
-                    GlobalDATA.SelectANSID = choosed.Id;
+                    GlobalDATA.SelectANSID = choosed.AnswerID;
                         navigateView.Navigate(typeof(WFA));
                     
                 }

@@ -23,7 +23,7 @@ namespace intsis
     {
         
         private int id = 0;
-        public ObservableCollection<LinearSystem_Question> RuleOptions { get; set; }
+        public ObservableCollection<Questions> RuleOptions { get; set; }
         Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
         public ANS()
         {
@@ -32,8 +32,8 @@ namespace intsis
             int idsis = GlobalDATA.IdSisForCREATE;
             binddatagrid(ID);
             id = Convert.ToInt32(ID);
-            RuleOptions = new ObservableCollection<LinearSystem_Question>(ExpertSystemEntities.GetContext().LinearSystem_Question.Where(x=>x.SystemId==idsis));
-            RuleTextBlock.Text="Настройка вопроса: "+ExpertSystemEntities.GetContext().LinearSystem_Question.Where(x=>x.Id==ID).FirstOrDefault()?.Text;
+            RuleOptions = new ObservableCollection<Questions>(ExpertSystemV2Entities.GetContext().Questions.Where(x=>x.ExpSysID==idsis));
+            RuleTextBlock.Text="Настройка вопроса: "+ ExpertSystemV2Entities.GetContext().Questions.Where(x => x.ExpSysID == ID).FirstOrDefault()?.Text;
             // Устанавливаем DataContext для MainWindow, чтобы RuleOptions был доступен
             DataContext = this;
 
@@ -46,8 +46,8 @@ namespace intsis
                 
 
                 // Получаем ответы по Id
-                var answersFromDb = ExpertSystemEntities.GetContext().LinearSystem_Answer
-                    .Where(a => a.QuestionId == ID)
+                var answersFromDb = ExpertSystemV2Entities.GetContext().Answers
+                    .Where(a => a.QuestionID == ID)
                     .ToList();
                 Dg.ItemsSource = answersFromDb; // Привязываем коллекцию к DataGrid
             }
@@ -65,34 +65,34 @@ namespace intsis
             //try
             {
                 // Получаем измененные записи из DataGrid
-                var answers = Dg.ItemsSource as List<LinearSystem_Answer>;
+                var answers = Dg.ItemsSource as List<Answers>;
                 foreach (var answer in answers)
                     {
-                        answer.QuestionId = id;
+                        answer.QuestionID = id;
 
                         // Проверяем, существует ли запись в базе данных
-                        var existingAnswer = ExpertSystemEntities.GetContext().LinearSystem_Answer
-                            .FirstOrDefault(a => a.Id == answer.Id);
+                        var existingAnswer = ExpertSystemV2Entities.GetContext().Answers
+                            .FirstOrDefault(a => a.AnswerID == answer.AnswerID);
 
                         if (existingAnswer != null)
                         {
                         // Обновляем запись
 
                         existingAnswer.Text = answer.Text;
-                        existingAnswer.NextQuestionId = answer.NextQuestionId;
-                        existingAnswer.Recomendation = answer.Recomendation;
+                        existingAnswer.NextQuestion = answer.NextQuestion;
+                        existingAnswer.Recommendation = answer.Recommendation;
                        
                         }
                         else
                         {
                         // Добавляем новую запись
-                        ExpertSystemEntities.GetContext().LinearSystem_Answer.Add(answer);
+                        ExpertSystemV2Entities.GetContext().Answers.Add(answer);
                         }
                     }
-                    
 
-                    // Сохраняем изменения в базе данных
-                    ExpertSystemEntities.GetContext().SaveChanges();
+
+                // Сохраняем изменения в базе данных
+                     ExpertSystemV2Entities.GetContext().SaveChanges();
 
                     // Повторно привязываем обновленные данные к DataGrid
                     binddatagrid(id);
@@ -112,7 +112,7 @@ namespace intsis
             try
             {
                 int del = id;
-                var itemToDelete = ExpertSystemEntities.GetContext().LinearSystem_Question.FirstOrDefault(x => x.Id == del);
+                var itemToDelete = ExpertSystemV2Entities.GetContext().Questions.FirstOrDefault(x => x.QuestionID == del);
 
                 if (itemToDelete != null)
                 {
@@ -125,10 +125,10 @@ namespace intsis
                         if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                         {
                             // Удалить объект из контекста
-                            ExpertSystemEntities.GetContext().LinearSystem_Question.Remove(itemToDelete);
+                            ExpertSystemV2Entities.GetContext().Questions.Remove(itemToDelete);
 
                             // Сохранить изменения в базе данных
-                            ExpertSystemEntities.GetContext().SaveChanges();
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
                             navigateView.GoBack();
                         }
                     }
@@ -146,8 +146,8 @@ namespace intsis
         {
             try
             {
-                int del = (Dg.ItemsSource as List<LinearSystem_Answer>)[Dg.SelectedIndex].Id;
-                var itemToDelete = ExpertSystemEntities.GetContext().LinearSystem_Answer.FirstOrDefault(x => x.Id == del);
+                int del = (Dg.ItemsSource as List<Answers>)[Dg.SelectedIndex].AnswerID;
+                var itemToDelete = ExpertSystemV2Entities.GetContext().Answers.FirstOrDefault(x => x.AnswerID == del);
 
                 if (itemToDelete != null)
                 {
@@ -159,12 +159,12 @@ namespace intsis
 
                         if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                         {
-                            
+
                             // Удалить объект из контекста
-                            ExpertSystemEntities.GetContext().LinearSystem_Answer.Remove(itemToDelete);
+                            ExpertSystemV2Entities.GetContext().Answers.Remove(itemToDelete);
 
                             // Сохранить изменения в базе данных
-                            ExpertSystemEntities.GetContext().SaveChanges();
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
                         }
                     }
                 }
@@ -184,18 +184,18 @@ namespace intsis
             {
                 // Получаем текущий объект строки, к которому относится ComboBox
                 var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(comboBox);
-                if (dataGridRow?.Item is LinearSystem_Answer answer)
+                if (dataGridRow?.Item is Answers answer)
                 {
                     // Обновляем значение NextR для текущего элемента
-                    answer.NextQuestionId = Convert.ToInt32(comboBox.SelectedValue);
+                    answer.NextQuestion = Convert.ToInt32(comboBox.SelectedValue);
 
                         // Сохраняем изменения для текущего объекта в базе данных
-                        var context = ExpertSystemEntities.GetContext();
-                        var existingAnswer = context.LinearSystem_Answer.FirstOrDefault(a => a.Id == answer.Id);
+                        var context = ExpertSystemV2Entities.GetContext();
+                        var existingAnswer = context.Answers.FirstOrDefault(a => a.AnswerID== answer.AnswerID);
                         if (existingAnswer != null)
                         {
 
-                            existingAnswer.NextQuestionId = answer.NextQuestionId;
+                            existingAnswer.NextQuestion = answer.NextQuestion;
 
                         }
                 }
@@ -210,19 +210,19 @@ namespace intsis
                 {
                     // Получаем текущий объект строки, к которому относится Button
                     var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
-                    if (dataGridRow?.Item is LinearSystem_Answer deleted)
+                    if (dataGridRow?.Item is Answers deleted)
                     {
                         // Находим объект для удаления в контексте
-                        var itemToDelete = ExpertSystemEntities.GetContext().LinearSystem_Answer
-                            .FirstOrDefault(x => x.Id == deleted.Id);
+                        var itemToDelete = ExpertSystemV2Entities.GetContext().Answers
+                            .FirstOrDefault(x => x.AnswerID== deleted.AnswerID);
 
                         if (itemToDelete != null)
                         {
                             // Удаляем объект
-                            ExpertSystemEntities.GetContext().LinearSystem_Answer.Remove(itemToDelete);
+                            ExpertSystemV2Entities.GetContext().Answers.Remove(itemToDelete);
 
                             // Сохраняем изменения в базе данных
-                            ExpertSystemEntities.GetContext().SaveChanges();
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
 
                             // Обновляем DataGrid
                             binddatagrid(id); // Используйте корректный идентификатор системы

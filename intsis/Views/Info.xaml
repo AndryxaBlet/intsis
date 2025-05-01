@@ -8,7 +8,7 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
         ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-        Title="Info"  SizeChanged="Page_SizeChanged">
+        Title="Info"  SizeChanged="Page_SizeChanged" Loaded="Page_Loaded">
     <Grid x:Name="RootGrid" VerticalAlignment="Center" HorizontalAlignment="Center">
         <!-- ScaleTransform для адаптивного масштабирования -->
         <Grid.RenderTransform>

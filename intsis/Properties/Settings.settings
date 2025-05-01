@@ -2,14 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="intsis.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="NotebookSQL" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;SerializableConnectionString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
-  &lt;ConnectionString&gt;Data Source=DESKTOP-2VLO4HT;Initial Catalog=intsisIR311;Persist Security Info=True;User ID=sa;Password=123;Encrypt=False&lt;/ConnectionString&gt;
-  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
-&lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=DESKTOP-2VLO4HT;Initial Catalog=intsisIR311;Persist Security Info=True;User ID=sa;Password=123;Encrypt=False</Value>
-    </Setting>
     <Setting Name="RestAPI_URL" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://192.168.0.109:8000/</Value>
     </Setting>
@@ -21,6 +13,23 @@
     </Setting>
     <Setting Name="ChoosedServer" Type="System.String" Scope="User">
       <Value Profile="(Default)">Data Source=REVISION-PC;Initial Catalog=ExpertSystem;Persist Security Info=True;User ID=sa;Password=123</Value>
+    </Setting>
+    <Setting Name="RemembeR" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Login" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Password" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="NotebookSQL" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;ConnectionString&gt;Data Source=DESKTOP-2VLO4HT;Initial Catalog=intsisIR311;Persist Security Info=True;User ID=sa;Password=123;Encrypt=False&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=DESKTOP-2VLO4HT;Initial Catalog=intsisIR311;Persist Security Info=True;User ID=sa;Password=123;Encrypt=False</Value>
     </Setting>
     <Setting Name="NotebookSQL2" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
@@ -38,14 +47,13 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=REVISION-PC;Initial Catalog=ExpertSystem;Persist Security Info=True;User ID=sa;Password=123</Value>
     </Setting>
-    <Setting Name="RemembeR" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Login" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="Password" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="SSS" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;ConnectionString&gt;Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=ExpertSystemV2;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=ExpertSystemV2;Integrated Security=True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

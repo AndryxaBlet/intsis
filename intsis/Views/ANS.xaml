@@ -39,13 +39,13 @@
                         <DataTemplate>
                             <ComboBox ItemsSource="{Binding DataContext.RuleOptions, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                       DisplayMemberPath="Text"   
-                                      SelectedValuePath="Id"
-                                      SelectedValue="{Binding NextQuestionId, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged"/>
+                                      SelectedValuePath="QuestionID"
+                                      SelectedValue="{Binding NextQuestion, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Рекомендации" Width="auto" Binding="{Binding Recomendation}"/>
+                <DataGridTextColumn Header="Рекомендации" Width="auto" Binding="{Binding Recommendation}"/>
                 <DataGridTextColumn FontSize="20" Width="auto"  Header="Вывод" Binding="{Binding Out}"/>
                 <DataGridTextColumn Header="Прио" Binding="{Binding Id}" Visibility="Hidden"/>
 

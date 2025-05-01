@@ -30,15 +30,9 @@
                 <DataGrid x:Name="Dg" AutoGenerateColumns="False"  CanUserAddRows="False" Margin="10"
                           MouseLeave="Dg_MouseLeave" MouseRightButtonDown="Dg_MouseRightButtonDown" IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn FontSize="18" Width="*" MaxWidth="300" Header="Название" Binding="{Binding Name}" IsReadOnly="True"/>
+                        <DataGridTextColumn FontSize="18" Width="*" MaxWidth="300" Header="Название" Binding="{Binding NameSys}" IsReadOnly="True"/>
                         <DataGridTextColumn FontSize="18" Width="*" MaxWidth="300" Header="Сфера применения" Binding="{Binding ScopeOfApplication}" IsReadOnly="True"/>
-                        <DataGridTemplateColumn  Width="*" MaxWidth="300" Header="Весовая" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding Type, Mode=TwoWay}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        <DataGridTextColumn FontSize="18" Width="*" MaxWidth="300" Header="Тип" Binding="{Binding TypeOfSys.Name}" IsReadOnly="True"/>
                         <DataGridTextColumn FontSize="18" Width="*" Header="Комментарий" Binding="{Binding Description}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>

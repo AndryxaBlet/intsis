@@ -26,7 +26,7 @@ namespace intsis
     public partial class WFA : Page
     {
         private int id = 0;
-        public ObservableCollection<WeightedSystem_Fact> Facts { get; set; }
+        public ObservableCollection<Facts> Facts { get; set; }
         Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
         public WFA()
         {
@@ -35,9 +35,9 @@ namespace intsis
             int idsis = GlobalDATA.IdSisForCREATE;
             binddatagrid(ID);
             id = Convert.ToInt32(ID);
-            var first = ExpertSystemEntities.GetContext().WeightedSystem_Fact.Where(x => x.SystemId == idsis).FirstOrDefault();
-            Facts = new ObservableCollection<WeightedSystem_Fact>(ExpertSystemEntities.GetContext().WeightedSystem_Fact.Where(x => x.SystemId == idsis && x.Id!=first.Id));
-            RuleTextBlock.Text = "Настройка ответа: " + ExpertSystemEntities.GetContext().WeightedSystem_Answer.Where(x => x.Id == ID).FirstOrDefault()?.Text;
+            var first = ExpertSystemV2Entities.GetContext().Facts.Where(x => x.ExpSysID == idsis).FirstOrDefault();
+            Facts = new ObservableCollection<Facts>(ExpertSystemV2Entities.GetContext().Facts.Where(x => x.ExpSysID == idsis && x.FactID!=first.FactID));
+            RuleTextBlock.Text = "Настройка ответа: " + ExpertSystemV2Entities.GetContext().Answers.Where(x => x.AnswerID == ID).FirstOrDefault()?.Text;
             // Устанавливаем DataContext для MainWindow, чтобы RuleOptions был доступен
             DataContext = this;
 
@@ -49,8 +49,8 @@ namespace intsis
             {
 
                 // Получаем ответы по Id
-                var answersFromDb = ExpertSystemEntities.GetContext().WeightFactAnswer
-                    .Where(a => a.IdAnswer == ID)
+                var answersFromDb = ExpertSystemV2Entities.GetContext().WeightAnswers
+                    .Where(a => a.AnswerID == ID)
                     .ToList();
                 Dg.ItemsSource = answersFromDb; // Привязываем коллекцию к DataGrid
             }
@@ -68,33 +68,33 @@ namespace intsis
             //try
             {
                 // Получаем измененные записи из DataGrid
-                var answers = Dg.ItemsSource as List<WeightFactAnswer>;
+                var answers = Dg.ItemsSource as List<WeightAnswers>;
                 foreach (var answer in answers)
                 {
-                    answer.IdAnswer = id;
+                    answer.AnswerID = id;
 
                     // Проверяем, существует ли запись в базе данных
-                    var existingAnswer = ExpertSystemEntities.GetContext().WeightFactAnswer
-                        .FirstOrDefault(a => a.Id == answer.Id);
+                    var existingAnswer = ExpertSystemV2Entities.GetContext().WeightAnswers
+                        .FirstOrDefault(a => a.WAID == answer.WAID);
 
                     if (existingAnswer != null)
                     {
                         // Обновляем запись
 
                         existingAnswer.PlusOrMinus = answer.PlusOrMinus;
-                        existingAnswer.Weight = answer.Weight;
+                        existingAnswer.Value = answer.Value;
 
                     }
                     else
                     {
                         // Добавляем новую запись
-                        ExpertSystemEntities.GetContext().WeightFactAnswer.Add(answer);
+                        ExpertSystemV2Entities.GetContext().WeightAnswers.Add(answer);
                     }
                 }
 
 
                 // Сохраняем изменения в базе данных
-                ExpertSystemEntities.GetContext().SaveChanges();
+                ExpertSystemV2Entities.GetContext().SaveChanges();
 
                 // Повторно привязываем обновленные данные к DataGrid
                 binddatagrid(id);
@@ -114,30 +114,30 @@ namespace intsis
                 System.Windows.Controls.TextBlock textBlock = new System.Windows.Controls.TextBlock();
                 var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(comboBox);
 
-                if (dataGridRow?.Item is WeightFactAnswer answer)
+                if (dataGridRow?.Item is WeightAnswers answer)
                 {
                     // Обновляем значение NextR для текущего элемента
-                    answer.IdFact = Convert.ToInt32(comboBox.SelectedValue);
+                    answer.FactID = Convert.ToInt32(comboBox.SelectedValue);
                    
 
                     // Сохраняем изменения для текущего объекта в базе данных
-                    var context = ExpertSystemEntities.GetContext();
-                    var existingAnswer = context.WeightFactAnswer.FirstOrDefault(a => a.Id == answer.Id);
+                    var context = ExpertSystemV2Entities.GetContext();
+                    var existingAnswer = context.WeightAnswers.FirstOrDefault(a => a.WAID == answer.WAID);
                     if (existingAnswer != null)
                     {
 
-                        existingAnswer.IdFact = answer.IdFact;
+                        existingAnswer.FactID = answer.FactID;
 
                     }
                 }
                 else
                 {
-                    WeightFactAnswer answerr = new WeightFactAnswer();
-                    answerr.IdFact = Convert.ToInt32(comboBox.SelectedValue);
+                    WeightAnswers answerr = new WeightAnswers();
+                    answerr.FactID = Convert.ToInt32(comboBox.SelectedValue);
                     // Сохраняем изменения для текущего объекта в базе данных
-                    var context = ExpertSystemEntities.GetContext();
-                    answerr.IdAnswer = id;
-                    context.WeightFactAnswer.Add(answerr);
+                    var context = ExpertSystemV2Entities.GetContext();
+                    answerr.AnswerID = id;
+                    context.WeightAnswers.Add(answerr);
                     context.SaveChanges();
                     binddatagrid(id);
 
@@ -153,19 +153,19 @@ namespace intsis
                 {
                     // Получаем текущий объект строки, к которому относится Button
                     var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
-                    if (dataGridRow?.Item is WeightFactAnswer deleted)
+                    if (dataGridRow?.Item is WeightAnswers deleted)
                     {
                         // Находим объект для удаления в контексте
-                        var itemToDelete = ExpertSystemEntities.GetContext().WeightFactAnswer
-                            .FirstOrDefault(x => x.Id == deleted.Id);
+                        var itemToDelete = ExpertSystemV2Entities.GetContext().WeightAnswers
+                            .FirstOrDefault(x => x.WAID == deleted.WAID);
 
                         if (itemToDelete != null)
                         {
                             // Удаляем объект
-                            ExpertSystemEntities.GetContext().WeightFactAnswer.Remove(itemToDelete);
+                            ExpertSystemV2Entities.GetContext().WeightAnswers.Remove(itemToDelete);
 
                             // Сохраняем изменения в базе данных
-                            ExpertSystemEntities.GetContext().SaveChanges();
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
 
                             // Обновляем DataGrid
                             binddatagrid(id); // Используйте корректный идентификатор системы
@@ -210,10 +210,10 @@ namespace intsis
             {
                 // Получаем текущий объект строки, к которому относится ComboBox
                 var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(toggle);
-                if (dataGridRow?.Item is WeightFactAnswer answer)
+                if (dataGridRow?.Item is WeightAnswers answer)
                 {
-                    var context = ExpertSystemEntities.GetContext();
-                    var existingAnswer = context.WeightFactAnswer.FirstOrDefault(a => a.Id == answer.Id);
+                    var context = ExpertSystemV2Entities.GetContext();
+                    var existingAnswer = context.WeightAnswers.FirstOrDefault(a => a.WAID == answer.WAID);
                     if (existingAnswer != null)
                     {
                         if (toggle.IsChecked == true)
@@ -234,17 +234,17 @@ namespace intsis
             {
                 // Получаем текущий объект строки, к которому относится ComboBox
                 var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(nb);
-                if (dataGridRow?.Item is WeightFactAnswer answer)
+                if (dataGridRow?.Item is WeightAnswers answer)
                 {
                     // Обновляем значение NextR для текущего элемента
-                    answer.Weight =Convert.ToDecimal(nb.Value);
+                    answer.Value =Convert.ToDecimal(nb.Value);
 
                     // Сохраняем изменения для текущего объекта в базе данных
-                    var context = ExpertSystemEntities.GetContext();
-                    var existingAnswer = context.WeightFactAnswer.FirstOrDefault(a => a.Id == answer.Id);
+                    var context = ExpertSystemV2Entities.GetContext();
+                    var existingAnswer = context.WeightAnswers.FirstOrDefault(a => a.WAID == answer.WAID);
                     if (existingAnswer != null)
                     {
-                        existingAnswer.Weight = answer.Weight;
+                        existingAnswer.Value = answer.Value;
                     }
                 }
             }

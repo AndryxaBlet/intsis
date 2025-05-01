@@ -18,269 +18,272 @@ namespace intsis
         {
             try
             {
-                var context = ExpertSystemEntities.GetContext();
+                var context = ExpertSystemV2Entities.GetContext();
 
-                // Загружаем систему с навигационными свойствами через LINQ
-                var systemToExport = context.ExpSystem
-                    .Where(s => s.Id == systemId)
-                    .Select(s => new
-                    {
-                        s.Id,
-                        s.Name,
-                        s.ScopeOfApplication,
-                        s.Description,
-                        s.Type,
-                        WeightedSystem_Fact = s.WeightedSystem_Fact.Select(f => new
-                        {
-                            f.Id,
-                            f.Name,
-                            f.Text,
-                            WeightedSystem_Question = f.WeightedSystem_Question.Select(q => new
-                            {
-                                q.Id,
-                                q.Text,
-                                WeightedSystem_Answer = q.WeightedSystem_Answer.Select(a => new
-                                {
-                                    a.Id,
-                                    a.Text,
-                                    a.Recomendation,
-                                    WeightFactAnswer = a.WeightFactAnswer.Select(wfa => new
-                                    {
-                                        wfa.Id,
-                                        wfa.IdFact,
-                                        wfa.Weight,
-                                        wfa.PlusOrMinus
-                                    })
-                                })
-                            })
-                        }),
-                        LinearSystem_Question = s.LinearSystem_Question.Select(q => new
-                        {
-                            q.Id,
-                            q.Text,
-                            LinearSystem_Answer = q.LinearSystem_Answer.Select(a => new
-                            {
-                                a.Id,
-                                a.Text,
-                                a.Recomendation,
-                                a.Out,
-                                a.NextQuestionId
-                            })
-                        })
-                    })
-                    .FirstOrDefault();
-
-                if (systemToExport == null)
+                var system = context.ExpSystems.FirstOrDefault(s => s.ExpSysID == systemId);
+                if (system == null)
                 {
                     throw new Exception("Система с указанным ID не найдена.");
                 }
 
-                var systemArray = new[] { systemToExport };
-                // Сериализация в JSON
-                var jsonData = JsonConvert.SerializeObject(systemArray, Formatting.Indented);
+                object systemToExport;
 
-                // Сохранение JSON в файл
+                if (system.TypeID == 1) // весовой
+                {
+                    var facts = context.Facts
+                        .Where(f => f.ExpSysID == systemId)
+                        .Select(f => new
+                        {
+                            f.FactID,
+                            f.Name,
+                            f.Description,
+                            Questions = context.Questions
+                                .Where(q => q.FactID == f.FactID)
+                                .Select(q => new
+                                {
+                                    q.QuestionID,
+                                    q.Text,
+                                    Answers = context.Answers
+                                        .Where(a => a.QuestionID == q.QuestionID)
+                                        .Select(a => new
+                                        {
+                                            a.AnswerID,
+                                            a.Text,
+                                            a.Recommendation,
+                                            WeightAnswers = context.WeightAnswers
+                                                .Where(w => w.AnswerID == a.AnswerID)
+                                                .Select(w => new
+                                                {
+                                                    w.WAID,
+                                                    w.FactID,
+                                                    w.Value,
+                                                    w.PlusOrMinus
+                                                })
+                                        })
+                                })
+                        })
+                        .ToList();
+
+                    systemToExport = new[]
+                    {
+                new
+                {
+                    system.ExpSysID,
+                    system.NameSys,
+                    system.ScopeOfApplication,
+                    system.Description,
+                    system.TypeID,
+                    Facts = facts
+                }
+            };
+                }
+                else // линейный
+                {
+                    var questions = context.Questions
+                        .Where(q => q.ExpSysID == systemId)
+                        .Select(q => new
+                        {
+                            q.QuestionID,
+                            q.Text,
+                            Answers = context.Answers
+                                .Where(a => a.QuestionID == q.QuestionID)
+                                .Select(a => new
+                                {
+                                    a.AnswerID,
+                                    a.Text,
+                                    a.Recommendation,
+                                    a.NextQuestion
+                                })
+                        })
+                        .ToList();
+
+                    systemToExport = new[]
+                    {
+                new
+                {
+                    system.ExpSysID,
+                    system.NameSys,
+                    system.ScopeOfApplication,
+                    system.Description,
+                    system.TypeID,
+                    Questions = questions
+                }
+            };
+                }
+
+                var jsonData = JsonConvert.SerializeObject(systemToExport, Formatting.Indented);
                 File.WriteAllText(filePath, jsonData);
 
                 var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Экспорт", Content = "Система успешно экспортирована" };
             }
             catch (Exception ex)
             {
-                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Экспорт", Content = "Ошибка экспорта" + ex.Message };
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Экспорт", Content = "Ошибка экспорта: " + ex.Message };
             }
         }
 
-    
 
 
-    public void ImportData(string filePath)
+
+
+        public void ImportData(string filePath)
         {
-            var context = ExpertSystemEntities.GetContext();
+            var context = ExpertSystemV2Entities.GetContext();
+            try
             {
                 var jsonData = File.ReadAllText(filePath);
-                var importedSystems = JsonConvert.DeserializeObject<List<ExpSystem>>(jsonData);
+                var importedSystems = JsonConvert.DeserializeObject<List<dynamic>>(jsonData);
 
                 foreach (var system in importedSystems)
                 {
-                    // Создаем новую систему
-                    var newSystem = new ExpSystem
+                    // 1. Создаём новую систему
+                    var newSystem = new ExpSystems
                     {
-                        Name = system.Name,
+                        NameSys = system.NameSys,
                         ScopeOfApplication = system.ScopeOfApplication,
                         Description = system.Description,
-                        Type = system.Type
+                        TypeID = system.TypeID
                     };
+                    GlobalDATA.SystemType= newSystem.TypeID;
+                    context.ExpSystems.Add(newSystem);
+                    context.SaveChanges(); // получаем ExpSysID
 
-                    context.ExpSystem.Add(newSystem);
-                    context.SaveChanges(); // Сохраняем систему, чтобы получить ID
-                    if (newSystem.Type == false)
+                    // --- ЛИНЕЙНАЯ СИСТЕМА ---
+                    if (newSystem.TypeID == 0)
                     {
-                        try
+                        var questionMap = new Dictionary<int, int>();
+
+                        // 2. Добавляем вопросы
+                        foreach (var q in system.Questions)
                         {
-                            var ruleMapping = new Dictionary<int, int>(); // Словарь для соответствия оригинальных и новых ID
-
-                            // Добавляем правила и заполняем словарь
-                            foreach (var rule in system.LinearSystem_Question)
+                            var newQuestion = new Questions
                             {
-                                var newRule = new LinearSystem_Question
-                                {
-                                    SystemId = newSystem.Id,
-                                    Text = rule.Text
-                                };
+                                ExpSysID = newSystem.ExpSysID,
+                                Text = q.Text
+                            };
+                            context.Questions.Add(newQuestion);
+                            context.SaveChanges();
+                            questionMap[(int)q.QuestionID] = newQuestion.QuestionID;
+                        }
 
-                                context.LinearSystem_Question.Add(newRule);
-                                context.SaveChanges(); // Сохраняем правило, чтобы получить Id
-
-                                // Сохраняем соответствие Id из JSON и Id из базы данных
-                                ruleMapping[rule.Id] = newRule.Id;
-                            }
-
-                            // Добавляем ответы, используя словарь для преобразования NextR
-                            foreach (var rule in system.LinearSystem_Question)
+                        // 3. Добавляем ответы (со связью NextQuestion)
+                        foreach (var q in system.Questions)
+                        {
+                            int newQId = questionMap[(int)q.QuestionID];
+                            foreach (var a in q.Answers)
                             {
-                                // Получаем Id для текущего правила
-                                var newRuleId = ruleMapping[rule.Id];
-
-                                foreach (var answer in rule.LinearSystem_Answer)
+                                int? nextId = null;
+                                if (a.NextQuestion != null && questionMap.ContainsKey((int)a.NextQuestion))
                                 {
-                                    int? nextq = -1;
-                                    if (answer.NextQuestionId != null)
-                                    { nextq = ruleMapping[Convert.ToInt32(answer.NextQuestionId)]; }
-                                    else nextq = null;
-
-                                    var newAnswer = new LinearSystem_Answer
-                                    {
-                                        NextQuestionId = nextq, // Здесь используем правильный Id из словаря
-                                        Text = answer.Text,
-                                        Recomendation = answer.Recomendation,
-                                        Out = answer.Out,
-                                        QuestionId = newRuleId
-                                    };
-
-                                    context.LinearSystem_Answer.Add(newAnswer);
-                                    context.SaveChanges();
+                                    nextId = questionMap[(int)a.NextQuestion];
                                 }
 
+                                var newAnswer = new Answers
+                                {
+                                    QuestionID = newQId,
+                                    Text = a.Text,
+                                    Recommendation = a.Recommendation,
+                                    NextQuestion = nextId
+                                };
+                                context.Answers.Add(newAnswer);
                             }
-
-
-
-
-                           
-                            context.SaveChanges(); // Сохраняем все изменения
-                            GlobalDATA.weigth = newSystem.Type;
-                            var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Импорт", Content ="Файл успешно импортирован"};
                         }
-                        catch (Exception)
-                        {
-                            context.ExpSystem.Remove(newSystem);
-                        }
-                        finally
-                        {
-                            context.SaveChanges(); // Сохраняем все изменения в конце
-                        }
+
+                        context.SaveChanges();
                     }
+                    // --- ВЕСОВАЯ СИСТЕМА ---
                     else
                     {
-                        try
+                        var factMap = new Dictionary<int, int>();
+                        var questionMap = new Dictionary<int, int>();
+                        var answerMap = new Dictionary<int, int>();
+
+                        // 2. Добавляем факты
+                        foreach (var f in system.Facts)
                         {
-                            var factMapping = new Dictionary<int, int>(); // Словарь для соответствия оригинальных и новых ID
-
-                            // Добавляем факты
-                            foreach (var fact in system.WeightedSystem_Fact)
+                            var newFact = new Facts
                             {
-                                var newFact = new WeightedSystem_Fact
+                                ExpSysID = newSystem.ExpSysID,
+                                Name = f.Name,
+                                Description = f.Description
+                            };
+                            context.Facts.Add(newFact);
+                            context.SaveChanges();
+                            factMap[(int)f.FactID] = newFact.FactID;
+                        }
+
+                        // 3. Добавляем вопросы
+                        foreach (var f in system.Facts)
+                        {
+                            int newFactId = factMap[(int)f.FactID];
+                            foreach (var q in f.Questions)
+                            {
+                                var newQuestion = new Questions
                                 {
-                                    SystemId = newSystem.Id,
-                                    Name = fact.Name,
-                                    Text = fact.Text
+                                    ExpSysID = newSystem.ExpSysID,
+                                    FactID = newFactId,
+                                    Text = q.Text
                                 };
+                                context.Questions.Add(newQuestion);
+                                context.SaveChanges();
+                                questionMap[(int)q.QuestionID] = newQuestion.QuestionID;
 
-                                context.WeightedSystem_Fact.Add(newFact);
-                                context.SaveChanges(); // Сохраняем факт, чтобы получить ID
-
-                                // Сохраняем соответствие IDFact
-                                factMapping[fact.Id] = newFact.Id;
-                            }
-
-                            var QuestMapping = new Dictionary<int, int>(); // Словарь для соответствия оригинальных и новых ID
-                                                                           // Добавляем вопросы, используя словарь для преобразования NextR
-                            foreach (var fact in system.WeightedSystem_Fact)
-                            {
-                                // Получаем IDFact для текущего факта
-                                var newFactId = factMapping[fact.Id];
-
-                                foreach (var question in fact.WeightedSystem_Question)
+                                // 4. Добавляем ответы
+                                foreach (var a in q.Answers)
                                 {
-                                    var newQuestion = new WeightedSystem_Question
+                                    var newAnswer = new Answers
                                     {
-                                        FactID = newFactId, // Используем правильный IDFact из словаря
-                                        Text = question.Text
+                                        QuestionID = newQuestion.QuestionID,
+                                        Text = a.Text,
+                                        Recommendation = a.Recommendation
                                     };
+                                    context.Answers.Add(newAnswer);
+                                    context.SaveChanges();
+                                    answerMap[(int)a.AnswerID] = newAnswer.AnswerID;
 
-                                    context.WeightedSystem_Question.Add(newQuestion);
-                                    context.SaveChanges(); // Сохраняем все изменения
-
-                                    QuestMapping[question.Id] = newQuestion.Id;
-
-                                    var AnsMapping = new Dictionary<int, int>(); // Словарь для соответствия оригинальных и новых ID
-                                    var weightedSystem_Answer = question.WeightedSystem_Answer.ToList(); // Создаём копию коллекции
-
-                                    foreach (var ans in weightedSystem_Answer)
+                                    // 5. Добавляем веса (WeightAnswers)
+                                    foreach (var w in a.WeightAnswers ?? new List<dynamic>())
                                     {
-                                        var newQuestId = newQuestion.Id;
-                                        var newAnswer = new WeightedSystem_Answer
+                                        if (!factMap.ContainsKey((int)w.FactID)) continue;
+
+                                        var newWeight = new WeightAnswers
                                         {
-                                            QuestionId = newQuestId,
-                                            Text = ans.Text,
-                                            Recomendation = ans.Recomendation
+                                            AnswerID = newAnswer.AnswerID,
+                                            FactID = factMap[(int)w.FactID],
+                                            PlusOrMinus = w.PlusOrMinus,
+                                            Value = w.Value
                                         };
-
-                                        context.WeightedSystem_Answer.Add(newAnswer);
-                                        context.SaveChanges();
-                                        AnsMapping[ans.Id] = newAnswer.Id; // Сохраняем соответствие оригинальных и новых ID
-
-                                        // Привязываем WeightFactAnswer
-                                        foreach (var wfa in ans.WeightFactAnswer)
-                                        {
-                                            var newWFA = new WeightFactAnswer
-                                            {
-                                                IdAnswer = newAnswer.Id,
-                                                IdFact = factMapping[wfa.IdFact],
-                                                PlusOrMinus = wfa.PlusOrMinus,
-                                                Weight = wfa.Weight
-                                            };
-
-                                            context.WeightFactAnswer.Add(newWFA);
-                                            context.SaveChanges();
-                                        }
+                                        context.WeightAnswers.Add(newWeight);
                                     }
                                 }
                             }
+                        }
 
-                            // Сохраняем все изменения в конце, чтобы не вызывать SaveChanges() слишком часто
-                            context.SaveChanges();
-                            GlobalDATA.weigth = newSystem.Type;
-                            var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Импорт", Content = "Файл успешно импортирован" };
-                        }
-                        catch (Exception ex)
-                        {
-                            // В случае ошибки удаляем созданную систему
-                            context.ExpSystem.Remove(newSystem);
-                            var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Импорт", Content = "Ошибка импорта: "+ex.Message };
-                        }
-                        finally
-                        {
-                            // Сохраняем все изменения в конце
-                            context.SaveChanges();
-                        }
+                        context.SaveChanges();
                     }
+
+                    var messagebox = new Wpf.Ui.Controls.MessageBox
+                    {
+                        CloseButtonText = "Ок",
+                        Title = "Импорт",
+                        Content = "Файл успешно импортирован"
+                    };
                 }
             }
+            catch (Exception ex)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox
+                {
+                    CloseButtonText = "Ок",
+                    Title = "Импорт",
+                    Content = "Ошибка импорта: " + ex.Message
+                };
+            }
         }
+
+
     }
 }
-                   
-                
-            
-   
+
+
+

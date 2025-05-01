@@ -68,7 +68,7 @@ namespace intsis.Views
             }
 
 
-            var existingUser = ExpertSystemEntities.GetContext().User.FirstOrDefault(u => u.Login == username || u.Email == email);
+            var existingUser = ExpertSystemV2Entities.GetContext().Users.FirstOrDefault(u => u.Login == username);
 
             if (existingUser != null)
             {
@@ -76,39 +76,41 @@ namespace intsis.Views
                 messagebox.ShowDialogAsync();
                 return;
             }
-            User newUser;
+            Users newUser;
             if (isAdmin)
             {
-                newUser = new User
+                newUser = new Users
                 {
-                    Email = email,
+
                     Login = username,
+                    Name = username,
                     Password = password,
-                    IsAdmin = true
+                    Status = "Admin"
 
                 };
             }
             else
             {
-                 newUser = new User
+                 newUser = new Users
                 {
-                    Email = email,
+ 
                     Login = username,
+                    Name = username,
                     Password = password,
-                    IsAdmin = false // Set to false by default; adjust as needed
+                    Status = "User" // Set to false by default; adjust as needed
 
                 };
             }
 
-            ExpertSystemEntities.GetContext().User.Add(newUser);
-            ExpertSystemEntities.GetContext().SaveChanges();
+            ExpertSystemV2Entities.GetContext().Users.Add(newUser);
+            ExpertSystemV2Entities.GetContext().SaveChanges();
 
             var messageboxx =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Content = "Регистрация успешна!" };
             messageboxx.ShowDialogAsync();
 
             // Optionally, open the main window after registration
 
-            GlobalDATA.recvadmin = Convert.ToBoolean(newUser.IsAdmin);
+            GlobalDATA.recvadmin = newUser.Status;
             var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
             navigateView.Navigate(typeof(MainWindow));
 

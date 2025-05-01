@@ -34,6 +34,9 @@ namespace intsis.Views
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Light);
             }
+           
+
+
         }
 
         Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
@@ -63,9 +66,9 @@ namespace intsis.Views
                 connects = ConfigurationManager.ConnectionStrings["intsisEntitiesLDB"].ConnectionString;
             }
             else { connects = intsis.Properties.Settings.Default.ChoosedServer; }
-            ExpertSystemEntities.GetContext().Database.Connection.ConnectionString = connects;
+            ExpertSystemV2Entities.GetContext().Database.Connection.ConnectionString = connects;
 
-            var users = ExpertSystemEntities.GetContext().User.FirstOrDefault();
+            var users = ExpertSystemV2Entities.GetContext().Users.FirstOrDefault();
             if (users == null)
             {
                 GlobalDATA.IsFirst = true;
@@ -77,6 +80,18 @@ namespace intsis.Views
             {
                 navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
                 navigateView.Navigate(typeof(LogIn));
+            }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Properties.Settings.Default.RemembeR == true)
+            {
+
+                navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+                navigateView.Navigate(typeof(LogIn));
+
+
             }
         }
     }

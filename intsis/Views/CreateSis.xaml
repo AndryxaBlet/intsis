@@ -29,8 +29,8 @@
         <Label FontWeight="Bold" Content="Название" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,10,10,10" Grid.Row="1" Grid.Column="0"/>
         <TextBox Name="NameTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" Grid.Row="1" Grid.Column="1" KeyDown="NameTextBox_KeyDown"/>
         
-        <Label FontWeight="Bold" Content="Режим 'Веса'" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,10,10,10" Grid.Row="2" Grid.Column="0"/>
-        <ui:ToggleSwitch Name="WeightSwitch" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" Grid.Row="2" Grid.Column="1" KeyDown="NameTextBox_KeyDown"/>
+        <Label FontWeight="Bold" Content="Тип системы" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,10,10,10" Grid.Row="2" Grid.Column="0"/>
+        <ComboBox Name="TypeSwitch" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10" Grid.Row="2" Grid.Column="1" KeyDown="NameTextBox_KeyDown"/>
 
         <!-- Scope of Application -->
         <Label FontWeight="Bold" Content="Область применения" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,10,10,10" Grid.Row="3" Grid.Column="0"/>

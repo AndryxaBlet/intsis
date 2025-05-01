@@ -17,6 +17,7 @@ using MessageBox = System.Windows.MessageBox;
 using MessageBoxButton = System.Windows.MessageBoxButton;
 using MessageBoxResult = System.Windows.MessageBoxResult;
 using CustomMessageBox = Wpf.Ui.Controls.MessageBox;
+using System.Xml.Linq;
 
 namespace intsis.Views
 {
@@ -27,20 +28,27 @@ namespace intsis.Views
     {
         public CreateSis(int id)
         {
+          
+
             InitializeComponent();
+            var types = ExpertSystemV2Entities.GetContext().TypeOfSys.ToList();
+            TypeSwitch.ItemsSource = types;
+            TypeSwitch.DisplayMemberPath = "Name";
+            TypeSwitch.SelectedValuePath = "TypeID";
             if (id != -1)
             {
-                sys=ExpertSystemEntities.GetContext().ExpSystem.Where(x => x.Id == id).FirstOrDefault();
-                NameTextBox.Text=sys.Name;
+                sys= ExpertSystemV2Entities.GetContext().ExpSystems.Where(x => x.ExpSysID == id).FirstOrDefault();
+                NameTextBox.Text=sys.NameSys;
                 ScopeTextBox.Text = sys.ScopeOfApplication;
                 CommentTextBox.Text = sys.Description;
-                WeightSwitch.IsChecked = sys.Type;
-                
+                TypeSwitch.SelectedValue = sys.TypeID;      // ПОСТАВЬ ПОЛЕ
 
             }
+           
         }
+
         public static int SystemId { get; private set; }
-        ExpSystem sys=null;
+        ExpSystems sys=null;
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -48,14 +56,16 @@ namespace intsis.Views
             {
                 if (sys!=null)
                 {
-                    sys.Name=NameTextBox.Text;
+                    sys.NameSys=NameTextBox.Text;
                     sys.ScopeOfApplication=ScopeTextBox.Text;
                     sys.Description = CommentTextBox.Text;
-                    ExpertSystemEntities.GetContext().SaveChanges();
+                    var type = ExpertSystemV2Entities.GetContext().TypeOfSys.Where(x=>x.TypeID==(int)TypeSwitch.SelectedValue).First();
+                    sys.TypeOfSys=type;
+                    ExpertSystemV2Entities.GetContext().SaveChanges();
                 }
                 else
                 {
-                    insert(NameTextBox.Text, ScopeTextBox.Text, CommentTextBox.Text,Convert.ToBoolean(WeightSwitch.IsChecked));
+                    insert(NameTextBox.Text, ScopeTextBox.Text, CommentTextBox.Text,(int)TypeSwitch.SelectedValue);//////////////////////////////////////////////// замени 0 на поле 
                   
                 }
             }
@@ -66,41 +76,41 @@ namespace intsis.Views
                 this.Close();
             }
         }
-        public void insert(string name, string scope, string comment,bool type)
+        public void insert(string name, string scope, string comment,int type)
         {
-            try
-            {
+            //try
+            //{
                 // Добавляем новую систему
-                var newSystem = new ExpSystem
+                var newSystem = new ExpSystems
                 {
-                    Name = name,
+                    NameSys = name,
                     ScopeOfApplication = scope,
                     Description = comment,
-                    Type = type
+                    TypeID = type
                 };
 
-                ExpertSystemEntities.GetContext().ExpSystem.Add(newSystem);
-                ExpertSystemEntities.GetContext().SaveChanges();
+                ExpertSystemV2Entities.GetContext().ExpSystems.Add(newSystem);
+                ExpertSystemV2Entities.GetContext().SaveChanges();
                
-                if (WeightSwitch.IsChecked == true)
+                if (Convert.ToInt32(TypeSwitch.SelectedValue) == 1)
                 {
-                    WeightedSystem_Fact first = new WeightedSystem_Fact
+                    Facts first = new Facts
                     {
-                        SystemId = newSystem.Id,
+                        ExpSysID = newSystem.ExpSysID,
                         Name = "Fact",
-                        Text="Системный факт по умолчанию, нужен для составления таблицы лидеров. Необходимо заполнить несколько вопросов для работы системы"
+                        Description="Системный факт по умолчанию, нужен для составления таблицы лидеров. Необходимо заполнить несколько вопросов для работы системы"
                         
                     };
-                    ExpertSystemEntities.GetContext().WeightedSystem_Fact.Add(first);
-                    ExpertSystemEntities.GetContext().SaveChanges();
+                    ExpertSystemV2Entities.GetContext().Facts.Add(first);
+                    ExpertSystemV2Entities.GetContext().SaveChanges();
                 }
                 DialogResult = true;
-                SystemId = newSystem.Id;
-            }
-            catch (Exception r)
-            {
-                MessageBox.Show(r.Message);
-            }
+                SystemId = newSystem.ExpSysID;
+            //}
+            //catch (Exception r)
+            //{
+            //    MessageBox.Show(r.Message);
+            //}
         }
 
         private void NameTextBox_KeyDown(object sender, KeyEventArgs e)

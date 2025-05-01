@@ -30,7 +30,7 @@ namespace intsis.Views
         private int id = 0;
         private int SelectedSys = -1;    
         SqlJSON sqlJSON = new SqlJSON();
-        bool IsWeight = false;
+        int SystemType;
         Wpf.Ui.Controls.NavigationView navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
 
         public Create_Window()
@@ -43,7 +43,7 @@ namespace intsis.Views
             if (id != -1)
             {                
                 NameI.SelectedValue = id;
-                IsWeight=ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == id).First().Type;
+                SystemType = ExpertSystemV2Entities.GetContext().ExpSystems.Where(r => r.ExpSysID == id).First().TypeID;
                 binddatagrid(Convert.ToInt32(NameI.SelectedValue));
                 binddatagrid(id);
             }
@@ -51,10 +51,10 @@ namespace intsis.Views
 
         void BindComboBox()
         {
-            var Sis = ExpertSystemEntities.GetContext().ExpSystem.ToList();
+            var Sis = ExpertSystemV2Entities.GetContext().ExpSystems.ToList();
             NameI.ItemsSource = Sis;
-            NameI.DisplayMemberPath = "Name";
-            NameI.SelectedValuePath = "Id";
+            NameI.DisplayMemberPath = "NameSys";
+            NameI.SelectedValuePath = "ExpSysID";
             binddatagrid(Convert.ToInt32(NameI.SelectedValue));
         }
 
@@ -62,18 +62,18 @@ namespace intsis.Views
         {
             {
                 SelectedSys = systemId;
-                if (ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == systemId).FirstOrDefault() != null)
+                if (ExpertSystemV2Entities.GetContext().ExpSystems.Where(r => r.ExpSysID == systemId).FirstOrDefault() != null)
                 {
 
-                    if (!IsWeight)
+                    if (SystemType!=1)
                     {
                         if (systemId != 0)
                         {
                             id = systemId;
 
                             // Получаем правила, привязанные к системе
-                            var rules = ExpertSystemEntities.GetContext().LinearSystem_Question
-                                .Where(r => r.SystemId == systemId)
+                            var rules = ExpertSystemV2Entities.GetContext().Questions
+                                .Where(r => r.ExpSysID == systemId)
                                 .ToList();
 
                             // Привязываем данные к DataGrid
@@ -86,7 +86,7 @@ namespace intsis.Views
                             // Устанавливаем значение по умолчанию для колонки IDSis
                             foreach (var rule in rules)
                             {
-                                rule.SystemId = systemId;
+                                rule.ExpSysID = systemId;
                             }
                         }
                     }
@@ -97,8 +97,8 @@ namespace intsis.Views
                             id = systemId;
 
                             // Получаем правила, привязанные к системе
-                            var rules = ExpertSystemEntities.GetContext().WeightedSystem_Fact
-                                .Where(r => r.SystemId == systemId)
+                            var rules = ExpertSystemV2Entities.GetContext().Facts
+                                .Where(r => r.ExpSysID == systemId)
                                 .ToList();
 
                             // Привязываем данные к DataGrid
@@ -111,7 +111,7 @@ namespace intsis.Views
                             // Устанавливаем значение по умолчанию для колонки IDSis
                             foreach (var rule in rules)
                             {
-                                rule.SystemId = systemId;
+                                rule.ExpSysID = systemId;
                             }
                         }
                     }
@@ -128,10 +128,10 @@ namespace intsis.Views
                 { var nameSisId = SelectedSys;
 
 
-                    if (!IsWeight)
+                    if (SystemType == 0) // linear sys
                     {
                         // Получаем измененные данные из DataGrid
-                        var rules = DgLinear.ItemsSource as List<LinearSystem_Question>;
+                        var rules = DgLinear.ItemsSource as List<Questions>;
 
                         if (rules != null)
                         {
@@ -139,28 +139,28 @@ namespace intsis.Views
                             foreach (var rule in rules)
                             {
                                 // Проверяем, существует ли запись в базе данных
-                                var existingRule = ExpertSystemEntities.GetContext().LinearSystem_Question
-                                    .FirstOrDefault(r => r.Id == rule.Id);
+                                var existingRule = ExpertSystemV2Entities.GetContext().Questions
+                                    .FirstOrDefault(r => r.ExpSysID == rule.ExpSysID);
 
                                 if (existingRule != null)
                                 {
                                     // Обновляем существующую запись
-                                    ExpertSystemEntities.GetContext().Entry(existingRule).CurrentValues.SetValues(rule);
+                                    ExpertSystemV2Entities.GetContext().Entry(existingRule).CurrentValues.SetValues(rule);
                                 }
                                 else
                                 {
                                     // Устанавливаем правильный ID для нового правила
-                                    var newRule = new LinearSystem_Question
+                                    var newRule = new Questions
                                     {
-                                        SystemId = nameSisId,
+                                        ExpSysID = nameSisId,
                                         Text = rule.Text
                                     };
-                                    ExpertSystemEntities.GetContext().LinearSystem_Question.Add(newRule);
+                                    ExpertSystemV2Entities.GetContext().Questions.Add(newRule);
                                 }
                             }
 
                             // Сохраняем изменения в базе данных
-                            ExpertSystemEntities.GetContext().SaveChanges();
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
                             binddatagrid(SelectedSys);
 
                         }
@@ -168,7 +168,7 @@ namespace intsis.Views
                     else
                     {
                         // Получаем измененные данные из DataGrid
-                        var facts = DgWeight.ItemsSource as List<WeightedSystem_Fact>;
+                        var facts = DgWeight.ItemsSource as List<Facts>;
 
                         if (facts != null)
                         {
@@ -176,29 +176,29 @@ namespace intsis.Views
                             foreach (var fact in facts)
                             {
                                 // Проверяем, существует ли запись в базе данных
-                                var existingRule = ExpertSystemEntities.GetContext().WeightedSystem_Fact
-                                    .FirstOrDefault(r => r.Id == fact.Id);
+                                var existingRule = ExpertSystemV2Entities.GetContext().Facts
+                                    .FirstOrDefault(r => r.ExpSysID == fact.ExpSysID);
 
                                 if (existingRule != null) 
                                 {
                                     // Обновляем существующую запись
-                                    ExpertSystemEntities.GetContext().Entry(existingRule).CurrentValues.SetValues(fact);
+                                    ExpertSystemV2Entities.GetContext().Entry(existingRule).CurrentValues.SetValues(fact);
                                 }
                                 else
                                 {
                                     // Устанавливаем правильный ID для нового правила
-                                    var newRule = new WeightedSystem_Fact
+                                    var newRule = new Facts
                                     {
-                                        SystemId = nameSisId,
+                                        ExpSysID = nameSisId,
                                         Name = fact.Name,
-                                        Text = fact.Text
+                                        Description = fact.Description
                                     };
-                                    ExpertSystemEntities.GetContext().WeightedSystem_Fact.Add(newRule);
+                                    ExpertSystemV2Entities.GetContext().Facts.Add(newRule);
                                 }
                             }
 
                             // Сохраняем изменения в базе данных
-                            ExpertSystemEntities.GetContext().SaveChanges();
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
                             binddatagrid(SelectedSys);
 
                         }
@@ -224,11 +224,11 @@ namespace intsis.Views
             if (DgLinear.SelectedIndex != -1)
             {
                 var nameSisId = SelectedSys;
-                if (ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == nameSisId).FirstOrDefault().Type == false)
+                if (ExpertSystemV2Entities.GetContext().ExpSystems.Where(r => r.ExpSysID== nameSisId).FirstOrDefault().TypeID == 0)
                 {
                     // Открываем окно с вопросами для выбранного правила
-                    LinearSystem_Question selectedRuleId = DgLinear.SelectedValue as LinearSystem_Question;
-                    GlobalDATA.SelectRULEID = selectedRuleId.Id;
+                    Questions selectedRuleId = DgLinear.SelectedValue as Questions;
+                    GlobalDATA.SelectRULEID = selectedRuleId.QuestionID;
                     navigateView.Navigate(typeof(ANS));
                 }
             }
@@ -242,13 +242,13 @@ namespace intsis.Views
         private void NameI_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             // Проверяем, существует ли система с таким именем
-            var temp = NameI.SelectedItem as ExpSystem;
-            var systemExists = ExpertSystemEntities.GetContext().ExpSystem.Any(ns => ns.Name == temp.Name);
+            var temp = NameI.SelectedItem as ExpSystems;
+            var systemExists = ExpertSystemV2Entities.GetContext().Facts.Any(ns => ns.Name == temp.NameSys);
 
             if (systemExists)
             {
                 int t = Convert.ToInt32(NameI.SelectedValue);
-                IsWeight = ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == t).First().Type;
+                SystemType = ExpertSystemV2Entities.GetContext().ExpSystems.Where(r => r.ExpSysID == t).First().TypeID;
                 binddatagrid(Convert.ToInt32(NameI.SelectedValue));
                 SelectedSys = Convert.ToInt32(NameI.SelectedValue);
                 GlobalDATA.IdSisForCREATE = SelectedSys;
@@ -261,7 +261,7 @@ namespace intsis.Views
             if (NameI.SelectedIndex != -1)
             {
                 int del = Convert.ToInt32(NameI.SelectedValue);
-                var itemToDelete = ExpertSystemEntities.GetContext().ExpSystem.FirstOrDefault(x => x.Id == del);
+                var itemToDelete = ExpertSystemV2Entities.GetContext().ExpSystems.FirstOrDefault(x => x.ExpSysID == del);
 
                 if (itemToDelete != null)
                 {     
@@ -275,11 +275,11 @@ namespace intsis.Views
                         if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                         {
                             // Удалить объект из контекста
-                            ExpertSystemEntities.GetContext().ExpSystem.Remove(itemToDelete);
-                            
+                            ExpertSystemV2Entities.GetContext().ExpSystems.Remove(itemToDelete);
+
 
                             // Сохранить изменения в базе данных
-                            ExpertSystemEntities.GetContext().SaveChanges();
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
                             navigateView.GoBack();
                         }
                     }
@@ -301,7 +301,7 @@ namespace intsis.Views
             if (result == true) // Проверяем, что окно закрыто с успешным результатом
             {
                 int systemId = CreateSis.SystemId;
-                IsWeight = ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == systemId).First().Type;
+                SystemType = ExpertSystemV2Entities.GetContext().ExpSystems.Where(r => r.ExpSysID == systemId).First().TypeID;
                 BindComboBox();
                 NameI.SelectedIndex = NameI.Items.Count - 1;
             }
@@ -317,23 +317,23 @@ namespace intsis.Views
                     // Получаем текущий объект строки, к которому относится ComboBox
                     var dataGridRow = intsis.FUNC.FindParent<DataGridRow>(button);
 
-                    if (!IsWeight)
+                    if (SystemType!=1)
                     {
-                        if (dataGridRow?.Item is LinearSystem_Question deleted)
+                        if (dataGridRow?.Item is Questions deleted)
                         {
-                            var itemToDelete = ExpertSystemEntities.GetContext().LinearSystem_Question.FirstOrDefault(x => x.Id == deleted.Id);
-                            ExpertSystemEntities.GetContext().LinearSystem_Question.Remove(itemToDelete);
-                            ExpertSystemEntities.GetContext().SaveChanges();
+                            var itemToDelete = ExpertSystemV2Entities.GetContext().Questions.FirstOrDefault(x => x.QuestionID == deleted.QuestionID);
+                            ExpertSystemV2Entities.GetContext().Questions.Remove(itemToDelete);
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
                             binddatagrid(id);
                         }
                     }
                     else
                     {
-                        if(dataGridRow?.Item is WeightedSystem_Fact deleted)
+                        if(dataGridRow?.Item is Facts deleted)
                         {
-                            var itemToDelete = ExpertSystemEntities.GetContext().WeightedSystem_Fact.FirstOrDefault(x => x.Id == deleted.Id);
-                            ExpertSystemEntities.GetContext().WeightedSystem_Fact.Remove(itemToDelete);
-                            ExpertSystemEntities.GetContext().SaveChanges();
+                            var itemToDelete = ExpertSystemV2Entities.GetContext().Facts.FirstOrDefault(x => x.FactID == deleted.FactID);
+                            ExpertSystemV2Entities.GetContext().Facts.Remove(itemToDelete);
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
                             binddatagrid(id);
                         }
                     }
@@ -377,6 +377,7 @@ namespace intsis.Views
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*", // Установите фильтр для файлов
                 Title = "Выберите файл" // Заголовок диалогового окна
             };
+            
             // Отображаем диалоговое окно и проверяем, была ли нажата кнопка "Открыть"
             if (openFileDialog.ShowDialog() == true)
             {
@@ -387,9 +388,9 @@ namespace intsis.Views
                 var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Content = $"Выбранный файл: {filePath}", Title = "Импорт" }.ShowDialogAsync();
                 sqlJSON.ImportData(filePath);
             }
-            IsWeight = GlobalDATA.weigth;
-            BindComboBox();
+            SystemType = GlobalDATA.SystemType;
             NameI.SelectedIndex=NameI.Items.Count-1;
+            BindComboBox();
 
         }
 
@@ -425,11 +426,11 @@ namespace intsis.Views
             if (DgWeight.SelectedIndex != -1)
             {
                 var nameSisId = SelectedSys;
-                if (ExpertSystemEntities.GetContext().ExpSystem.Where(r => r.Id == nameSisId).FirstOrDefault().Type == true)
+                if (ExpertSystemV2Entities.GetContext().ExpSystems.Where(r => r.ExpSysID == nameSisId).FirstOrDefault().TypeID == 1)
                 {
                     // Открываем окно с вопросами для выбранного правила
-                    WeightedSystem_Fact selectedRuleId = DgWeight.SelectedValue as WeightedSystem_Fact;
-                    GlobalDATA.SelectFACTID = selectedRuleId.Id;
+                    Facts selectedRuleId = DgWeight.SelectedValue as Facts;
+                    GlobalDATA.SelectFACTID = selectedRuleId.FactID;
                     navigateView.Navigate(typeof(FactChanger));
                 }
             }
