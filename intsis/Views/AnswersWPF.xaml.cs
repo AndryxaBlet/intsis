@@ -170,190 +170,151 @@ namespace intsis
 
 
         public static async Task RunSisAsync(
-            ExpSystems system,
-            Action< string> displayQuestion,
-            Func<List<string>, Task<int>> getAnswer,
-            Action<string> logToListBox, Action<string> exit) // Метод для добавления логов в ListBox
+     ExpSystems system,
+     Action<string> displayQuestion,
+     Func<List<string>, Task<int>> getAnswer,
+     Action<string> logToListBox,
+     Action<string> exit)
         {
             int count = 0;
-            if (system != null)
+            if (system == null) return;
+
+            var context = ExpertSystemV2Entities.GetContext();
+            var LeaderBoard = new Dictionary<int, decimal>();
+
+            logToListBox("Запуск системы.");
+
+            var startFact = context.Facts.FirstOrDefault(f => f.ExpSysID == system.ExpSysID);
+            if (startFact == null) { logToListBox("Стартовый факт не найден."); return; }
+
+            int startFactId = startFact.FactID;
+            logToListBox($"Стартовый факт: {startFact.Name}");
+
+            var startFactQuestions = context.Questions
+                .Where(q => q.FactID == startFactId)
+                .ToList();
+
+            foreach (var factQuestion in startFactQuestions)
             {
-                ExpertSystemV2Entities context = ExpertSystemV2Entities.GetContext();
-                Dictionary<int, decimal> LeaderBoard = new Dictionary<int, decimal>();
+                displayQuestion(factQuestion.Text);
+                logToListBox($"Задан вопрос: {factQuestion.Text}");
 
-                logToListBox("Запуск системы."); // Логируем запуск системы
+                var factAnswers = factQuestion.Answers.ToList();
+                var answerOptions = factAnswers.Select(a => $"{a.AnswerID}: {a.Text}").ToList();
 
-                // Шаг 1: Начинаем с факта 1 (стартовый факт)
+                int selectedAnswerId = await getAnswer(answerOptions);
+                var selectedAnswer = context.Answers.FirstOrDefault(r => r.AnswerID == selectedAnswerId);
+                if (selectedAnswer == null) continue;
 
-                var startFact = context.Facts
-                                        .Where(f => f.ExpSysID == system.ExpSysID)
-                                        .FirstOrDefault();
-                int startFactId = startFact.FactID;
+                logToListBox($"Выбран ответ: {selectedAnswer.Text}");
+                if (!string.IsNullOrEmpty(selectedAnswer.Recommendation))
+                    await new MessageBox { Content = selectedAnswer.Recommendation, CloseButtonText = "Ок" }.ShowDialogAsync();
 
-                logToListBox($"Стартовый факт: {startFact.Name}");
+                foreach (var weight in selectedAnswer.WeightAnswers)
+                {
+                    int factId = weight.FactID;
+                    decimal weightValue = weight.PlusOrMinus ? weight.Value : -weight.Value;
 
-                var startFactQuestions = context.Questions
-                    .Where(q => q.FactID == startFactId)
+                    LeaderBoard[factId] = LeaderBoard.TryGetValue(factId, out var existing) ? existing + weightValue : weightValue;
+
+                    var affectedFact = context.Facts.FirstOrDefault(f => f.FactID == factId);
+                    if (affectedFact != null)
+                        logToListBox($"Факт {affectedFact.Name} обновлён: вес {LeaderBoard[factId]}");
+                }
+            }
+
+            logToListBox("Первоначальная таблица лидеров построена.");
+
+            var currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
+            int currentFactId = currentLeader.Key;
+
+            var leaderFact = context.Facts.FirstOrDefault(f => f.FactID == currentFactId);
+            logToListBox($"Текущий лидер: {leaderFact?.Name}, вес: {currentLeader.Value}");
+
+            if (currentLeader.Value >= 0.8m)
+            {
+                logToListBox($"Факт достиг порога 0.8: ID = {leaderFact?.Name}, Вес = {currentLeader.Value}");
+                displayQuestion($"Выбранный факт: {leaderFact?.Name}");
+                exit("");
+                return;
+            }
+
+            var answeredQuestions = new HashSet<int>();
+
+            while (count < 5)
+            {
+                count++;
+
+                var factQuestions = context.Questions
+                    .Where(q => q.FactID == currentFactId && !answeredQuestions.Contains(q.QuestionID))
                     .ToList();
 
-                foreach (var factQuestion in startFactQuestions)
+                foreach (var question in factQuestions)
                 {
-                    displayQuestion(factQuestion.Text);
-                    logToListBox($"Задан вопрос: {factQuestion.Text}");
+                    displayQuestion(question.Text);
+                    logToListBox($"Задан вопрос: {question.Text}");
 
-                    var factAnswers = factQuestion.Answers
-                        .Where(r => r.QuestionID == factQuestion.QuestionID)
-                        .ToList();
-                    var answerOptionsForFact = factAnswers.Select(a => $"{a.AnswerID}: {a.Text}").ToList();
+                    var answers = question.Answers.ToList();
+                    var options = answers.Select(a => $"{a.AnswerID}: {a.Text}").ToList();
 
-                    int selectedAnswerId = await getAnswer(answerOptionsForFact);
+                    int answerId = await getAnswer(options);
+                    var selectedAnswer = context.Answers.FirstOrDefault(r => r.AnswerID == answerId);
+                    if (selectedAnswer == null) continue;
 
-                    var selectedAnswer = context.Answers.FirstOrDefault(r => r.AnswerID == selectedAnswerId);
-                    if (selectedAnswer != null)
+                    logToListBox($"Выбран ответ: {selectedAnswer.Text}");
+                    if (!string.IsNullOrEmpty(selectedAnswer.Recommendation))
+                        await new MessageBox { Content = selectedAnswer.Recommendation, CloseButtonText = "Ок" }.ShowDialogAsync();
+
+                    foreach (var weight in selectedAnswer.WeightAnswers)
                     {
-                        logToListBox($"Выбран ответ: {selectedAnswer.Text}");
-                        if (selectedAnswer.Recommendation != "") 
-                        new MessageBox { Content = selectedAnswer.Recommendation, CloseButtonText="Ок" }.ShowDialogAsync();
+                        int factId = weight.FactID;
+                        decimal weightValue = weight.PlusOrMinus ? weight.Value : -weight.Value;
 
-                        var weightAnswers = selectedAnswer.WeightAnswers.Where(r => r.AnswerID == selectedAnswer.AnswerID).ToList();
-                        foreach (var weight in weightAnswers)
-                        {
-                            int factId = weight.FactID;
-                            decimal weightValue = weight.Value;
-                            bool isPositive = weight.PlusOrMinus;
+                        LeaderBoard[factId] = LeaderBoard.TryGetValue(factId, out var existing) ? existing + weightValue : weightValue;
 
-
-                            if (LeaderBoard.ContainsKey(factId))
-                                LeaderBoard[factId] += isPositive ? weightValue : -weightValue;
-                            else
-                                LeaderBoard[factId] = isPositive ? weightValue : -weightValue;
-
-                            var thisfact = context.Facts
-                                        .Where(f => f.FactID == factId)
-                                        .FirstOrDefault();
-
-                            logToListBox($"Факт {thisfact.Name} обновлён: вес {LeaderBoard[factId]}");
-                        }
-                    }
-                }
-
-                logToListBox("Первоначальная таблица лидеров построена.");
-
-                // Шаг 2: Берем лидера с максимальным весом
-                var currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
-                int currentFactId = currentLeader.Key;
-
-                var fact = context.Facts
-                            .Where(f => f.FactID == currentFactId)
-                            .FirstOrDefault();
-                logToListBox($"Текущий лидер: {fact.Name}, вес: {currentLeader.Value}");
-
-                while (count <= 5)
-                {
-                    count++;
-
-                    var factQuestionsForLeader = context.Questions
-                        .Where(q => q.FactID == currentFactId)
-                        .ToList();
-
-                    List<Answers> leaderChosenAnswers = new List<Answers>();
-                    HashSet<int> answeredQuestions = new HashSet<int>();
-
-                    foreach (var leaderQuestion in factQuestionsForLeader)
-                    {
-                        if (answeredQuestions.Contains(leaderQuestion.QuestionID)) continue;
-
-                        displayQuestion(leaderQuestion.Text);
-                        logToListBox($"Задан вопрос: {leaderQuestion.Text}");
-
-                        var leaderAnswers = leaderQuestion.Answers
-                            .Where(r => r.QuestionID == leaderQuestion.QuestionID)
-                            .ToList();
-                        var leaderAnswerOptions = leaderAnswers.Select(a => $"{a.AnswerID}: {a.Text}").ToList();
-
-                        int leaderChosenAnswerId = await getAnswer(leaderAnswerOptions);
-
-                        var leaderChosenAnswer = context.Answers
-                            .FirstOrDefault(r => r.AnswerID == leaderChosenAnswerId);
-                        if (leaderChosenAnswer != null)
-                        {
-                            leaderChosenAnswers.Add(leaderChosenAnswer);
-                            logToListBox($"Выбран ответ: {leaderChosenAnswer.Text}");
-                            new MessageBox { Content = leaderChosenAnswer.Recommendation, CloseButtonText = "Ок" }.ShowDialogAsync();
-
-                            var weightAnswersForLeader = leaderChosenAnswer.WeightAnswers
-                                .Where(r => r.AnswerID == leaderChosenAnswer.AnswerID)
-                                .ToList();
-                            foreach (var weight in weightAnswersForLeader)
-                            {
-                                int factId = weight.FactID;
-                                decimal weightValue = weight.Value;
-                                bool isPositive = weight.PlusOrMinus;
-
-                                if (LeaderBoard.ContainsKey(factId))
-                                    LeaderBoard[factId] += isPositive ? weightValue : -weightValue;
-                                else
-                                    LeaderBoard[factId] = isPositive ? weightValue : -weightValue;
-
-                                var thisfact = context.Facts
-                                       .Where(f => f.FactID == factId)
-                                       .FirstOrDefault();
-
-                                logToListBox($"Факт {thisfact.Name} обновлён: вес {LeaderBoard[factId]}");
-                            }
-                        }
-
-                        answeredQuestions.Add(leaderQuestion.QuestionID);
-
-                        var updatedLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
-                        if (updatedLeader.Key != currentFactId)
-                        {
-                            currentFactId = updatedLeader.Key;
-                            logToListBox($"Изменился лидер: {currentFactId}, вес: {updatedLeader.Value}");
-                            break;
-                        }
-
-                        currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
-                        if (currentLeader.Value >= 0.8m) { break; }
+                        var affectedFact = context.Facts.FirstOrDefault(f => f.FactID == factId);
+                        if (affectedFact != null)
+                            logToListBox($"Факт {affectedFact.Name} обновлён: вес {LeaderBoard[factId]}");
                     }
 
+                    answeredQuestions.Add(question.QuestionID);
+
+                    currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
                     if (currentLeader.Value >= 0.8m)
                     {
-                        var thisfact = context.Facts
-                                       .Where(f => f.FactID == currentLeader.Key)
-                                       .FirstOrDefault();
-
-                        logToListBox($"Факт достиг порога 0.8: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
-                        displayQuestion($"Выбранный факт: {thisfact.Name}");
+                        var winningFact = context.Facts.FirstOrDefault(f => f.FactID == currentLeader.Key);
+                        logToListBox($"Факт достиг порога 0.8: ID = {winningFact?.Name}, Вес = {currentLeader.Value}");
+                        displayQuestion($"Выбранный факт: {winningFact?.Name}");
                         exit("");
-                        // Если это не число, выводим строковое сообщение
-                        break;
+                        return;
                     }
 
-                    if (count == 5)
+                    if (currentLeader.Key != currentFactId)
                     {
-                        
-                        logToListBox($"Достигнуто максимальное количество попыток. Проверяем лидера...");
-                        if (currentLeader.Value > 0.5m)
-
-                        {var thisfact = context.Facts
-                                       .Where(f => f.FactID == currentLeader.Key)
-                                       .FirstOrDefault();
-                            logToListBox($"Факт с весом > 0.5: ID = {thisfact.Name}, Вес = {currentLeader.Value}");
-                            displayQuestion($"Выбранный факт: {thisfact.Name}");
-                            exit("");
-                        }
-                        else
-                        {
-                            logToListBox($"Лидер с весом <= 0.5. Перезапуск системы...");
-                            await RunSisAsync(system, displayQuestion, getAnswer, logToListBox,exit);
-                        }
-                        break;
+                        currentFactId = currentLeader.Key;
+                        logToListBox($"Изменился лидер: {currentFactId}, вес: {currentLeader.Value}");
+                        break; // выйти и пересобрать список вопросов
                     }
                 }
             }
+
+            logToListBox($"Достигнуто максимальное количество попыток. Проверяем лидера...");
+
+            if (currentLeader.Value > 0.5m)
+            {
+                var winningFact = context.Facts.FirstOrDefault(f => f.FactID == currentLeader.Key);
+                logToListBox($"Факт с весом > 0.5: ID = {winningFact?.Name}, Вес = {currentLeader.Value}");
+                displayQuestion($"Выбранный факт: {winningFact?.Name}");
+                exit("");
+            }
+            else
+            {
+                logToListBox("Лидер с весом <= 0.5. Перезапуск системы...");
+                await RunSisAsync(system, displayQuestion, getAnswer, logToListBox, exit);
+            }
         }
-      
+
+
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
