@@ -176,186 +176,323 @@ namespace intsis
      Action<string> logToListBox,
      Action<string> exit)
         {
-            int count = 0;
-            if (system == null) return;
+            if (system == null)
+            {
+                logToListBox("Система не найдена.");
+                return;
+            }
 
             var context = ExpertSystemV2Entities.GetContext();
-            var LeaderBoard = new Dictionary<int, decimal>();
+            var leaderBoard = new Dictionary<int, decimal>();
+            var answeredQuestions = new HashSet<int>();
+            const decimal THRESHOLD = 0.8m;
+            const decimal MIN_THRESHOLD = 0.5m;
+            const int MAX_ITERATIONS = 5;
+            int iterationCount = 0;
 
-            logToListBox("Запуск системы.");
+            logToListBox("Запуск экспертной системы.");
 
+            // Получаем стартовый факт
             var startFact = context.Facts.FirstOrDefault(f => f.ExpSysID == system.ExpSysID);
-            if (startFact == null) { logToListBox("Стартовый факт не найден."); return; }
+            if (startFact == null)
+            {
+                logToListBox("Стартовый факт не найден. Невозможно продолжить работу.");
+                return;
+            }
 
-            int startFactId = startFact.FactID;
-            logToListBox($"Стартовый факт: {startFact.Name}");
+            logToListBox($"Стартовый факт системы: {startFact.Name} [ID: {startFact.FactID}]");
+
+            // ЭТАП 1: Обработка всех вопросов стартового факта для построения первичной таблицы лидеров
+            logToListBox("=========== ЭТАП 1: Построение начальной таблицы лидеров ===========");
 
             var startFactQuestions = context.Questions
-                .Where(q => q.FactID == startFactId)
+                .Where(q => q.FactID == startFact.FactID)
                 .ToList();
 
-            foreach (var factQuestion in startFactQuestions)
+            if (startFactQuestions.Count == 0)
             {
-                displayQuestion(factQuestion.Text);
-                logToListBox($"Задан вопрос: {factQuestion.Text}");
+                logToListBox("Предупреждение: У стартового факта нет вопросов. Невозможно построить таблицу лидеров.");
+                return;
+            }
 
-                var factAnswers = factQuestion.Answers.ToList();
-                var answerOptions = factAnswers.Select(a => $"{a.AnswerID}: {a.Text}").ToList();
+            logToListBox($"Найдено {startFactQuestions.Count} вопросов для стартового факта.");
 
-                int selectedAnswerId = await getAnswer(answerOptions);
-                var selectedAnswer = context.Answers.FirstOrDefault(r => r.AnswerID == selectedAnswerId);
-                if (selectedAnswer == null) continue;
+            // Обрабатываем все вопросы стартового факта
+            foreach (var question in startFactQuestions)
+            {
+                displayQuestion(question.Text);
+                logToListBox($"Задан вопрос: \"{question.Text}\" [ID: {question.QuestionID}]");
 
-                logToListBox($"Выбран ответ: {selectedAnswer.Text}");
+                var answers = question.Answers.ToList();
+                if (answers.Count == 0)
+                {
+                    logToListBox($"Предупреждение: Вопрос ID: {question.QuestionID} не имеет вариантов ответа. Пропускаем.");
+                    continue;
+                }
+
+                var options = answers.Select(a => $"{a.AnswerID}: {a.Text}").ToList();
+
+                logToListBox($"Доступно вариантов ответа: {answers.Count}");
+
+                int answerId = await getAnswer(options);
+                var selectedAnswer = context.Answers.FirstOrDefault(r => r.AnswerID == answerId);
+                if (selectedAnswer == null)
+                {
+                    logToListBox($"Ошибка: Выбранный ответ ID: {answerId} не найден. Пропускаем вопрос.");
+                    continue;
+                }
+
+                logToListBox($"Выбран ответ: \"{selectedAnswer.Text}\" [ID: {selectedAnswer.AnswerID}]");
+
+                // Отображаем рекомендацию, если она есть
                 if (!string.IsNullOrEmpty(selectedAnswer.Recommendation))
+                {
+                    logToListBox($"Рекомендация: \"{selectedAnswer.Recommendation}\"");
                     await new MessageBox { Content = selectedAnswer.Recommendation, CloseButtonText = "Ок" }.ShowDialogAsync();
+                }
+
+                // Учитываем влияние ответа на веса фактов
+                var weightCount = selectedAnswer.WeightAnswers?.Count() ?? 0;
+                logToListBox($"Ответ влияет на {weightCount} факт(ов)");
 
                 foreach (var weight in selectedAnswer.WeightAnswers)
                 {
                     int factId = weight.FactID;
                     decimal weightValue = weight.PlusOrMinus ? weight.Value : -weight.Value;
+                    string sign = weight.PlusOrMinus ? "+" : "-";
 
-                    LeaderBoard[factId] = LeaderBoard.TryGetValue(factId, out var existing) ? existing + weightValue : weightValue;
+                    var beforeValue = leaderBoard.TryGetValue(factId, out var existing) ? existing : 0;
+                    leaderBoard[factId] = beforeValue + weightValue;
 
                     var affectedFact = context.Facts.FirstOrDefault(f => f.FactID == factId);
                     if (affectedFact != null)
-                        logToListBox($"Факт {affectedFact.Name} обновлён: вес {LeaderBoard[factId]}");
+                        logToListBox($"Факт \"{affectedFact.Name}\" [ID: {factId}] обновлён: {beforeValue} {sign} {Math.Abs(weightValue)} = {leaderBoard[factId]}");
                 }
+
+                // Помечаем вопрос как отвеченный
+                answeredQuestions.Add(question.QuestionID);
             }
 
+            // Анализируем результаты после обработки всех вопросов стартового факта
             logToListBox("Первоначальная таблица лидеров построена.");
 
-            var currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
-            int currentFactId = currentLeader.Key;
-
-            var leaderFact = context.Facts.FirstOrDefault(f => f.FactID == currentFactId);
-            logToListBox($"Текущий лидер: {leaderFact?.Name}, вес: {currentLeader.Value}");
-
-            if (currentLeader.Value >= 0.8m)
+            if (leaderBoard.Count == 0)
             {
-                logToListBox($"Факт достиг порога 0.8: ID = {leaderFact?.Name}, Вес = {currentLeader.Value}");
+                logToListBox("Предупреждение: Таблица лидеров пуста. Ответы не повлияли ни на один факт.");
+                return;
+            }
+
+            logToListBox("Состояние таблицы лидеров:");
+            foreach (var entry in leaderBoard.OrderByDescending(kv => kv.Value))
+            {
+                var fact = context.Facts.FirstOrDefault(f => f.FactID == entry.Key);
+                logToListBox($"- \"{fact?.Name}\" [ID: {entry.Key}]: {entry.Value}");
+            }
+
+            // Определяем текущего лидера
+            var currentLeader = leaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
+            int currentFactId = currentLeader.Key;
+            var leaderFact = context.Facts.FirstOrDefault(f => f.FactID == currentFactId);
+
+            logToListBox($"Текущий лидер: \"{leaderFact?.Name}\" [ID: {currentFactId}], вес: {currentLeader.Value}");
+
+            // Проверяем, достиг ли лидер порогового значения
+            if (currentLeader.Value >= THRESHOLD)
+            {
+                logToListBox($"Факт \"{leaderFact?.Name}\" достиг порога {THRESHOLD}: Вес = {currentLeader.Value}");
                 displayQuestion($"Выбранный факт: {leaderFact?.Name}");
                 exit("");
                 return;
             }
 
-            var answeredQuestions = new HashSet<int>();
+            // ЭТАП 2: Задаем дополнительные вопросы по фактам-лидерам
+            logToListBox("=========== ЭТАП 2: Задание дополнительных вопросов по фактам-лидерам ===========");
 
-            while (count < 5)
+            // Основной цикл алгоритма для уточнения лидеров
+            while (iterationCount < MAX_ITERATIONS)
             {
-                count++;
+                iterationCount++;
+                logToListBox($"Итерация #{iterationCount} из {MAX_ITERATIONS}");
 
+                // Получаем вопросы для текущего факта-лидера, которые еще не были заданы
                 var factQuestions = context.Questions
                     .Where(q => q.FactID == currentFactId && !answeredQuestions.Contains(q.QuestionID))
                     .ToList();
 
+                if (factQuestions.Count == 0)
+                {
+                    logToListBox($"Нет доступных вопросов для факта \"{leaderFact?.Name}\" [ID: {currentFactId}]");
+
+                    // Если нет доступных вопросов, но есть лидер с весом >= THRESHOLD
+                    if (currentLeader.Value >= THRESHOLD)
+                    {
+                        logToListBox($"Факт-лидер достиг порога {THRESHOLD}. Завершаем работу.");
+                        break;
+                    }
+
+                    // Находим следующий факт с максимальным весом, для которого есть незаданные вопросы
+                    var nextFactCandidate = leaderBoard.OrderByDescending(f => f.Value)
+                        .FirstOrDefault(f => f.Key != currentFactId &&
+                                 context.Questions.Any(q => q.FactID == f.Key && !answeredQuestions.Contains(q.QuestionID)));
+
+                    if (nextFactCandidate.Key == 0)
+                    {
+                        logToListBox("Нет доступных вопросов для других фактов. Завершаем процесс уточнения.");
+                        break;
+                    }
+
+                    currentFactId = nextFactCandidate.Key;
+                    leaderFact = context.Facts.FirstOrDefault(f => f.FactID == currentFactId);
+                    logToListBox($"Переход к следующему факту с наибольшим весом: \"{leaderFact?.Name}\" [ID: {currentFactId}], вес: {nextFactCandidate.Value}");
+                    continue;
+                }
+
+                logToListBox($"Найдено {factQuestions.Count} незаданных вопросов для факта \"{leaderFact?.Name}\"");
+
+                // Процесс задания вопросов и обработки ответов
                 foreach (var question in factQuestions)
                 {
                     displayQuestion(question.Text);
-                    logToListBox($"Задан вопрос: {question.Text}");
+                    logToListBox($"Задан вопрос: \"{question.Text}\" [ID: {question.QuestionID}]");
 
                     var answers = question.Answers.ToList();
                     var options = answers.Select(a => $"{a.AnswerID}: {a.Text}").ToList();
 
+                    logToListBox($"Доступно вариантов ответа: {answers.Count}");
+
                     int answerId = await getAnswer(options);
                     var selectedAnswer = context.Answers.FirstOrDefault(r => r.AnswerID == answerId);
-                    if (selectedAnswer == null) continue;
+                    if (selectedAnswer == null)
+                    {
+                        logToListBox($"Ошибка: Выбранный ответ ID: {answerId} не найден. Пропускаем вопрос.");
+                        continue;
+                    }
 
-                    logToListBox($"Выбран ответ: {selectedAnswer.Text}");
+                    logToListBox($"Выбран ответ: \"{selectedAnswer.Text}\" [ID: {selectedAnswer.AnswerID}]");
+
+                    // Отображаем рекомендацию, если она есть
                     if (!string.IsNullOrEmpty(selectedAnswer.Recommendation))
+                    {
+                        logToListBox($"Рекомендация: \"{selectedAnswer.Recommendation}\"");
                         await new MessageBox { Content = selectedAnswer.Recommendation, CloseButtonText = "Ок" }.ShowDialogAsync();
+                    }
+
+                    // Учитываем влияние ответа на веса фактов
+                    var weightCount = selectedAnswer.WeightAnswers?.Count() ?? 0;
+                    logToListBox($"Ответ влияет на {weightCount} факт(ов)");
 
                     foreach (var weight in selectedAnswer.WeightAnswers)
                     {
                         int factId = weight.FactID;
                         decimal weightValue = weight.PlusOrMinus ? weight.Value : -weight.Value;
+                        string sign = weight.PlusOrMinus ? "+" : "-";
 
-                        LeaderBoard[factId] = LeaderBoard.TryGetValue(factId, out var existing) ? existing + weightValue : weightValue;
+                        var beforeValue = leaderBoard.TryGetValue(factId, out var existing) ? existing : 0;
+                        leaderBoard[factId] = beforeValue + weightValue;
 
                         var affectedFact = context.Facts.FirstOrDefault(f => f.FactID == factId);
                         if (affectedFact != null)
-                            logToListBox($"Факт {affectedFact.Name} обновлён: вес {LeaderBoard[factId]}");
+                            logToListBox($"Факт \"{affectedFact.Name}\" [ID: {factId}] обновлён: {beforeValue} {sign} {Math.Abs(weightValue)} = {leaderBoard[factId]}");
                     }
 
+                    // Помечаем вопрос как отвеченный
                     answeredQuestions.Add(question.QuestionID);
 
-                    currentLeader = LeaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
-                    if (currentLeader.Value >= 0.8m)
+                    // Проверяем, достиг ли какой-либо факт порогового значения
+                    currentLeader = leaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
+
+                    if (currentLeader.Value >= THRESHOLD)
                     {
                         var winningFact = context.Facts.FirstOrDefault(f => f.FactID == currentLeader.Key);
-                        logToListBox($"Факт достиг порога 0.8: ID = {winningFact?.Name}, Вес = {currentLeader.Value}");
+                        logToListBox($"Факт \"{winningFact?.Name}\" достиг порога {THRESHOLD}: Вес = {currentLeader.Value}");
                         displayQuestion($"Выбранный факт: {winningFact?.Name}");
                         exit("");
                         return;
                     }
 
-                    if (currentLeader.Key != currentFactId)
+                    // Если изменился лидер, переходим к вопросам по новому факту
+                    if (currentLeader.Key != currentFactId && currentLeader.Value > 0)
                     {
                         currentFactId = currentLeader.Key;
-                        logToListBox($"Изменился лидер: {currentFactId}, вес: {currentLeader.Value}");
+                        var newLeaderFact = context.Facts.FirstOrDefault(f => f.FactID == currentFactId);
+                        logToListBox($"Изменился лидер: \"{newLeaderFact?.Name}\" [ID: {currentFactId}], вес: {currentLeader.Value}");
                         break; // выйти и пересобрать список вопросов
                     }
                 }
             }
 
-            logToListBox($"Достигнуто максимальное количество попыток. Проверяем лидера...");
+            // Проверяем результаты после завершения итераций
+            logToListBox("=========== РЕЗУЛЬТАТЫ РАБОТЫ СИСТЕМЫ ===========");
+            logToListBox($"Достигнуто максимальное количество итераций ({MAX_ITERATIONS}) или исчерпаны вопросы.");
 
-            if (currentLeader.Value > 0.5m)
+            // Вывод окончательной таблицы лидеров
+            logToListBox("Финальная таблица лидеров фактов:");
+            foreach (var entry in leaderBoard.OrderByDescending(kv => kv.Value))
             {
-                var winningFact = context.Facts.FirstOrDefault(f => f.FactID == currentLeader.Key);
-                logToListBox($"Факт с весом > 0.5: ID = {winningFact?.Name}, Вес = {currentLeader.Value}");
-                displayQuestion($"Выбранный факт: {winningFact?.Name}");
+                var fact = context.Facts.FirstOrDefault(f => f.FactID == entry.Key);
+                logToListBox($"- \"{fact?.Name}\" [ID: {entry.Key}]: {entry.Value}");
+            }
+
+            var finalLeader = leaderBoard.OrderByDescending(f => f.Value).FirstOrDefault();
+            var finalFact = context.Facts.FirstOrDefault(f => f.FactID == finalLeader.Key);
+
+            logToListBox($"Итоговый лидер: \"{finalFact?.Name}\" [ID: {finalLeader.Key}], вес: {finalLeader.Value}");
+
+            if (finalLeader.Value >= MIN_THRESHOLD)
+            {
+                logToListBox($"Вес факта превышает минимальный порог {MIN_THRESHOLD}. Система успешно определила факт.");
+                displayQuestion($"Выбранный факт: {finalFact?.Name}");
                 exit("");
             }
             else
             {
-                logToListBox("Лидер с весом <= 0.5. Перезапуск системы...");
+                logToListBox($"Недостаточный вес для определения факта ({finalLeader.Value} < {MIN_THRESHOLD}).");
+                logToListBox($"Требуется перезапуск системы с новыми вопросами...");
+
+                // Перезапуск системы
                 await RunSisAsync(system, displayQuestion, getAnswer, logToListBox, exit);
             }
         }
-
-
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             ExpertSystemV2Entities context = ExpertSystemV2Entities.GetContext();
             var sys = context.ExpSystems.Where(x => x.ExpSysID == log).First();
+
             // Запускаем алгоритм системы
             await RunSisAsync(
                 sys,
-                DisplayQuestion,    // Передаём метод для отображения вопроса
+                DisplayQuestion,
                 GetAnswerFromUI,
-                logToListBox: LogToListBox,
-                exit:Exit// Передаём метод для логов     // Передаём метод для получения ответа
+                LogToListBox,
+                Exit
             );
         }
 
-        // Метод для отображения вопроса (реализация делегата displayQuestion)
+        // Метод для отображения вопроса
         private void DisplayQuestion(string question)
         {
-           
-            // Используем Dispatcher для обновления UI в потоке UI
             Dispatcher.Invoke(() =>
             {
-                VOP.Text = question; // Показываем текст вопроса на UI
-               
+                VOP.Text = question;
             });
         }
-    private void Exit(string s)
-    {
-        // Используем Dispatcher для обновления UI в потоке UI
-        Dispatcher.Invoke(() =>
-        {
-            CB.Visibility = Visibility.Hidden;
-            Deny.Visibility = Visibility.Hidden;
-            Repeat.Visibility = Visibility.Visible;
-            Log window = new Log(logs);
-            window.Show();
-        });
-    }
 
-    // Метод для получения ответа (реализация делегата getAnswer)
-    private async Task<int> GetAnswerFromUI(List<string> options)
+        // Метод для завершения работы
+        private void Exit(string s)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                CB.Visibility = Visibility.Hidden;
+                Deny.Visibility = Visibility.Hidden;
+                Repeat.Visibility = Visibility.Visible;
+                Log window = new Log(logs);
+                window.Show();
+            });
+        }
+
+        // Метод для получения ответа
+        private async Task<int> GetAnswerFromUI(List<string> options)
         {
             // Заполняем список ответов
             Dispatcher.Invoke(() =>
@@ -378,12 +515,17 @@ namespace intsis
                 }
                 else
                 {
-                    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Выберите ваприант ответа." };
+                    var messagebox = new Wpf.Ui.Controls.MessageBox
+                    {
+                        CloseButtonText = "Ок",
+                        Title = "Предупреждение",
+                        Content = "Выберите вариант ответа."
+                    };
                     messagebox.ShowDialogAsync();
                 }
             };
 
-            // Подписываемся на событие только один раз
+            // Подписываемся на событие
             Deny.Click += handler;
 
             // Ждем, пока пользователь выберет ответ
@@ -392,7 +534,7 @@ namespace intsis
             // Убираем обработчик после завершения
             Deny.Click -= handler;
 
-            return result; // Возвращаем результат, когда пользователь выберет ответ
+            return result;
         }
 
 

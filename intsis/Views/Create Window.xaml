@@ -42,7 +42,7 @@
                         <TextBlock Text="Экспортировать JSON" FontSize="14" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
 
-                </StackPanel>
+                    </StackPanel>
             </StackPanel>
         </ui:Card>
 

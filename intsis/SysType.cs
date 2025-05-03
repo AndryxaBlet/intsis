@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
-using System.Data.Entity.Validation;
-using System.Windows;
-
+using System.Net.Http;
+using System.Text;
 namespace intsis
 {
 
     public class SqlJSON
     {
-
+        string url = "http://wise-choice.ru/api/import/";
+        
         public void ExportData(int systemId, string filePath)
         {
             try
@@ -112,9 +110,31 @@ namespace intsis
                 }
 
                 var jsonData = JsonConvert.SerializeObject(systemToExport, Formatting.Indented);
-                File.WriteAllText(filePath, jsonData);
+                if (filePath != "wise-choice")
+                {
+                    File.WriteAllText(filePath, jsonData);
 
-                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Экспорт", Content = "Система успешно экспортирована" };
+                    var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Экспорт", Content = "Система успешно экспортирована" }.ShowDialogAsync();
+                }
+                else
+                {
+                    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                    using (var httpClient = new HttpClient())
+                    {
+                        try
+                        {
+                            var response = httpClient.PostAsync(url, content);
+                            var result = response.Result;
+                           var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Экспорт", Content = "Ответ сервера: " + result }.ShowDialogAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Ошибка: " + ex.Message);
+                        }
+                    }
+                }
+                
             }
             catch (Exception ex)
             {

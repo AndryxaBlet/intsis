@@ -398,19 +398,28 @@ namespace intsis.Views
         {
             if (NameI.SelectedIndex != -1)
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*", // Установите фильтр для файлов
-                    Title = "Выберите файл" // Заголовок диалогового окна
-                };
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    // Получаем путь к выбранному файлу
-                    string filePath = saveFileDialog.FileName;
 
-                    // Здесь можно добавить код для обработки файла
-                    MessageBox.Show($"Выбранный файл: {filePath}");
-                    sqlJSON.ExportData(Convert.ToInt32(NameI.SelectedValue), filePath);
+                var resultm = new Wpf.Ui.Controls.MessageBox { Content = "Куда экспортировать?", Title = "Экспорт", PrimaryButtonText = "Сайт", SecondaryButtonText="ПК", CloseButtonText = "Отмена" }.ShowDialogAsync().Result;
+                if (resultm == Wpf.Ui.Controls.MessageBoxResult.Secondary)
+                {
+                    SaveFileDialog saveFileDialog = new SaveFileDialog
+                    {
+                        Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*", // Установите фильтр для файлов
+                        Title = "Выберите файл" // Заголовок диалогового окна
+                    };
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        // Получаем путь к выбранному файлу
+                        string filePath = saveFileDialog.FileName;
+
+                        // Здесь можно добавить код для обработки файла
+                        MessageBox.Show($"Выбранный файл: {filePath}");
+                        sqlJSON.ExportData(Convert.ToInt32(NameI.SelectedValue), filePath);
+                    }
+                }
+                else if(resultm == Wpf.Ui.Controls.MessageBoxResult.Primary)
+                {
+                    sqlJSON.ExportData(Convert.ToInt32(NameI.SelectedValue), "wise-choice");
                 }
             }
             else
