@@ -5,12 +5,13 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
+using intsis.Views;
 namespace intsis
 {
 
     public class SqlJSON
     {
-        string url = "http://wise-choice.ru/api/import/";
+       
         
         public void ExportData(int systemId, string filePath)
         {
@@ -118,22 +119,9 @@ namespace intsis
                 }
                 else
                 {
-                    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-                    using (var httpClient = new HttpClient())
-                    {
-                        try
-                        {
-                            var response = httpClient.PostAsync(url, content);
-                            var result = response.Result;
-                           var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Экспорт", Content = "Ответ сервера: " + result }.ShowDialogAsync();
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("Ошибка: " + ex.Message);
-                        }
-                    }
-                }
+                   
+                    LogIn.ExpSysForEx = systemToExport;
+    }
                 
             }
             catch (Exception ex)

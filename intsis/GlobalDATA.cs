@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,17 +22,18 @@ namespace intsis
         public static Brush Accent { get;set; }
 
         public static int SystemType { get; set; }
+        public static StringContent ExpSysForEx { get; set; }
 
-    //      {
-    //        Database.SetInitializer(new CreateDatabaseIfNotExists<ExpertSystemEntities>());
-    //        Database.Log = log => System.Diagnostics.Debug.WriteLine(log);
-    //    }
-    //private static ExpertSystemEntities context;
-    //public static ExpertSystemEntities GetContext()
-    //{
-    //    if (context == null)
-    //        context = new ExpertSystemEntities();
-    //    return context;
-    //}
-}
+        //      {
+        //        Database.SetInitializer(new CreateDatabaseIfNotExists<ExpertSystemEntities>());
+        //        Database.Log = log => System.Diagnostics.Debug.WriteLine(log);
+        //    }
+        //private static ExpertSystemEntities context;
+        //public static ExpertSystemEntities GetContext()
+        //{
+        //    if (context == null)
+        //        context = new ExpertSystemEntities();
+        //    return context;
+        //}
+    }
 }

@@ -12,6 +12,7 @@ using System.Data;
 using intsis;
 using System.Security.Cryptography;
 using System.Configuration.Internal;
+using System.Web.UI.WebControls;
 using Microsoft.Win32;
 using Wpf.Ui.Controls;
 using MessageBox = System.Windows.MessageBox;
@@ -419,7 +420,10 @@ namespace intsis.Views
                 }
                 else if(resultm == Wpf.Ui.Controls.MessageBoxResult.Primary)
                 {
+                   
                     sqlJSON.ExportData(Convert.ToInt32(NameI.SelectedValue), "wise-choice");
+                    navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+                    navigateView.Navigate(typeof(LogIn));
                 }
             }
             else

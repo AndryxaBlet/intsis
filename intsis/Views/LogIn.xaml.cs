@@ -1,26 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Security.Cryptography;
-using Wpf.Ui.Controls;
-using static intsis.Views.MainWindow;
-using System.Web.UI.WebControls;
-using System.Configuration;
+using Newtonsoft.Json;
 using Wpf.Ui.Appearance;
-using intsis.Properties;
+using System.Net.Http;
+using System.Text;
+using System.Net.PeerToPeer;
+using System.Collections.Generic;
 
 namespace intsis.Views
 {
@@ -35,26 +22,69 @@ namespace intsis.Views
             InitializeComponent();
             LoginTextBox.Focus();
             LoginButton.Background = ApplicationAccentColorManager.PrimaryAccentBrush;
+            RememberMe.IsChecked=Properties.Settings.Default.RemembeR;
+            LoginTextBox.Text=Properties.Settings.Default.Login;
+            PasswordBox.Password = Properties.Settings.Default.Password;
 
-           
         }
-       
+        public static object  ExpSysForEx {  get; set; }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             //try
             //{
                 string username = LoginTextBox.Text;
                 string password = PasswordBox.Password;
+                string url = "https://wise-choice.ru/api/import/";
             if (username != "" && password != "")
             {
-
-                var login = ExpertSystemV2Entities.GetContext().Users.FirstOrDefault(l => l.Login == username && l.Password == password);
-
-                if (login != null)
+                var content =new
                 {
-                 
-                    GlobalDATA.recvadmin= login.Status;
+                    username = username,
+                    password = password,
+                    file = ExpSysForEx
+                };
+                var contentJSON = JsonConvert.SerializeObject(content,Formatting.Indented);
+                var data = new StringContent(contentJSON, Encoding.UTF8, "application/json");
+                using (var httpClient = new HttpClient())
+                {
+                    try
+                    {
+                        var response = await httpClient.PostAsync(url, data);
+
+                        // Чтение ответа как строки
+                        var result = await response.Content.ReadAsStringAsync();
+
+                        // Десериализация JSON-ответа
+                        var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+
+                        string message;
+                        if (responseObject != null && responseObject.ContainsKey("message"))
+                        {
+                            message = responseObject["message"];
+                        }
+                        else
+                        {
+                            message = "Не удалось получить сообщение от сервера.";
+                        }
+
+                        // Показываем сообщение
+                        var messagebox = new Wpf.Ui.Controls.MessageBox
+                        {
+                            CloseButtonText = "Ок",
+                            Title = "Экспорт",
+                            Content = message
+                        };
+                        await messagebox.ShowDialogAsync();
+                       var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+                        navigateView.Navigate(typeof(MainWindow));
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Ошибка: " + ex.Message);
+                    }
+                }
                     if (RememberMe.IsChecked == true)
                     {
                         Properties.Settings.Default.RemembeR = Convert.ToBoolean(RememberMe.IsChecked);
@@ -63,22 +93,12 @@ namespace intsis.Views
                         Properties.Settings.Default.Save();
 
                     }
-                    var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
-                    navigateView.Navigate(typeof(MainWindow));
+                    //var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
+                    //navigateView.Navigate(typeof(MainWindow));
                    
                     
                     
 
-                }
-                else
-                {
-                    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",
-                        Title = "Ошибка",
-                        Content= "Неверно введены данные аккаунта!",
-                        PrimaryButtonText = "OK",
-                    };
-                    messagebox.ShowDialogAsync();
-                }
             }
             else
             {
@@ -88,20 +108,7 @@ namespace intsis.Views
         }
 
 
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
-        {
-            //try
-            //{
-            GlobalDATA.IsFirst = false;
-            var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
-            navigateView.Navigate(typeof(Registration));
-            //}
-            //catch (Exception r)
-            //{
-            //    MessageBox.Show(r.Message);
-
-            //}
-        }
+        
 
         private void LoginTextBox_KeyDown(object sender, KeyEventArgs e)
         {

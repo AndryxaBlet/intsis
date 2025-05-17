@@ -34,9 +34,9 @@ namespace intsis.Views
             InitializeComponent();
             binddatagrid();
             string admin = GlobalDATA.recvadmin;
-            if (admin!="Admin") {
-                Create.Visibility = Visibility.Hidden;
-            }
+            // if (admin!="Admin") {
+            //     Create.Visibility = Visibility.Hidden;
+            // }
             
         }
         public void binddatagrid()
