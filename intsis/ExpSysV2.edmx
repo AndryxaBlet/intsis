@@ -369,8 +369,11 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__WeightAns__FactI__36B12243">
-          <End Type="ExpertSystemV2Model.Facts" Role="Facts" Multiplicity="1" />
-          <End Type="ExpertSystemV2Model.WeightAnswers" Role="WeightAnswers" Multiplicity="*" />
+          <End Type="ExpertSystemV2Model.Facts" Role="Facts" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ExpertSystemV2Model.WeightAnswers" Role="WeightAnswers" Multiplicity="*" >
+          </End>
           <ReferentialConstraint>
             <Principal Role="Facts">
               <PropertyRef Name="FactID" />

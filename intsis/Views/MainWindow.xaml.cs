@@ -41,21 +41,21 @@ namespace intsis.Views
         }
         public void binddatagrid()
         {
-           // try
+            try
             {
                 Dg.ItemsSource = ExpertSystemV2Entities.GetContext().ExpSystems.ToList();
             }
-         ////   catch (Exception r)
-         //   {
-         //       var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
-         //       messagebox.ShowDialogAsync();
+            catch (Exception r)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
 
-         //   }
+            }
         }
 
         private void Create_Click(object sender, RoutedEventArgs e)
         {
-           // try
+            try
             {
                 var selectedRuleId = -1;
                 if (Dg.SelectedIndex != -1)
@@ -68,17 +68,17 @@ namespace intsis.Views
 
                 binddatagrid();
             }
-           // catch (Exception r)
-            //{
-            //    var messagebox =new Wpf.Ui.Controls.MessageBox {  CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
-            //    messagebox.ShowDialogAsync();
+            catch (Exception r)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
 
-            //}
+            }
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-         //   try
+            try
             {
                 if (Dg.SelectedIndex != -1)
                 {
@@ -89,23 +89,23 @@ namespace intsis.Views
                 }
                 else
                 {
-                    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Выберите систему" };
+                    var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Предупреждение", Content = "Выберите систему" };
                     messagebox.ShowDialogAsync();
                 }
-                
-            }
-           //// catch (ArgumentOutOfRangeException)
-           // {
-           //     var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Нужно выбрать существующий набор вопросов" };
-           //     messagebox.ShowDialogAsync();
-           // }
-           //// catch (Exception r)
-           // {
-           //     var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
-           //     messagebox.ShowDialogAsync();
 
-           // }
-            
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Предупреждение", Content = "Нужно выбрать существующий набор вопросов" };
+                messagebox.ShowDialogAsync();
+            }
+            catch (Exception r)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
+
+            }
+
         }
 
         private void Grid_Click(object sender, MouseEventArgs e)

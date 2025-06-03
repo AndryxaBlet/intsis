@@ -37,7 +37,7 @@
                 <DataGridTemplateColumn Width="auto" Header="Настроить">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Настроить вопрос" Width="auto" Name="ChangeAns"  Click="ChangeAns_Click"/>
+                            <Button Content="Настроить ответ" Width="auto" Name="ChangeAns"  Click="ChangeAns_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

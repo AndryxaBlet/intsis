@@ -74,7 +74,7 @@ namespace intsis
         }
         private void UpdateItems(int id)
         {
-            //try
+            try
             {
                 // Получаем список ответов по Id
                 var answers = ExpertSystemV2Entities.GetContext().Answers
@@ -87,18 +87,18 @@ namespace intsis
                 CB.SelectedValuePath = "AnswerID";
 
             }
-            //catch (Exception r)
-            //{
-            //    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Title = "Ошибка", Content = r.Message };
-            //    messagebox.ShowDialogAsync();
+            catch (Exception r)
+            {
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
 
-            //}
+           }
         }
 
         public void BNext()
         {
-            //try
-            //{
+            try
+            {
                 if (CB.SelectedIndex != -1)
                 {
                     var selectedValue = CB.SelectedValue.ToString();
@@ -140,7 +140,7 @@ namespace intsis
                         else
                         {
                             // Если это не число, выводим строковое сообщение
-                            VOP.Text = nextValue.Recommendation.ToString(); //////////////////////////////////////////////////////////
+                            VOP.Text = nextValue.Recommendation.ToString(); 
                             CB.Visibility = Visibility.Hidden;
                             Deny.Visibility = Visibility.Hidden;
                             Repeat.Visibility = Visibility.Visible;
@@ -153,12 +153,12 @@ namespace intsis
                     var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Выберите ваприант ответа." };
                     messagebox.ShowDialogAsync();
                 }
-            //}
-            //catch (Exception r)
-            //{
-            //    new MessageBox { Content = r.Message }.ShowDialogAsync();
+            }
+            catch (Exception r)
+            {
+                new MessageBox { Content = r.Message }.ShowDialogAsync();
 
-            //}
+            }
         }
         List<string> logs = new List<string>();
         private void LogToListBox(string message)
@@ -550,15 +550,15 @@ namespace intsis
         }
         private async void Deny_Click(object sender, RoutedEventArgs e)
         {
-            //try
+            try
             {
                 BNext();
             }
-            //catch (Exception r)
-            //{
-            //    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
-            //    messagebox.ShowDialogAsync();
-            //}
+            catch (Exception r)
+            {
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
+                messagebox.ShowDialogAsync();
+            }
         }
     }
 }

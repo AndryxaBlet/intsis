@@ -34,27 +34,27 @@ namespace intsis
 
         public void binddatagrid(int ID)
         {
-            //try
-            //{
+            try
+            {
 
                 // Получаем ответы по Id
                 var answersFromDb = ExpertSystemV2Entities.GetContext().Questions
                     .Where(a => a.FactID == ID)
                     .ToList();
                 Dg.ItemsSource = answersFromDb; // Привязываем коллекцию к DataGrid
-            //}
-            //catch (Exception r)
-            //{
-            //    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
-            //    messagebox.ShowDialogAsync();
-            //}
+            }
+            catch (Exception r)
+            {
+                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message};
+                messagebox.ShowDialogAsync();
+            }
 
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //try
-            //{
+            try
+            {
                 // Получаем измененные записи из DataGrid
                 var answers = Dg.ItemsSource as List<Questions>;
                 foreach (var answer in answers)
@@ -91,22 +91,23 @@ namespace intsis
                 var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Обновление прошло успешно." };
                 messagebox.ShowDialogAsync();
 
-            //}
-            //catch (Exception r)
-            //{
-            //    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
-            //    messagebox.ShowDialogAsync();
+            }
+            catch (Exception r)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
 
-            //}
+            }
         }
 
- 
+
+
 
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
-            //try
-            //{
+            try
+            {
                 if (sender is Button button)
                 {
                     // Получаем текущий объект строки, к которому относится Button
@@ -130,18 +131,18 @@ namespace intsis
                         }
                     }
                 }
-            //}
-            //catch (NullReferenceException)
-            //{
-            //    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Сохраните изменения, прежде чем удалять." };
-            //    messagebox.ShowDialogAsync();
-            //}
+            }
+            catch (NullReferenceException)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Предупреждение", Content = "Сохраните изменения, прежде чем удалять." };
+                messagebox.ShowDialogAsync();
+            }
 
-            //catch (Exception ex)
-            //{
-            //    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = ex.Message };
-            //    messagebox.ShowDialogAsync();
-            //}
+            catch (Exception ex)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Ошибка", Content = ex.Message };
+                messagebox.ShowDialogAsync();
+            }
 
         }
 
@@ -165,9 +166,9 @@ namespace intsis
         }
 
         private void ChangeAns_Click(object sender, RoutedEventArgs e)
-        {   
-            //try        
-            //{
+        {
+            try
+            {
                 if (sender is Button button)
                 {
                 
@@ -184,20 +185,20 @@ namespace intsis
                     }
                 
                 }
-            //}
+            }
 
-            //catch (System.NullReferenceException)
-            //{
-            //    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Предупреждение", Content = "Сохраните данные." };
-            //    messagebox.ShowDialogAsync();
-                
-            //}
+            catch (System.NullReferenceException)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Предупреждение", Content = "Сохраните данные." };
+                messagebox.ShowDialogAsync();
 
-            //catch (Exception r)
-            //{
-            //    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок", Title = "Ошибка", Content = r.Message };
-            //    messagebox.ShowDialogAsync();
-            //}
+            }
+
+            catch (Exception r)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Ошибка", Content = r.Message };
+                messagebox.ShowDialogAsync();
+            }
 
         }
     }

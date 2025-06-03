@@ -65,7 +65,7 @@ namespace intsis
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //try
+           
             {
                 // Получаем измененные записи из DataGrid
                 var answers = Dg.ItemsSource as List<WeightAnswers>;

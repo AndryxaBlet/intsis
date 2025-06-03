@@ -46,7 +46,6 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Рекомендации" Width="auto" Binding="{Binding Recommendation}"/>
-                <DataGridTextColumn FontSize="20" Width="auto"  Header="Вывод" Binding="{Binding Out}"/>
                 <DataGridTextColumn Header="Прио" Binding="{Binding Id}" Visibility="Hidden"/>
 
                 <DataGridTemplateColumn Width="auto" Header="Удалить">

@@ -78,8 +78,8 @@ namespace intsis.Views
         }
         public void insert(string name, string scope, string comment,int type)
         {
-            //try
-            //{
+            try
+            {
                 // Добавляем новую систему
                 var newSystem = new ExpSystems
                 {
@@ -106,11 +106,11 @@ namespace intsis.Views
                 }
                 DialogResult = true;
                 SystemId = newSystem.ExpSysID;
-            //}
-            //catch (Exception r)
-            //{
-            //    MessageBox.Show(r.Message);
-            //}
+            }
+            catch (Exception r)
+           {
+                MessageBox.Show(r.Message);
+            }
         }
 
         private void NameTextBox_KeyDown(object sender, KeyEventArgs e)

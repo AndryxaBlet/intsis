@@ -62,7 +62,7 @@ namespace intsis
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //try
+            try
             {
                 // Получаем измененные записи из DataGrid
                 var answers = Dg.ItemsSource as List<Answers>;
@@ -100,11 +100,10 @@ namespace intsis
                     var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Обновление прошло успешно." };
                     messagebox.ShowDialogAsync();
             }
-            //catch (Exception r)
-            //{
-            //    MessageBox.Show(r.Message);
-
-            //}
+            catch (Exception r)
+            {
+                MessageBox.Show(r.Message);
+            }
         }
 
         private void DelV_Click(object sender, RoutedEventArgs e)

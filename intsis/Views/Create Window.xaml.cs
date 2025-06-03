@@ -68,7 +68,7 @@ namespace intsis.Views
 
                     if (SystemType!=1)
                     {
-                        if (systemId != 0)
+                      
                         {
                             id = systemId;
 
@@ -93,7 +93,7 @@ namespace intsis.Views
                     }
                     else {
 
-                        if (systemId != 0)
+                  
                         {
                             id = systemId;
 
@@ -244,7 +244,7 @@ namespace intsis.Views
         {
             // Проверяем, существует ли система с таким именем
             var temp = NameI.SelectedItem as ExpSystems;
-            var systemExists = ExpertSystemV2Entities.GetContext().Facts.Any(ns => ns.Name == temp.NameSys);
+            var systemExists = ExpertSystemV2Entities.GetContext().ExpSystems.Any(ns => ns.NameSys == temp.NameSys);
 
             if (systemExists)
             {
@@ -275,6 +275,10 @@ namespace intsis.Views
 
                         if (result == Wpf.Ui.Controls.MessageBoxResult.Primary)
                         {
+                            var factIds = itemToDelete.Facts.Select(f => f.FactID).ToList();
+                            var relatedWeights = ExpertSystemV2Entities.GetContext().WeightAnswers.Where(wa => factIds.Contains(wa.FactID)).ToList();
+                            ExpertSystemV2Entities.GetContext().WeightAnswers.RemoveRange(relatedWeights);
+                            ExpertSystemV2Entities.GetContext().SaveChanges();
                             // Удалить объект из контекста
                             ExpertSystemV2Entities.GetContext().ExpSystems.Remove(itemToDelete);
 
