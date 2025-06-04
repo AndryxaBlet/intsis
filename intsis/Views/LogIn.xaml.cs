@@ -77,7 +77,7 @@ namespace intsis.Views
                         };
                         await messagebox.ShowDialogAsync();
                        var navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
-                        navigateView.Navigate(typeof(MainWindow));
+                        navigateView.GoBack();
 
                     }
                     catch (Exception ex)

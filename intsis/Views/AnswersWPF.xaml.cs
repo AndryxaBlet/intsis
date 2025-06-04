@@ -16,7 +16,6 @@ using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Windows.Threading;
 using System.Web.UI.WebControls;
-using MaterialDesignThemes.Wpf;
 using intsis.Views;
 using Wpf.Ui.Controls;
 using MessageBox = Wpf.Ui.Controls.MessageBox;

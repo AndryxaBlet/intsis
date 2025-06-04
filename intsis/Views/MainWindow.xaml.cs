@@ -37,6 +37,31 @@ namespace intsis.Views
             // if (admin!="Admin") {
             //     Create.Visibility = Visibility.Hidden;
             // }
+            try
+            {
+                if (ExpertSystemV2Entities.GetContext().TypeOfSys.ToArray().Length == 0)
+                {
+                    ExpertSystemV2Entities.GetContext().TypeOfSys.Add(new TypeOfSys
+                    {
+                        TypeID = 0,
+                        Name = "Линейная",
+                        Description = "Система работает на основани поля NextR в таблице ответов, каждый ответ содержит либо факт конец, либо следующий вопрос"
+                    });
+
+                    ExpertSystemV2Entities.GetContext().TypeOfSys.Add(new TypeOfSys
+                    {
+                        TypeID = 1,
+                        Name = "Весовая",
+                        Description = "Система работает на основани weight answers, каждый ответ имеет влияние на факт, система работает динамически"
+                    });
+                    ExpertSystemV2Entities.GetContext().SaveChanges();
+                }
+            } catch
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Title = "Ошибка", Content = "Произошла ошибка в подключении к базе данных, экстренное выключение. Проверьте строку подключения в настройках" };
+                messagebox.ShowDialogAsync();
+                Application.Current.Shutdown();
+            }
             
         }
         public void binddatagrid()

@@ -53,5 +53,15 @@ namespace intsis.Views
         {
             MainNavigation.Navigate(typeof(Settings));
         }
+
+        private void FluentWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void BrowserClick(object sender, RoutedEventArgs e)
+        {
+            MainNavigation.Navigate(typeof(WebBrowser));
+        }
     }
 }

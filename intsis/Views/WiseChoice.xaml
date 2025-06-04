@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="WiseChoice" Height="450" Width="800" WindowState="Maximized" WindowStartupLocation="CenterScreen"
         Background="{DynamicResource ApplicationBackgroundBrush}" WindowBackdropType="Mica"
-        WindowCornerPreference="Default" ExtendsContentIntoTitleBar="True">
+        WindowCornerPreference="Default" ExtendsContentIntoTitleBar="True" Closing="FluentWindow_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -20,8 +20,9 @@
 
                 <ui:NavigationView.MenuItems>
                     <ui:MenuItem  Icon="{ui:SymbolIcon Symbol=Home16, Filled=True}" Tag="HomePage" Name="LogPG" Click="LogPG_Click"/>
+                    <ui:MenuItem Icon="{ui:SymbolIcon Symbol=Cloud16, Filled=True}" Tag="WebBrowser" Click="BrowserClick"/>
                     <ui:MenuItem Icon="{ui:SymbolIcon Symbol=Settings16, Filled=True}" Tag="SettingsPage" Click="MenuItem_Click"/>
-                </ui:NavigationView.MenuItems>
+            </ui:NavigationView.MenuItems>
             </ui:NavigationView>
         
     </Grid>

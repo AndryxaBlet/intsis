@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
@@ -66,6 +67,7 @@ namespace intsis.Views
                 connects = ConfigurationManager.ConnectionStrings["intsisEntitiesLDB"].ConnectionString;
             }
             else { connects = intsis.Properties.Settings.Default.ChoosedServer; }
+     
             ExpertSystemV2Entities.GetContext().Database.Connection.ConnectionString = connects;
             navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
             navigateView.Navigate(typeof(MainWindow));

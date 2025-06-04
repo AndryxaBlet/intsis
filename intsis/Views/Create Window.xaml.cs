@@ -383,15 +383,16 @@ namespace intsis.Views
                 Title = "Выберите файл" // Заголовок диалогового окна
             };
             
+            
             // Отображаем диалоговое окно и проверяем, была ли нажата кнопка "Открыть"
             if (openFileDialog.ShowDialog() == true)
             {
                 // Получаем путь к выбранному файлу
                 string filePath = openFileDialog.FileName;
 
-                // Здесь можно добавить код для обработки файла
                 var messagebox = new Wpf.Ui.Controls.MessageBox { CloseButtonText = "Ок", Content = $"Выбранный файл: {filePath}", Title = "Импорт" }.ShowDialogAsync();
                 sqlJSON.ImportData(filePath);
+               
             }
             SystemType = GlobalDATA.SystemType;
             NameI.SelectedIndex=NameI.Items.Count-1;

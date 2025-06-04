@@ -18,6 +18,8 @@ namespace intsis
         public ExpertSystemV2Entities()
             : base("name=ExpertSystemV2Entities")
         {
+              Database.SetInitializer(new CreateDatabaseIfNotExists<ExpertSystemV2Entities>());
+              Database.Log = log => System.Diagnostics.Debug.WriteLine(log);
         }
         private static ExpertSystemV2Entities context;
         public static ExpertSystemV2Entities GetContext()
