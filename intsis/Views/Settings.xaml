@@ -25,7 +25,6 @@
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Строка подключения:" VerticalAlignment="Center" Width="160"/>
                 <TextBox x:Name="ConnectionString" Width="300" Margin="5"/>
-                <Button Content="Обзор" Width="80" VerticalAlignment="Center" Margin="5" Click="Button_Click"/>
             </StackPanel>
 
             <!-- Сменить тему -->

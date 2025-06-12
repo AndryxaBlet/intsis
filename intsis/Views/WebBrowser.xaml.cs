@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
+using Microsoft.Web.WebView2.Core;
 using Wpf.Ui.Controls;
 
 namespace intsis.Views
@@ -24,15 +15,36 @@ namespace intsis.Views
         public WebBrowser()
         {
             InitializeComponent();
-            InitAsync();
-        }
-        async void InitAsync()
-        {
-            await WebView.EnsureCoreWebView2Async(null);
-            WebView.Source = new Uri("https://wise-choice.ru");
+            this.Loaded += WebBrowser_Loaded;
         }
 
-       
-    
+        private async void WebBrowser_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string userDataFolder = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "WiseChoice", "WebView2");
+
+                // Убедимся, что папка существует
+                Directory.CreateDirectory(userDataFolder);
+
+                var env = await CoreWebView2Environment.CreateAsync(null, userDataFolder);
+                await WebView.EnsureCoreWebView2Async(env);
+
+                WebView.Source = new Uri("https://wise-choice.ru");
+            }
+            catch (Exception ex)
+            {
+                var messagebox = new Wpf.Ui.Controls.MessageBox
+                {
+                    CloseButtonText = "Ок",
+                    Title = "Ошибка",
+                    Content = ex.Message
+                };
+
+                await messagebox.ShowDialogAsync();
+            }
+        }
     }
 }

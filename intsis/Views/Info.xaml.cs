@@ -61,42 +61,16 @@ namespace intsis.Views
         }
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
-            string connects;
-            if (intsis.Properties.Settings.Default.IsLocalDB == true)
-            {
-                connects = ConfigurationManager.ConnectionStrings["intsisEntitiesLDB"].ConnectionString;
-            }
-            else { connects = intsis.Properties.Settings.Default.ChoosedServer; }
-     
-            ExpertSystemV2Entities.GetContext().Database.Connection.ConnectionString = connects;
+
             navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
             navigateView.Navigate(typeof(MainWindow));
             
-          // var users = ExpertSystemV2Entities.GetContext().Users.FirstOrDefault();
-          //  if (users == null)
-          // {
-          //      GlobalDATA.IsFirst = true;
-          //     navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
-          //      navigateView.Navigate(typeof(Registration));
-
-          //  }
-          // else
-          // {
-          //navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
-          //      navigateView.Navigate(typeof(LogIn));
-          //  }
+         
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            // if (Properties.Settings.Default.RemembeR == true)
-            // {
-            //
-            //     navigateView = Application.Current.MainWindow.FindName("MainNavigation") as Wpf.Ui.Controls.NavigationView;
-            //     navigateView.Navigate(typeof(LogIn));
-            //
-            //
-            // }
+
         }
     }
 }

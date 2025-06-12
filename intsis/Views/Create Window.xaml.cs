@@ -123,100 +123,142 @@ namespace intsis.Views
 
         public void Create_Copy_Click(object sender, RoutedEventArgs e)
         {
-            if (DgLinear.SelectedIndex != -1 || DgWeight.SelectedIndex != -1)
+            try
             {
-                if (SelectedSys != -1)
-                { var nameSisId = SelectedSys;
-
-
-                    if (SystemType == 0) // linear sys
+                if (DgLinear.SelectedIndex != -1 || DgWeight.SelectedIndex != -1)
+                {
+                    if (SelectedSys != -1)
                     {
-                        // Получаем измененные данные из DataGrid
-                        var rules = DgLinear.ItemsSource as List<Questions>;
+                        var nameSisId = SelectedSys;
 
-                        if (rules != null)
+                        if (SystemType == 0) // linear sys
                         {
-                            // Получаем ID существующей ExpSystem
-                            foreach (var rule in rules)
+                            // Получаем измененные данные из DataGrid
+                            var rules = DgLinear.ItemsSource as List<Questions>;
+
+                            if (rules != null)
                             {
-                                // Проверяем, существует ли запись в базе данных
-                                var existingRule = ExpertSystemV2Entities.GetContext().Questions
-                                    .FirstOrDefault(r => r.ExpSysID == rule.ExpSysID);
+                                foreach (var rule in rules)
+                                {
+                                    // Проверяем, существует ли запись в базе данных по ID
+                                    var existingRule = ExpertSystemV2Entities.GetContext().Questions
+                                        .FirstOrDefault(r => r.QuestionID == rule.QuestionID);
 
-                                if (existingRule != null)
-                                {
-                                    // Обновляем существующую запись
-                                    ExpertSystemV2Entities.GetContext().Entry(existingRule).CurrentValues.SetValues(rule);
-                                }
-                                else
-                                {
-                                    // Устанавливаем правильный ID для нового правила
-                                    var newRule = new Questions
+                                    if (existingRule != null)
                                     {
-                                        ExpSysID = nameSisId,
-                                        Text = rule.Text
-                                    };
-                                    ExpertSystemV2Entities.GetContext().Questions.Add(newRule);
+                                        // Обновляем только неключевые свойства
+                                        existingRule.ExpSysID = rule.ExpSysID;
+                                        existingRule.Text = rule.Text;
+                                        // Добавьте другие свойства, кроме QuestionID
+                                    }
+                                    else
+                                    {
+                                        // Создаем новую запись (QuestionID будет автогенерирован)
+                                        var newRule = new Questions
+                                        {
+                                            ExpSysID = nameSisId,
+                                            Text = rule.Text
+                                            // Не устанавливаем QuestionID - он будет автогенерирован
+                                        };
+                                        ExpertSystemV2Entities.GetContext().Questions.Add(newRule);
+                                    }
                                 }
+
+                                // Сохраняем изменения в базе данных
+                                ExpertSystemV2Entities.GetContext().SaveChanges();
+                                binddatagrid(SelectedSys);
+
+                                // Уведомляем об успешном сохранении
+                                var successMessageBox = new Wpf.Ui.Controls.MessageBox
+                                {
+                                    CloseButtonText = "Ок",
+                                    Content = "Данные успешно сохранены."
+                                };
+                                successMessageBox.ShowDialogAsync();
                             }
+                        }
+                        else
+                        {
+                            // Получаем измененные данные из DataGrid
+                            var facts = DgWeight.ItemsSource as List<Facts>;
 
-                            // Сохраняем изменения в базе данных
-                            ExpertSystemV2Entities.GetContext().SaveChanges();
-                            binddatagrid(SelectedSys);
+                            if (facts != null)
+                            {
+                                foreach (var fact in facts)
+                                {
+                                    // Проверяем, существует ли запись в базе данных по ID
+                                    var existingFact = ExpertSystemV2Entities.GetContext().Facts
+                                        .FirstOrDefault(r => r.FactID == fact.FactID);
 
+                                    if (existingFact != null)
+                                    {
+                                        // Обновляем только неключевые свойства
+                                        existingFact.ExpSysID = fact.ExpSysID;
+                                        existingFact.Name = fact.Name;
+                                        existingFact.Description = fact.Description;
+                                        // Добавьте другие свойства, кроме FactID
+                                    }
+                                    else
+                                    {
+                                        // Создаем новую запись (FactID будет автогенерирован)
+                                        var newFact = new Facts
+                                        {
+                                            ExpSysID = nameSisId,
+                                            Name = fact.Name,
+                                            Description = fact.Description
+                                            // Не устанавливаем FactID - он будет автогенерирован
+                                        };
+                                        ExpertSystemV2Entities.GetContext().Facts.Add(newFact);
+                                    }
+                                }
+
+                                // Сохраняем изменения в базе данных
+                                ExpertSystemV2Entities.GetContext().SaveChanges();
+                                binddatagrid(SelectedSys);
+
+                                // Уведомляем об успешном сохранении
+                                var successMessageBox = new Wpf.Ui.Controls.MessageBox
+                                {
+                                    CloseButtonText = "Ок",
+                                    Content = "Данные успешно сохранены."
+                                };
+                                successMessageBox.ShowDialogAsync();
+                            }
                         }
                     }
                     else
                     {
-                        // Получаем измененные данные из DataGrid
-                        var facts = DgWeight.ItemsSource as List<Facts>;
-
-                        if (facts != null)
+                        var messagebox = new Wpf.Ui.Controls.MessageBox
                         {
-                            // Получаем ID существующей ExpSystem
-                            foreach (var fact in facts)
-                            {
-                                // Проверяем, существует ли запись в базе данных
-                                var existingRule = ExpertSystemV2Entities.GetContext().Facts
-                                    .FirstOrDefault(r => r.ExpSysID == fact.ExpSysID);
-
-                                if (existingRule != null) 
-                                {
-                                    // Обновляем существующую запись
-                                    ExpertSystemV2Entities.GetContext().Entry(existingRule).CurrentValues.SetValues(fact);
-                                }
-                                else
-                                {
-                                    // Устанавливаем правильный ID для нового правила
-                                    var newRule = new Facts
-                                    {
-                                        ExpSysID = nameSisId,
-                                        Name = fact.Name,
-                                        Description = fact.Description
-                                    };
-                                    ExpertSystemV2Entities.GetContext().Facts.Add(newRule);
-                                }
-                            }
-
-                            // Сохраняем изменения в базе данных
-                            ExpertSystemV2Entities.GetContext().SaveChanges();
-                            binddatagrid(SelectedSys);
-
-                        }
+                            CloseButtonText = "Ок",
+                            Content = "Не выбрана система."
+                        };
+                        messagebox.ShowDialogAsync();
                     }
                 }
                 else
                 {
-                    var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Не выбрана система." };
+                    var messagebox = new Wpf.Ui.Controls.MessageBox
+                    {
+                        CloseButtonText = "Ок",
+                        Content = "Выберите систему."
+                    };
                     messagebox.ShowDialogAsync();
                 }
             }
-            else
+            catch (Exception ex)
             {
-                var messagebox =new Wpf.Ui.Controls.MessageBox { CloseButtonText="Ок",Content = "Выберите систему." };
-                messagebox.ShowDialogAsync();
-            }
+                // Логирование ошибки (если есть система логирования)
+                // Logger.Error($"Ошибка при сохранении данных: {ex.Message}", ex);
 
+                // Показываем пользователю дружелюбное сообщение об ошибке
+                var errorMessageBox = new Wpf.Ui.Controls.MessageBox
+                {
+                    CloseButtonText = "Ок",
+                    Content = $"Произошла ошибка при сохранении данных.\nПожалуйста, попробуйте еще раз.\n\nДетали ошибки: {ex.Message}"
+                };
+                errorMessageBox.ShowDialogAsync();
+            }
         }
 
 
@@ -395,7 +437,7 @@ namespace intsis.Views
                
             }
             SystemType = GlobalDATA.SystemType;
-            NameI.SelectedIndex=NameI.Items.Count-1;
+            NameI.SelectedIndex=NameI.Items.Count;
             BindComboBox();
 
         }

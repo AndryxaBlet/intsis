@@ -20,6 +20,7 @@ using MessageBoxButton = System.Windows.MessageBoxButton;
 using MessageBoxResult = System.Windows.MessageBoxResult;
 using CustomMessageBox = Wpf.Ui.Controls.MessageBox;
 using System.Web.UI.WebControls;
+using System.Configuration;
 
 namespace intsis.Views
 {
@@ -32,13 +33,24 @@ namespace intsis.Views
         public MainWindow()
         {
             InitializeComponent();
-            binddatagrid();
+           
             string admin = GlobalDATA.recvadmin;
             // if (admin!="Admin") {
             //     Create.Visibility = Visibility.Hidden;
             // }
             try
             {
+
+                string connects;
+                if (intsis.Properties.Settings.Default.IsLocalDB == true)
+                {
+                    connects = ConfigurationManager.ConnectionStrings["intsisEntitiesLDB"].ConnectionString;
+                }
+                else { connects = intsis.Properties.Settings.Default.ChoosedServer; }
+
+                ExpertSystemV2Entities.GetContext().Database.Connection.ConnectionString = connects;
+                binddatagrid();
+
                 if (ExpertSystemV2Entities.GetContext().TypeOfSys.ToArray().Length == 0)
                 {
                     ExpertSystemV2Entities.GetContext().TypeOfSys.Add(new TypeOfSys

@@ -41,7 +41,7 @@ namespace intsis.Views
 
         private void LogPG_Click(object sender, RoutedEventArgs e)
         {
-            MainNavigation.Navigate(typeof(Info));
+            MainNavigation.Navigate(typeof(MainWindow));
         }
 
         private void MainNavigation_Loaded(object sender, RoutedEventArgs e)
